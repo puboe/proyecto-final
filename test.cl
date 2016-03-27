@@ -4,6 +4,11 @@ inline int _2dlin(const int w, const int h, const int x, const int y) {
 inline bool bounded(const int w, const int h, const int x, const int y) {
     return x >= 0 && y >= 0 && x < w && y < h;
 }
+inline bool rbounded(const int w, const int h,
+                     const int x, const int y,
+                     const int rw, const int rh) {
+    return (x >= 0 && y >= 0 && x + rw < w && y + rh < h);
+}
 __kernel void enumerate(__global float *res_g, const int width, const int height) {
     int x = get_global_id(0);
     int y = get_global_id(1);
@@ -17,16 +22,12 @@ __kernel void gauss(__global const float *input, __global float *output, const i
     float weight = 1.0/(gw*gh);
     int sx = cx - gw/2;
     int sy = cy - gh/2;
-    int ex = cx + gw/2;
-    int ey = cy + gh/2;
-    /* int ex = sx + gw; */
-    //int ey = sy + gh;
-    if (sx < 0) sx = 0;
-    if (sy < 0) sy = 0;
-    if (ex >= w) ex = w-1;
-    if (ey >= h) ey = h-1;
-    for (int x = sx; x <= ex; x++)
-        for (int y = sy; y <= ey; y++)
+    if (!rbounded(w, h, sx, sy, gw, gh)) {
+        output[_2dlin(w, h, cx, cy)] = input[_2dlin(w, h, cx, cy)];
+        return;
+    }
+    for (int x = sx; x < (sx + gw); x++)
+        for (int y = sy; y < (sy + gh); y++)
             result += input[_2dlin(w, h, x, y)];
     output[_2dlin(w, h, cx, cy)] = result*weight;
 }
@@ -36,21 +37,18 @@ __kernel void convolve(__global const float *input, __global float *output, cons
     float result = 0.0;
     int sx = tx - cw/2, sy = ty - ch/2;
     __global float * irow, * ipos;
-    //__global float * crow, * cpos;
     __global float * cpos = convm;
-    if (sx < 0) {cw += sx; sx = 0;}
-    if (sy < 0) {ch += sy; sy = 0;}
+    if (!rbounded(w, h, sx, sy, cw, ch)) {
+        output[_2dlin(w, h, tx, ty)] = input[_2dlin(w, h, tx, ty)];
+        return;
+    }
     irow = &input[_2dlin(w, h, sx, sy)]; ipos = irow;
-    //crow = &convm[0]; cpos = crow;
-    if (sx + cw > w) cw = w - sx;
-    if (sy + ch > h) ch = h - sy;
     for (int y = 0; y < ch; y++) {
         for (int x = 0; x < cw; x++) {
             result += (*cpos)*(*ipos);
             ipos++; cpos++;
         }
         irow += h; ipos = irow;
-        //crow += cw; cpos = crow;
     }
     output[_2dlin(w, h, tx, ty)] = result;
 }
@@ -62,12 +60,12 @@ __kernel void hconvolve(__global const float *input, __global float *output, con
     int sx = tx - cw/2, sy = ty - ch/2;
     __global float * irow, * ipos;
     __global float * cpos;
+    if (!rbounded(w, h, sx, sy, cw, ch)) {
+        output[_2dlin(w, h, tx, ty)] = input[_2dlin(w, h, tx, ty)];
+        return;
+    }
     cpos = &convm[_2dlin(w*cw*ch, h*cw*ch, tx, ty)];
-    if (sx < 0) {cw += sx; sx = 0;}
-    if (sy < 0) {ch += sy; sy = 0;}
     irow = &input[_2dlin(w, h, sx, sy)]; ipos = irow;
-    if (sx + cw > w) cw = w - sx;
-    if (sy + ch > h) ch = h - sy;
     for (int y = 0; y < ch; y++) {
         for (int x = 0; x < cw; x++) {
             result += (*cpos)*(*ipos);
@@ -85,14 +83,12 @@ __kernel void nconvolve(__global const float *input, __global float *output, con
     int sx = tx - cw/2, sy = ty - ch/2;
     __global float * irow, * ipos;
     __global float * cpos;
+    if (!rbounded(w, h, sx, sy, cw, ch)) {
+        output[_2dlin(w, h, tx, ty)] = input[_2dlin(w, h, tx, ty)];
+        return;
+    }
     cpos = &convm[_2dlin(w*cw*ch, h*cw*ch, tx, ty)];
-    // Check for image limits
-    if (sx < 0) {cw += sx; sx = 0;}
-    if (sy < 0) {ch += sy; sy = 0;}
-    if (sx + cw > w) cw = w - sx;
-    if (sy + ch > h) ch = h - sy;
     irow = &input[_2dlin(w, h, sx, sy)]; ipos = irow;
-    // Process sensorial neurons
     for (int y = 0; y < ch; y++) {
         for (int x = 0; x < cw; x++) {
             result += (*cpos)*(*ipos);
@@ -100,7 +96,31 @@ __kernel void nconvolve(__global const float *input, __global float *output, con
         }
         irow += h; ipos = irow;
     }
-    // Process bias neuron
     result += *cpos;
-    output[_2dlin(w, h, tx, ty)] = result;
+    output[_2dlin(w, h, tx, ty)] = result/(cw*ch + 1);
+}
+__kernel void adjust(__global const float *input, __global const float *output, __global const float * sample, const int w, const int h, __global float * convm, int cw, int ch, const float eta) {
+    int tx = get_global_id(0);
+    int ty = get_global_id(1);
+    int sx = tx - cw/2, sy = ty - ch/2;
+    __global float * irow, * ipos;
+    __global float * cpos;
+    __global float * opos;
+    float oval, sval;
+    if (!rbounded(w, h, sx, sy, cw, ch))
+        return;
+    cpos = &convm[_2dlin(w*cw*ch, h*cw*ch, tx, ty)];
+    irow = &input[_2dlin(w, h, sx, sy)]; ipos = irow;
+    oval = output[_2dlin(w, h, tx, ty)];
+    sval = sample[_2dlin(w, h, tx, ty)];
+    // Adjust weights
+    for (int y = 0; y < ch; y++) {
+        for (int x = 0; x < cw; x++) {
+            *cpos += 2.0*eta*(sval - oval)*(*ipos);
+            ipos++; cpos++;
+        }
+        irow += h; ipos = irow;
+    }
+    // Adjust bias
+    *cpos += 2.0*eta*(sval - oval);
 }

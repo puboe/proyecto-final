@@ -42,8 +42,8 @@ os_g = [cl.Buffer(ctx, mf.READ_WRITE | mf.ALLOC_HOST_PTR | mf.COPY_HOST_PTR, hos
 #s_g = [cl.Buffer(ctx, mf.READ_WRITE | mf.ALLOC_HOST_PTR, size=s.size) for s in os_g]
 
 #for idx in range(len(os_g)):
-    ##prg.gradient(queue, ishape, (10, 10), os_g[idx], s_g[idx]).wait()
-    #cl.enqueue_copy(queue, s_g[idx], os_g[idx]).wait()
+    #prg.gradient(queue, ishape, (10, 10), os_g[idx], s_g[idx]).wait()
+    ##cl.enqueue_copy(queue, s_g[idx], os_g[idx]).wait()
     #cl.enqueue_copy(queue, s_np[idx], s_g[idx]).wait()
 
 s_np = os_np
@@ -68,23 +68,23 @@ dy_ds_g = cl.Buffer(ctx, mf.WRITE_ONLY | mf.ALLOC_HOST_PTR | mf.COPY_HOST_PTR, h
 start_time = time.time()
 
 
-#prg.best_delta(queue, ishape, (10, 10), s_g[0], s_g[1],
-               #dx_g, dy_g,
-               #np.int32(conv_dim), np.int32(conv_dim),
-               #np.int32(win_dim), np.int32(win_dim)).wait()
+prg.best_delta(queue, ishape, (10, 10), s_g[0], s_g[1],
+               dx_g, dy_g,
+               np.int32(conv_dim), np.int32(conv_dim),
+               np.int32(win_dim), np.int32(win_dim)).wait()
 
 
-#prg.downsample2d(queue, dx_ds.shape, (10, 10), dx_ds_g, dx_g,
-                 #np.int32(ds_x), np.int32(ds_y))
+prg.downsample2d(queue, dx_ds.shape, (10, 10), dx_ds_g, dx_g,
+                 np.int32(ds_x), np.int32(ds_y))
 
-#prg.downsample2d(queue, dy_ds.shape, (10, 10), dy_ds_g, dy_g,
-                 #np.int32(ds_x), np.int32(ds_y))
+prg.downsample2d(queue, dy_ds.shape, (10, 10), dy_ds_g, dy_g,
+                 np.int32(ds_x), np.int32(ds_y))
 
 
-prg.bma(queue, dx_ds.shape, (10, 10), s_g[0], s_g[1],
-        dx_ds_g, dy_ds_g,
-        np.int32(conv_dim), np.int32(conv_dim),
-        np.int32(ds_x), np.int32(ds_y))
+#prg.bma(queue, dx_ds.shape, (10, 10), s_g[0], s_g[1],
+        #dx_ds_g, dy_ds_g,
+        #np.int32(conv_dim), np.int32(conv_dim),
+        #np.int32(ds_x), np.int32(ds_y))
 
 cl.enqueue_copy(queue, dx_ds, dx_ds_g)
 cl.enqueue_copy(queue, dy_ds, dy_ds_g)

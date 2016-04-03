@@ -131,8 +131,6 @@ __kernel void bma(__global float *prev, __global float *next, __global float * o
                 best_dy = (dy - cy);
             }
         }
-    prev[_2dlin(w, h, cx, cy)] = 1.0;
-    prev[_2dlin(w, h, cx+1, cy+2)] = 1.0;
     out_dx[_2dlin(rw, rh, rx, ry)] = best_dx;
     out_dy[_2dlin(rw, rh, rx, ry)] = best_dy;
 }
@@ -164,8 +162,8 @@ __kernel void best_delta(__global const float *prev, __global const float *next,
                 best_dy = (y - cy);
             }
         }
-    dx[_2dlin(w, h, cx, cy)] = best_dx*prev[_2dlin(w, h, cx, cy)]*10;
-    dy[_2dlin(w, h, cx, cy)] = best_dy*prev[_2dlin(w, h, cx, cy)]*10;
+    dx[_2dlin(w, h, cx, cy)] = best_dx;//*prev[_2dlin(w, h, cx, cy)]*10;
+    dy[_2dlin(w, h, cx, cy)] = best_dy;//*prev[_2dlin(w, h, cx, cy)]*10;
 }
 __kernel void downsample2d(__global float *dest, __global const float *source, const int ds_x, const int ds_y) {
     int dest_x = get_global_id(0);

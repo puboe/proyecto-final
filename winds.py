@@ -27,13 +27,15 @@ image_filenames = sys.argv[1:]
 #image_filenames.sort()
 print(image_filenames)
 
-os_np = [np.array(Image.open(f), np.float32, copy=True)/255.0
+os_np = [np.array(Image.open(f), np.float32, copy=True, order='F')/255.0
         for f in image_filenames]
 
 ishape = os_np[0].shape
 
-conv_dim = 21
+conv_dim = 25
 win_dim = 23
+#conv_dim = 9
+#win_dim = 11
 
 os_g = [cl.Buffer(ctx, mf.READ_WRITE | mf.ALLOC_HOST_PTR | mf.COPY_HOST_PTR, hostbuf=s) for s in os_np]
 
@@ -42,7 +44,7 @@ os_g = [cl.Buffer(ctx, mf.READ_WRITE | mf.ALLOC_HOST_PTR | mf.COPY_HOST_PTR, hos
 #s_g = [cl.Buffer(ctx, mf.READ_WRITE | mf.ALLOC_HOST_PTR, size=s.size) for s in os_g]
 
 #for idx in range(len(os_g)):
-    #prg.gradient(queue, ishape, (10, 10), os_g[idx], s_g[idx]).wait()
+    #prg.gradient(queue, ishape, None, os_g[idx], s_g[idx]).wait()
     ##cl.enqueue_copy(queue, s_g[idx], os_g[idx]).wait()
     #cl.enqueue_copy(queue, s_np[idx], s_g[idx]).wait()
 
@@ -52,13 +54,13 @@ s_g = os_g
 
 #gs_g = [cl.Buffer(ctx, mf.READ_WRITE | mf.ALLOC_HOST_PTR, size=s.size) for s in s_g]
 
-dx = np.zeros_like(s_np[0])
-dy = np.zeros_like(s_np[0])
+dx = np.zeros_like(s_np[0], order='F')
+dy = np.zeros_like(s_np[0], order='F')
 
 ds_x = 10
 ds_y = 10
-dx_ds = np.zeros((dx.shape[0]/ds_x, dx.shape[1]/ds_y), np.float32)
-dy_ds = np.zeros((dy.shape[0]/ds_x, dy.shape[1]/ds_y), np.float32)
+dx_ds = np.zeros((dx.shape[0]/ds_x, dx.shape[1]/ds_y), np.float32, order='F')
+dy_ds = np.zeros((dy.shape[0]/ds_x, dy.shape[1]/ds_y), np.float32, order='F')
 
 dx_g = cl.Buffer(ctx, mf.WRITE_ONLY | mf.ALLOC_HOST_PTR | mf.COPY_HOST_PTR, hostbuf=dx)
 dy_g = cl.Buffer(ctx, mf.WRITE_ONLY | mf.ALLOC_HOST_PTR | mf.COPY_HOST_PTR, hostbuf=dy)
@@ -68,16 +70,16 @@ dy_ds_g = cl.Buffer(ctx, mf.WRITE_ONLY | mf.ALLOC_HOST_PTR | mf.COPY_HOST_PTR, h
 start_time = time.time()
 
 
-prg.best_delta(queue, ishape, (10, 10), s_g[0], s_g[1],
+prg.best_delta(queue, ishape, None, s_g[0], s_g[1],
                dx_g, dy_g,
                np.int32(conv_dim), np.int32(conv_dim),
                np.int32(win_dim), np.int32(win_dim)).wait()
 
 
-prg.downsample2d(queue, dx_ds.shape, (10, 10), dx_ds_g, dx_g,
+prg.downsample2d(queue, dx_ds.shape, None, dx_ds_g, dx_g,
                  np.int32(ds_x), np.int32(ds_y))
 
-prg.downsample2d(queue, dy_ds.shape, (10, 10), dy_ds_g, dy_g,
+prg.downsample2d(queue, dy_ds.shape, None, dy_ds_g, dy_g,
                  np.int32(ds_x), np.int32(ds_y))
 
 
@@ -104,6 +106,7 @@ print(time.time() - start_time)
 #Y, X = np.mgrid[0:ishape[0]:1, 0:ishape[1]:1]
 #plt.quiver(X, Y, dx, dy, units='xy', color='red')
 #plt.show()
+
 print(np.max(dx), np.max(dy))
 print(np.max(dx_ds), np.max(dy_ds))
 
@@ -117,3 +120,5 @@ plt.show()
 
 
 
+if __name__ == "__main__":
+    main()

@@ -1,7 +1,7 @@
 __constant float gradient_convm[3] = {-1.0, 0.0, 1.0};
 
 inline int _2dlin(const int w, const int h, const int x, const int y) {
-    return x*h + y;
+    return x + y*w;
 }
 inline bool bounded(const int w, const int h, const int x, const int y) {
     return x >= 0 && y >= 0 && x < w && y < h;
@@ -26,7 +26,7 @@ inline bool rbounded(const int w, const int h,
               result += (*cpos)*(*ipos); \
               ipos++; cpos++; \
           } \
-          irow += h; ipos = irow; \
+          irow += w; ipos = irow; \
       } \
       return result; \
   }

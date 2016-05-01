@@ -207,16 +207,19 @@ def main():
     (ds_x, ds_y) = (10, 10)
     flux = MeteoFlux.from_images((25, 25), (23, 23), (ds_x, ds_y), images, clargs)
 
-    first_state = flux.states[0].get_ir_data()
-    bshape = first_state.shape
 
-    print('Get motion data')
+    for index, step in enumerate(flux.steps):
 
-    dx_ds, dy_ds = flux.steps[0].get_ds_motion_data()
+        ir_data = step.prev_state.get_ir_data()
+        bshape = ir_data.shape
 
-    Y, X = np.mgrid[0:bshape[0]:ds_x, 0:bshape[1]:ds_y]
-    plt.imshow(first_state, interpolation='none', cmap='gray')
-    plt.quiver(X, Y, dy_ds, -dx_ds, scale=1.0, units='xy', color='red')
+        dx_ds, dy_ds = step.get_ds_motion_data()
+
+        Y, X = np.mgrid[0:bshape[0]:ds_x, 0:bshape[1]:ds_y]
+        plt.figure(str(index))
+        plt.imshow(ir_data, interpolation='none', cmap='gray')
+        plt.quiver(X, Y, dy_ds, -dx_ds, scale=1.0, units='xy', color='red')
+
     plt.show()
 
 if __name__ == "__main__":

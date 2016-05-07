@@ -7,6 +7,7 @@ import os
 import shutil
 import pickle
 import logging
+from functools import reduce
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 LOGGER = logging.getLogger('METEO')
@@ -174,6 +175,12 @@ class MeteoStep(object):
             self.dx_ds, self.dy_ds = self._gen_ds_motion_data()
         return self.dx_ds, self.dy_ds
 
+    def trail_step(self, pos):
+        dx_ds, dy_ds = self.get_ds_motion_data()
+        pos_index = tuple(np.transpose(np.fliplr(pos.astype(np.uint32)) // self.downsample))
+        dpos = np.transpose(np.array([dy_ds[pos_index], dx_ds[pos_index]]))
+        return pos + dpos
+
 
 class MeteoFlux(object):
     @classmethod
@@ -187,6 +194,11 @@ class MeteoFlux(object):
         self.states = states
         self.steps = [MeteoStep(pair, search_area, window, downsample, clargs)
                         for pair in zip(self.states[:-1], self.states[1:])]
+
+    def get_trail(self, start, transpose = False):
+        result = np.array(reduce(lambda slist, step: slist + [step.trail_step(slist[-1])],
+                                 self.steps, [start]))
+        return np.transpose(result, (1, 0, 2)) if transpose else result
 
 
 def main():
@@ -205,22 +217,35 @@ def main():
               'prg': cl_program}
 
     (ds_x, ds_y) = (10, 10)
+    images.sort()
     flux = MeteoFlux.from_images((25, 25), (23, 23), (ds_x, ds_y), images, clargs)
 
+    #trail = flux.get_trail(np.array([[150.0, 150.0],[200.0, 200.0]]))
 
-    for index, step in enumerate(flux.steps):
+    trail = flux.get_trail((70.0, 70.0) + np.random.random((400, 2))*(400.0, 200.0) )
 
-        ir_data = step.prev_state.get_ir_data()
-        bshape = ir_data.shape
+    plt.imshow(flux.states[0].get_ir_data(), interpolation='none', cmap='gray')
 
-        dx_ds, dy_ds = step.get_ds_motion_data()
-
-        Y, X = np.mgrid[0:bshape[0]:ds_x, 0:bshape[1]:ds_y]
-        plt.figure(str(index))
-        plt.imshow(ir_data, interpolation='none', cmap='gray')
-        plt.quiver(X, Y, dy_ds, -dx_ds, scale=1.0, units='xy', color='red')
+    for (v, dv) in zip(trail[:-1], np.diff(trail, axis=0)):
+        x, y = np.transpose(v)
+        dx, dy = np.transpose(dv)
+        plt.quiver(x, y, dx, -dy, scale=1.0, units='x', color='blue')
 
     plt.show()
+
+    #for index, step in enumerate(flux.steps):
+
+        #ir_data = step.prev_state.get_ir_data()
+        #bshape = ir_data.shape
+
+        #dx_ds, dy_ds = step.get_ds_motion_data()
+
+        #Y, X = np.mgrid[0:bshape[0]:ds_x, 0:bshape[1]:ds_y]
+        #plt.figure(str(index))
+        #plt.imshow(ir_data, interpolation='none', cmap='gray')
+        #plt.quiver(X, Y, dy_ds, -dx_ds, scale=1.0, units='xy', color='red')
+
+    #plt.show()
 
 if __name__ == "__main__":
     main()

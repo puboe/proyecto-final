@@ -6,41 +6,38 @@ import sys
 import os
 import shutil
 import pickle
-import logging
 from functools import reduce
+from datetime import datetime
 
+import logging
+import loggingtools
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
-LOGGER = logging.getLogger('METEO')
+logger = logging.getLogger("Meteo")
+timefunction = loggingtools.create_timefunction(logger)
+logblock = loggingtools.create_logblock(logger)
 
 mf = cl.mem_flags
 
-
-def timedmethod(method):
-    def wrapper(*args, **kwargs):
-        LOGGER.debug("Enter %s" % str(method))
-        start_time = time.time()
-        result = method(*args, **kwargs)
-        elapsed_time = time.time() - start_time
-        LOGGER.debug("Exit %s (%f sec)" % (str(method), elapsed_time))
-        return result
-    return wrapper
 
 class MeteoState(object):
     @classmethod
     def from_image(cls, image_file, clargs, crop_rect=None):
         data = np.array(Image.open(image_file), np.float32, copy=True, order='F')/255.0
+
         if crop_rect is not None:
             (x, y, w, h) = crop_rect
-            data = data[y:y+h, x:x+w]
+            data = np.array(data[y:y+h, x:x+w], np.float32, copy=False, order='F')
 
-        return cls(data, clargs, inject=True)
+        return cls(datetime.strptime(os.path.basename(image_file)[:10], "%y%m%d%H%M"),
+                   data, clargs, inject=True)
 
-    def __init__(self, ir_data, clargs, inject=False):
+    def __init__(self, datetime, ir_data, clargs, inject=False):
         if len(ir_data.shape) != 2:
             raise Exception('Only bidimensional data allowed')
         self.clargs = clargs
         self.ir_data = ir_data if inject else np.array(ir_data, np.float32, copy=True, order='F')
         self.ir_data_edges = None
+        self.datetime = datetime
 
     def _gen_ir_data_edges(self):
         output = np.zeros_like(self.ir_data, order='F')
@@ -52,7 +49,7 @@ class MeteoState(object):
                              mf.WRITE_ONLY | mf.ALLOC_HOST_PTR,
                              hostbuf=output)
 
-        self.clargs['prg'].gradient(self.clargs['q'], self.get_shape(),
+        self.clargs['prg'].gradient(self.clargs['q'], self.get_shape(), None,
                                 ir_data_g, output_g).wait()
 
         cl.enqueue_copy(self.clargs['q'], output, output_g).wait()
@@ -70,6 +67,13 @@ class MeteoState(object):
 
     def get_shape(self):
         return self.ir_data.shape
+
+    def valid(self):
+        print(np.any(self.ir_data > 0))
+        return np.any(self.ir_data > 0)
+
+    def get_datetime(self):
+        return self.datetime 
 
 class MeteoStep(object):
     def __init__(self, states, search_area, window, downsample, clargs):
@@ -89,10 +93,11 @@ class MeteoStep(object):
         self.dx_ds = None
         self.dy_ds = None
 
-    @timedmethod
+        self.density_data_key = 'get_ir_data_edges'
+
     def _gen_motion_data(self):
-        prev = self.prev_state.get_ir_data()
-        post = self.post_state.get_ir_data()
+        prev = getattr(self.prev_state, self.density_data_key)()
+        post = getattr(self.post_state, self.density_data_key)()
 
         dx = np.zeros_like(prev, order='F')
         dy = np.zeros_like(dx, order='F')
@@ -117,18 +122,18 @@ class MeteoStep(object):
         search_area_w, search_area_h = self.search_area
 
 
-        self.clargs['prg'].best_delta(self.clargs['q'], prev.shape, None,
-                                      prev_g, post_g,
-                                      dx_g, dy_g,
-                                      np.int32(search_area_w), np.int32(search_area_h),
-                                      np.int32(window_w), np.int32(window_h)).wait()
+        with logblock("bma"):
+            self.clargs['prg'].best_delta(self.clargs['q'], prev.shape, None,
+                                          prev_g, post_g,
+                                          dx_g, dy_g,
+                                          np.int32(search_area_w), np.int32(search_area_h),
+                                          np.int32(window_w), np.int32(window_h)).wait()
 
         cl.enqueue_copy(self.clargs['q'], dx, dx_g).wait()
         cl.enqueue_copy(self.clargs['q'], dy, dy_g).wait()
 
         return dx, dy
 
-    @timedmethod
     def _gen_ds_motion_data(self):
         dx, dy = self.get_motion_data()
 
@@ -184,14 +189,18 @@ class MeteoStep(object):
 
 class MeteoFlux(object):
     @classmethod
-    @timedmethod
     def from_images(cls, search_area, window, downsample, image_files, clargs, crop_rect=None):
         states = [MeteoState.from_image(image_file, clargs, crop_rect)
                     for image_file in image_files]
         return cls(states, search_area, window, downsample, clargs)
 
     def __init__(self, states, search_area, window, downsample, clargs):
-        self.states = states
+        self.states = list(sorted(list(filter(lambda s: s.valid(), states)),
+                                  key=lambda s: s.get_datetime()))
+
+        if len(self.states) < 2:
+            raise Exception('Need at least two states to calculate steps')
+
         self.steps = [MeteoStep(pair, search_area, window, downsample, clargs)
                         for pair in zip(self.states[:-1], self.states[1:])]
 
@@ -218,11 +227,21 @@ def main():
 
     (ds_x, ds_y) = (10, 10)
     images.sort()
-    flux = MeteoFlux.from_images((25, 25), (23, 23), (ds_x, ds_y), images, clargs)
+    crop_rect = None
+    #crop_rect = crop_rect=(180, 160, 500, 300)  
+    flux = MeteoFlux.from_images((15, 15), (33, 33), (ds_x, ds_y), images, clargs, crop_rect = crop_rect)
 
-    #trail = flux.get_trail(np.array([[150.0, 150.0],[200.0, 200.0]]))
+    trail = flux.get_trail((0.0, 0.0) + np.random.random((400, 2))*(500.0, 300.0) )
 
-    trail = flux.get_trail((70.0, 70.0) + np.random.random((400, 2))*(400.0, 200.0) )
+    for index, (state, points) in enumerate(zip(flux.states, trail)):
+        x, y = np.transpose(points)
+        plt.xlim([0, state.get_ir_data().shape[1]])
+        plt.ylim([0, state.get_ir_data().shape[0]])
+        plt.gca().invert_yaxis()
+        plt.imshow(state.get_ir_data(), interpolation='none', cmap='gray')
+        plt.plot(x, y, 'ro')
+        plt.savefig('result/' + str(index) + '.png', format='png')
+        plt.clf()
 
     plt.imshow(flux.states[0].get_ir_data(), interpolation='none', cmap='gray')
 

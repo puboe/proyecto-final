@@ -2,6 +2,7 @@ import svgwrite
 from svgwrite.image import Image
 
 class SVGImage(object):
+        #TODO: Arreglar esta poronga atomica.
 	def __init__(self, uri, fileName, shape):
 		self.dwg = svgwrite.Drawing(fileName, profile='tiny')
 		image = Image(uri, insert=(0,0), size=("500", "300"))

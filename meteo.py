@@ -8,6 +8,7 @@ import shutil
 import pickle
 from functools import reduce
 from datetime import datetime
+from collections import namedtuple
 
 import logging
 import loggingtools
@@ -17,6 +18,11 @@ timefunction = loggingtools.create_timefunction(logger)
 logblock = loggingtools.create_logblock(logger)
 
 mf = cl.mem_flags
+
+def arange2d(starts, stops, steps, dtype=None):
+    x, y = [np.arange(start, stop, step)
+            for start, stop, step in zip(starts, stops, steps)]
+    return np.transpose([np.tile(x, len(y)), np.repeat(y, len(x))])
 
 
 class MeteoState(object):
@@ -69,20 +75,19 @@ class MeteoState(object):
         return self.ir_data.shape
 
     def valid(self):
-        print(np.any(self.ir_data > 0))
         return np.any(self.ir_data > 0)
 
     def get_datetime(self):
         return self.datetime 
 
 class MeteoStep(object):
+    StatePair = namedtuple('StatePair', ['prev', 'post'])
     def __init__(self, states, search_area, window, downsample, clargs):
-        prev_state, post_state = states
-        if prev_state.get_shape() != post_state.get_shape():
+        states = MeteoStep.StatePair(*states)
+        if states.prev.get_shape() != states.post.get_shape():
             raise Exception('Step states must be of the same shape')
 
-        self.prev_state = prev_state
-        self.post_state = post_state
+        self.states = states
         self.search_area = search_area
         self.window = window
         self.downsample = downsample
@@ -96,8 +101,8 @@ class MeteoStep(object):
         self.density_data_key = 'get_ir_data_edges'
 
     def _gen_motion_data(self):
-        prev = getattr(self.prev_state, self.density_data_key)()
-        post = getattr(self.post_state, self.density_data_key)()
+        prev = getattr(self.states.prev, self.density_data_key)()
+        post = getattr(self.states.post, self.density_data_key)()
 
         dx = np.zeros_like(prev, order='F')
         dy = np.zeros_like(dx, order='F')
@@ -180,11 +185,15 @@ class MeteoStep(object):
             self.dx_ds, self.dy_ds = self._gen_ds_motion_data()
         return self.dx_ds, self.dy_ds
 
-    def trail_step(self, pos):
+    def trail_step(self, pos, backwards = False):
         dx_ds, dy_ds = self.get_ds_motion_data()
         pos_index = tuple(np.transpose(np.fliplr(pos.astype(np.uint32)) // self.downsample))
         dpos = np.transpose(np.array([dy_ds[pos_index], dx_ds[pos_index]]))
-        return pos + dpos
+        return pos - dpos if backwards else pos + dpos
+
+    def get_timedelta(self):
+        return self.states.post.get_datetime() - self.states.prev.get_datetime()
+
 
 
 class MeteoFlux(object):
@@ -192,22 +201,53 @@ class MeteoFlux(object):
     def from_images(cls, search_area, window, downsample, image_files, clargs, crop_rect=None):
         states = [MeteoState.from_image(image_file, clargs, crop_rect)
                     for image_file in image_files]
-        return cls(states, search_area, window, downsample, clargs)
+        return cls.from_states(states, search_area, window, downsample, clargs)
 
-    def __init__(self, states, search_area, window, downsample, clargs):
-        self.states = list(sorted(list(filter(lambda s: s.valid(), states)),
-                                  key=lambda s: s.get_datetime()))
+    @classmethod
+    def from_states(cls, states, search_area, window, downsample, clargs):
+        states = list(sorted(list(filter(lambda s: s.valid(), states)),
+                             key=lambda s: s.get_datetime()))
 
-        if len(self.states) < 2:
+        if len(states) < 2:
             raise Exception('Need at least two states to calculate steps')
 
-        self.steps = [MeteoStep(pair, search_area, window, downsample, clargs)
-                        for pair in zip(self.states[:-1], self.states[1:])]
+        steps = [MeteoStep(pair, search_area, window, downsample, clargs)
+                   for pair in zip(states[:-1], states[1:])]
 
-    def get_trail(self, start, transpose = False):
-        result = np.array(reduce(lambda slist, step: slist + [step.trail_step(slist[-1])],
-                                 self.steps, [start]))
+        return cls(steps, clargs)
+
+    def __init__(self, steps, clargs):
+        self.states = [state 
+                        for step in steps
+                            for state in step.states]
+        self.steps = steps
+        self.clargs = clargs
+
+    def get_trail(self, start, transpose = False, backwards = False):
+        if not backwards:
+            result = np.array(reduce(lambda slist, step: slist + [step.trail_step(slist[-1])],
+                                     self.steps, [start]))
+        else:
+            rev_steps = self.steps
+            rev_steps.reverse()
+            result = np.array(reduce(lambda slist, step: [step.trail_step(slist[0], backwards=True)] + slist,
+                                     rev_steps, [start]))
         return np.transpose(result, (1, 0, 2)) if transpose else result
+
+    def get_times(self):
+        return np.cumsum([0.0] + [step.get_timedelta().seconds // 60
+                            for step in self.steps])
+
+    def get_polys(self, start, deg, backwards = False):
+        trails = self.get_trail(start, transpose = True, backwards = backwards)
+        t = self.get_times()
+        return [(np.polyfit(t, c, deg) for c in np.transpose(trail))
+                for trail in trails]
+
+    def get_polyfitted_trails(self, tstart, tstop, tstep, start, deg, backwards = False):
+        polys = self.get_polys(start, deg, backwards = backwards)
+        return [(np.polyval(poly, np.arange(tstart, tstop, tstep)) for poly in polypair)
+                    for polypair in polys]
 
 
 def main():
@@ -228,10 +268,16 @@ def main():
     (ds_x, ds_y) = (10, 10)
     images.sort()
     crop_rect = None
-    #crop_rect = crop_rect=(180, 160, 500, 300)  
+    crop_rect = crop_rect=(180, 160, 500, 300)  
     flux = MeteoFlux.from_images((15, 15), (33, 33), (ds_x, ds_y), images, clargs, crop_rect = crop_rect)
 
-    trail = flux.get_trail((0.0, 0.0) + np.random.random((400, 2))*(500.0, 300.0) )
+
+    print(flux.get_times())
+
+    #trail = flux.get_trail((0.0, 0.0) + np.random.random((400, 2))*(500.0, 300.0) )
+
+    start = np.fliplr(arange2d((10.0, 10.0), flux.states[0].get_ir_data().shape, (10.0, 10.0), dtype=np.float32) - 10.0)
+    trail = flux.get_trail(start, backwards = True)
 
     for index, (state, points) in enumerate(zip(flux.states, trail)):
         x, y = np.transpose(points)
@@ -252,9 +298,19 @@ def main():
 
     plt.show()
 
+    start_time = 0.0
+    end_time = np.max(flux.get_times()) + 60.0
+
+    plt.imshow(flux.states[0].get_ir_data(), interpolation='none', cmap='gray')
+
+    for (tx, ty) in flux.get_polyfitted_trails(start_time, end_time, 5.0, start, 2):
+        plt.plot(tx, ty, 'b')
+
+    plt.show()
+
     #for index, step in enumerate(flux.steps):
 
-        #ir_data = step.prev_state.get_ir_data()
+        #ir_data = step.states.prev.get_ir_data()
         #bshape = ir_data.shape
 
         #dx_ds, dy_ds = step.get_ds_motion_data()

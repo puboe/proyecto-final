@@ -9,6 +9,7 @@ import pickle
 from functools import reduce
 from datetime import datetime
 from collections import namedtuple
+from svg import SVGImage
 
 import logging
 import loggingtools
@@ -24,18 +25,20 @@ def arange2d(starts, stops, steps, dtype=None):
             for start, stop, step in zip(starts, stops, steps)]
     return np.transpose([np.tile(x, len(y)), np.repeat(y, len(x))])
 
+def crop_image(image, crop_rect = None):
+    if crop_rect is None:
+        return image
+    (x, y, w, h) = crop_rect
+    return np.array(image[y:y+h, x:x+w], np.float32, copy=False, order='F')
+
 
 class MeteoState(object):
     @classmethod
     def from_image(cls, image_file, clargs, crop_rect=None):
         data = np.array(Image.open(image_file), np.float32, copy=True, order='F')/255.0
 
-        if crop_rect is not None:
-            (x, y, w, h) = crop_rect
-            data = np.array(data[y:y+h, x:x+w], np.float32, copy=False, order='F')
-
         return cls(datetime.strptime(os.path.basename(image_file)[:10], "%y%m%d%H%M"),
-                   data, clargs, inject=True)
+                   crop_image(data, crop_rect), clargs, inject=True)
 
     def __init__(self, datetime, ir_data, clargs, inject=False):
         if len(ir_data.shape) != 2:
@@ -98,7 +101,8 @@ class MeteoStep(object):
         self.dx_ds = None
         self.dy_ds = None
 
-        self.density_data_key = 'get_ir_data_edges'
+        #self.density_data_key = 'get_ir_data_edges'
+        self.density_data_key = 'get_ir_data'
 
     def _gen_motion_data(self):
         prev = getattr(self.states.prev, self.density_data_key)()
@@ -194,6 +198,9 @@ class MeteoStep(object):
     def get_timedelta(self):
         return self.states.post.get_datetime() - self.states.prev.get_datetime()
 
+    def get_shape(self):
+        return self.states.prev.get_shape()
+
 
 
 class MeteoFlux(object):
@@ -217,21 +224,24 @@ class MeteoFlux(object):
         return cls(steps, clargs)
 
     def __init__(self, steps, clargs):
-        self.states = [state 
-                        for step in steps
-                            for state in step.states]
         self.steps = steps
         self.clargs = clargs
+
+    def get_states(self):
+        yield self.steps[0].states.prev
+        for step in self.steps:
+            yield step.states.post
+
+    def get_shape(self):
+        return self.steps[0].get_shape()
 
     def get_trail(self, start, transpose = False, backwards = False):
         if not backwards:
             result = np.array(reduce(lambda slist, step: slist + [step.trail_step(slist[-1])],
                                      self.steps, [start]))
         else:
-            rev_steps = self.steps
-            rev_steps.reverse()
             result = np.array(reduce(lambda slist, step: [step.trail_step(slist[0], backwards=True)] + slist,
-                                     rev_steps, [start]))
+                                     self.steps[::-1], [start]))
         return np.transpose(result, (1, 0, 2)) if transpose else result
 
     def get_times(self):
@@ -248,6 +258,21 @@ class MeteoFlux(object):
         polys = self.get_polys(start, deg, backwards = backwards)
         return [(np.polyval(poly, np.arange(tstart, tstop, tstep)) for poly in polypair)
                     for polypair in polys]
+
+
+class MeteoMap(object):
+    @classmethod
+    def from_image(cls, image_file, crop_rect = None):
+        image = np.array(Image.open(image_file), np.float32, copy=True, order='F')/255.0
+        return cls(crop_image(image, crop_rect))
+
+    @classmethod
+    def to_image(cls, mmap, image_file):
+        image = Image.fromarray((mmap.image*255.0).astype(np.uint8))
+        image.save(image_file)
+
+    def __init__(self, image):
+        self.image = image
 
 
 def main():
@@ -269,28 +294,26 @@ def main():
     images.sort()
     crop_rect = None
     crop_rect = crop_rect=(180, 160, 500, 300)  
-    flux = MeteoFlux.from_images((15, 15), (33, 33), (ds_x, ds_y), images, clargs, crop_rect = crop_rect)
-
+    flux = MeteoFlux.from_images((15, 15), (33, 33), (ds_x, ds_y), images, clargs, crop_rect = None)
+    mmap = MeteoMap.from_image("map.png", crop_rect = crop_rect)
 
     print(flux.get_times())
 
-    #trail = flux.get_trail((0.0, 0.0) + np.random.random((400, 2))*(500.0, 300.0) )
-
-    start = np.fliplr(arange2d((10.0, 10.0), flux.states[0].get_ir_data().shape, (10.0, 10.0), dtype=np.float32) - 10.0)
+    start = np.fliplr(arange2d((10.0, 10.0), flux.get_shape(), (10.0, 10.0), dtype=np.float32) - 10.0)
     trail = flux.get_trail(start, backwards = True)
 
-    for index, (state, points) in enumerate(zip(flux.states, trail)):
+    for index, (state, points) in enumerate(zip(flux.get_states(), trail)):
         x, y = np.transpose(points)
-        plt.xlim([0, state.get_ir_data().shape[1]])
-        plt.ylim([0, state.get_ir_data().shape[0]])
+        height, width = flux.get_shape()
+        plt.xlim([0, width])
+        plt.ylim([0, height])
         plt.gca().invert_yaxis()
         plt.imshow(state.get_ir_data(), interpolation='none', cmap='gray')
         plt.plot(x, y, 'ro')
         plt.savefig('result/' + str(index) + '.png', format='png')
         plt.clf()
 
-    plt.imshow(flux.states[0].get_ir_data(), interpolation='none', cmap='gray')
-
+    plt.imshow(mmap.image, interpolation='none', cmap='gray')
     for (v, dv) in zip(trail[:-1], np.diff(trail, axis=0)):
         x, y = np.transpose(v)
         dx, dy = np.transpose(dv)
@@ -301,26 +324,19 @@ def main():
     start_time = 0.0
     end_time = np.max(flux.get_times()) + 60.0
 
-    plt.imshow(flux.states[0].get_ir_data(), interpolation='none', cmap='gray')
+    MeteoMap.to_image(mmap, "result/map.png")
+    svg = SVGImage("map.png", "result/lines.svg", flux.get_shape())
 
+    plt.imshow(mmap.image, interpolation='none', cmap='gray')
     for (tx, ty) in flux.get_polyfitted_trails(start_time, end_time, 5.0, start, 2):
         plt.plot(tx, ty, 'b')
+        txy = list(zip(tx, ty))
+        for v1, v2 in zip(txy[:-1], txy[1:]):
+            svg.addLine(v1, v2)
+    svg.save()
+
 
     plt.show()
-
-    #for index, step in enumerate(flux.steps):
-
-        #ir_data = step.states.prev.get_ir_data()
-        #bshape = ir_data.shape
-
-        #dx_ds, dy_ds = step.get_ds_motion_data()
-
-        #Y, X = np.mgrid[0:bshape[0]:ds_x, 0:bshape[1]:ds_y]
-        #plt.figure(str(index))
-        #plt.imshow(ir_data, interpolation='none', cmap='gray')
-        #plt.quiver(X, Y, dy_ds, -dx_ds, scale=1.0, units='xy', color='red')
-
-    #plt.show()
 
 if __name__ == "__main__":
     main()

@@ -26,7 +26,7 @@ def fetch():
 	downloaded = 0
 
 	for filename in ftp.nlst(FILEMATCH):
-		if os.path.exists(IMG_DIR + filename) or ftp.size(filename) < MIN_SIZE:
+		if filename == "latest.tif" or os.path.exists(IMG_DIR + filename) or ftp.size(filename) < MIN_SIZE:
 			skipped += 1
 		else:
 			fhandle = open(os.path.join(IMG_DIR, filename), 'wb')
@@ -35,7 +35,7 @@ def fetch():
 			fhandle.close()
 			downloaded += 1
 
-	logging.info('%s files downloaded, %s files skipped."', downloaded, skipped)
+	logging.info('%s files downloaded, %s files skipped.', downloaded, skipped)
 			
 	ftp.close()
 

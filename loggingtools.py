@@ -3,10 +3,13 @@ import time
 from contextlib import contextmanager
 
 def create_timefunction(logger):
-    def timefunction(function, fname = None):
+    def timefunction(function, fname=None, params=False):
         fname = fname or str(function)
         def wrapper(*args, **kwargs):
-            logger.debug('Enter %s (%s, %s)' % (fname, str(args), str(kwargs)))
+            if params:
+                logger.debug('Enter %s (%s, %s)' % (fname, str(args), str(kwargs)))
+            else:
+                logger.debug('Enter %s' % (fname,))
             start_time = time.time()
             result = function(*args, **kwargs)
             elapsed_time = time.time() - start_time

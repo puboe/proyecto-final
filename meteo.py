@@ -34,6 +34,15 @@ def path_walker(path):
         path, field = os.path.split(path)
         yield field
 
+
+class MeteoPoint(namedtuple('_MeteoPoint', ('x', 'y'))):
+    def __composite_values__(self):
+        return self.x, self.y
+
+class MeteoSize(namedtuple('_MeteoSize', ('w', 'h'))):
+    def __composite_values__(self):
+        return self.x, self.y
+
 class MeteoBase(object):
     _image_processor = None
     
@@ -47,16 +56,13 @@ class MeteoData(MeteoBase):
         zone = next(fields)
         satellite = next(fields)
 
-        return cls(time, satellite, zone, channel,
-                   crop_image(image, crop_rect))
+        return cls(satellite, channel, crop_image(image, crop_rect))
 
-    def __init__(self, time, satellite, zone, channel, image):
+    def __init__(self, satellite, channel, image):
         if len(image.shape) != 2:
             raise Exception('Only bidimensional data allowed')
 
-        self.time = time
         self.satellite = satellite
-        self.zone = zone
         self.channel = channel
         self.image = image
         self._edges = None
@@ -84,20 +90,20 @@ class MeteoData(MeteoBase):
 
 class MeteoState(MeteoBase):
     @classmethod
-    def from_images(cls, image_files, crop_rect=None):
+    def from_images(cls, image_files, time, crop_rect=None):
         datas = [MeteoData.from_image(image_file, crop_rect=crop_rect)
                     for image_file in image_files]
 
 
-        return cls(datas)
+        return cls(datas, time)
 
-    def __init__(self, datas):
-        for attr in ['time', 'shape', 'zone', 'satellite']:
-            attr_list = [getattr(data, attr) for data in datas]
-            if attr_list[1:] != attr_list[:-1]:
-                raise Exception('Data objects in state must have the same %s.' % attr)
-
+    def __init__(self, datas, time):
+        #for attr in ['time', 'shape', 'zone', 'satellite']:
+            #attr_list = [getattr(data, attr) for data in datas]
+            #if attr_list[1:] != attr_list[:-1]:
+                #raise Exception('Data objects in state must have the same %s.' % attr)
         self.datas = datas
+        self.time = time
 
     @property
     def first_data(self):
@@ -108,29 +114,16 @@ class MeteoState(MeteoBase):
         return self.first_data.shape
 
     @property
-    def time(self):
-        return self.first_data.time
-
-    @property
-    def zone(self):
-        return self.first_data.zone
-
-    @property
-    def satellite(self):
-        return self.first_data.satellite
-
-    @property
     def valid(self):
         return all([d.valid for d in self.datas])
 
 class MeteoStep(MeteoBase):
-    StatePair = namedtuple('StatePair', ['prev', 'post'])
-    def __init__(self, states, search_area, window, downsample):
-        states = MeteoStep.StatePair(*states)
-        if states.prev.shape != states.post.shape:
+    def __init__(self, prev, post, search_area, window, downsample):
+        if prev.shape != post.shape:
             raise Exception('Step states must be of the same shape')
 
-        self.states = states
+        self.prev = prev
+        self.post = post
         self.search_area = search_area
         self.window = window
         self.downsample = downsample
@@ -146,8 +139,8 @@ class MeteoStep(MeteoBase):
 
     def _motion_data(self, processor):
         processor = processor or self._image_processor
-        prev = getattr(self.states.prev.first_data, self.density_data_key)(processor)
-        post = getattr(self.states.post.first_data, self.density_data_key)(processor)
+        prev = getattr(self.prev.first_data, self.density_data_key)(processor)
+        post = getattr(self.post.first_data, self.density_data_key)(processor)
         return processor.bma(prev, post, self.search_area, self.window)
 
     def motion_data(self, processor=None):
@@ -174,11 +167,11 @@ class MeteoStep(MeteoBase):
 
     @property
     def timedelta(self):
-        return self.states.post.time - self.states.prev.time
+        return self.post.time - self.prev.time
 
     @property
     def shape(self):
-        return self.states.prev.shape
+        return self.prev.shape
 
 
 class MeteoFlux(MeteoBase):
@@ -196,8 +189,8 @@ class MeteoFlux(MeteoBase):
         if len(states) < 2:
             raise Exception('Need at least two states to calculate steps')
 
-        steps = [MeteoStep(pair, search_area, window, downsample)
-                   for pair in zip(states[:-1], states[1:])]
+        steps = [MeteoStep(prev, post, search_area, window, downsample)
+                   for prev, post in zip(states[:-1], states[1:])]
 
         return cls(steps)
 

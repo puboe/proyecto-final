@@ -118,12 +118,12 @@ class MeteoState(MeteoBase):
         return all([d.valid for d in self.datas])
 
 class MeteoStep(MeteoBase):
-    def __init__(self, prev, post, search_area, window, downsample):
-        if prev.shape != post.shape:
+    def __init__(self, prev_state, next_state, search_area, window, downsample):
+        if prev_state.shape != next_state.shape:
             raise Exception('Step states must be of the same shape')
 
-        self.prev = prev
-        self.post = post
+        self.prev_state = prev_state
+        self.next_state = next_state
         self.search_area = search_area
         self.window = window
         self.downsample = downsample
@@ -139,9 +139,9 @@ class MeteoStep(MeteoBase):
 
     def _motion_data(self, processor):
         processor = processor or self._image_processor
-        prev = getattr(self.prev.first_data, self.density_data_key)(processor)
-        post = getattr(self.post.first_data, self.density_data_key)(processor)
-        return processor.bma(prev, post, self.search_area, self.window)
+        prev_image = getattr(self.prev_state.first_data, self.density_data_key)(processor)
+        next_image = getattr(self.next_state.first_data, self.density_data_key)(processor)
+        return processor.bma(prev_image, next_image, self.search_area, self.window)
 
     def motion_data(self, processor=None):
         if self.motion_x is None or self.motion_y is None:
@@ -167,7 +167,7 @@ class MeteoStep(MeteoBase):
 
     @property
     def timedelta(self):
-        return self.post.time - self.prev.time
+        return self.next_state.time - self.prev_state.time
 
     @property
     def shape(self):
@@ -189,8 +189,8 @@ class MeteoFlux(MeteoBase):
         if len(states) < 2:
             raise Exception('Need at least two states to calculate steps')
 
-        steps = [MeteoStep(prev, post, search_area, window, downsample)
-                   for prev, post in zip(states[:-1], states[1:])]
+        steps = [MeteoStep(prev_state, next_state, search_area, window, downsample)
+                   for prev_state, next_state in zip(states[:-1], states[1:])]
 
         return cls(steps)
 
@@ -198,9 +198,9 @@ class MeteoFlux(MeteoBase):
         self.steps = steps
 
     def get_states(self):
-        yield self.steps[0].states.prev
+        yield self.steps[0].prev_state
         for step in self.steps:
-            yield step.states.post
+            yield step.next_state
 
     @property
     def shape(self):
@@ -232,10 +232,10 @@ class MeteoFlux(MeteoBase):
                     for polypair in polys]
 
 
-class MeteoMap(object):
+class MeteoZone(object):
     @classmethod
     def from_image(cls, image_file, crop_rect = None):
-        image = np.array(Image.open(image_file), np.float32, copy=True, order='F')/255.0
+        map_image = np.array(Image.open(image_file), np.float32, copy=True, order='F')/255.0
         return cls(crop_image(image, crop_rect))
 
     @classmethod

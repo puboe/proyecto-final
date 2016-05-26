@@ -18,6 +18,15 @@ timefunction = loggingtools.create_timefunction(logger)
 logblock = loggingtools.create_logblock(logger)
 
 
+DEFAULT_CONFIG = {
+        'crop_rect': (180, 160, 500, 300),
+        'search_area': (15, 15),
+        'window': (33, 33),
+        'downsample': (10, 10),
+        'channels': ['ir4'],
+        'satellites': ['goeseast']
+        }
+
 def arange2d(starts, stops, steps, dtype=None):
     x, y = [np.arange(start, stop, step)
             for start, stop, step in zip(starts, stops, steps)]
@@ -234,17 +243,21 @@ class MeteoFlux(MeteoBase):
 
 class MeteoZone(object):
     @classmethod
-    def from_image(cls, image_file, crop_rect = None):
-        map_image = np.array(Image.open(image_file), np.float32, copy=True, order='F')/255.0
-        return cls(crop_image(image, crop_rect))
+    def from_image(cls, map_image_file, name, config=None):
+        map_image = np.array(Image.open(map_image_file), np.float32, copy=True, order='F')/255.0
+        return cls(name, states=[], config=config, map_image=crop_image(map_image, config['crop_rect']))
 
     @classmethod
     def to_image(cls, mmap, image_file):
-        image = Image.fromarray((mmap.image*255.0).astype(np.uint8))
+        image = Image.fromarray((mmap.map_image*255.0).astype(np.uint8))
         image.save(image_file)
 
-    def __init__(self, image):
-        self.image = image
+    def __init__(self, name, states=[], config=None, map_image=None):
+        self.config = config
+        self.states = states
+        self.name = name
+        self.map_image = map_image
+
 
 
 def main():

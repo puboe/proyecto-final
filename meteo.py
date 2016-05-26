@@ -44,33 +44,24 @@ def path_walker(path):
         yield field
 
 
-class MeteoPoint(namedtuple('_MeteoPoint', ('x', 'y'))):
-    def __composite_values__(self):
-        return self.x, self.y
-
-class MeteoSize(namedtuple('_MeteoSize', ('w', 'h'))):
-    def __composite_values__(self):
-        return self.x, self.y
-
 class MeteoBase(object):
     _image_processor = None
     
-class MeteoData(MeteoBase):
+class MeteoStaticData(MeteoBase):
     @classmethod
     def from_image(cls, image_file, crop_rect=None):
         image = np.array(Image.open(image_file), np.float32, copy=True, order='F')/255.0
         fields = path_walker(image_file)
         time = datetime.strptime(next(fields)[:10], "%y%m%d%H%M")
         channel = next(fields)
-        zone = next(fields)
+        zone_name = next(fields)
         satellite = next(fields)
 
-        return cls(satellite, channel, crop_image(image, crop_rect))
+        return cls(time, zone_name, satellite, channel, crop_image(image, crop_rect))
 
-    def __init__(self, satellite, channel, image):
-        if len(image.shape) != 2:
-            raise Exception('Only bidimensional data allowed')
-
+    def __init__(self, time, zone, satellite, channel, image=None):
+        self.time = time
+        self.zone = zone
         self.satellite = satellite
         self.channel = channel
         self.image = image
@@ -100,19 +91,37 @@ class MeteoData(MeteoBase):
 class MeteoState(MeteoBase):
     @classmethod
     def from_images(cls, image_files, time, crop_rect=None):
-        datas = [MeteoData.from_image(image_file, crop_rect=crop_rect)
+        datas = [MeteoStaticData.from_image(image_file, crop_rect=crop_rect)
                     for image_file in image_files]
 
 
         return cls(datas, time)
 
-    def __init__(self, datas, time):
-        #for attr in ['time', 'shape', 'zone', 'satellite']:
-            #attr_list = [getattr(data, attr) for data in datas]
-            #if attr_list[1:] != attr_list[:-1]:
-                #raise Exception('Data objects in state must have the same %s.' % attr)
-        self.datas = datas
-        self.time = time
+    def __init__(self, datas=None, time=None, prev_state=None, zone=None):
+        self.datas = datas or []
+        self.prev_state = prev_state
+        self.next_state = None
+        self.time = time or self.first_data.time
+        self.motion_data = None
+        self.zone = zone
+        if self.prev_state is not None:
+            if zone is not None and zone is not self.prev_state.zone:
+                raise ValueError('Zone must be None or match previous state zone.')
+            if self is not self.prev_state.next_state:
+                if self.prev_state.next_state is None:
+                    self.prev_state.next_state = self
+                else:
+                    raise ValueError('Previous state already has next state.')
+
+            if self.shape != self.prev_state.shape:
+                raise ValueError('Previous state must have same shape')
+
+            self.zone = self.prev_state.zone
+            self.motion_data = MeteoMotionData(self)
+        if self.zone is None:
+            raise ValueError('Zone not specified')
+        if self.time is None:
+            raise ValueError('No time specified')
 
     @property
     def first_data(self):
@@ -126,17 +135,13 @@ class MeteoState(MeteoBase):
     def valid(self):
         return all([d.valid for d in self.datas])
 
-class MeteoStep(MeteoBase):
-    def __init__(self, prev_state, next_state, search_area, window, downsample):
-        if prev_state.shape != next_state.shape:
-            raise Exception('Step states must be of the same shape')
+    #@property
+    #def datas(self):
+        #return []
 
-        self.prev_state = prev_state
-        self.next_state = next_state
-        self.search_area = search_area
-        self.window = window
-        self.downsample = downsample
-
+class MeteoMotionData(MeteoBase):
+    def __init__(self, state):
+        self.state = state
         self.motion_x = None
         self.motion_y = None
         self.motion_x_ds = None
@@ -145,6 +150,25 @@ class MeteoStep(MeteoBase):
         #self.density_data_key = 'edges'
         self.density_data_key = 'plain'
 
+    @property
+    def search_area(self):
+        return self.state.zone.config['search_area']
+
+    @property
+    def window(self):
+        return self.state.zone.config['window']
+
+    @property
+    def downsample(self):
+        return self.state.zone.config['downsample']
+
+    @property
+    def prev_state(self):
+        return self.state.prev_state
+
+    @property
+    def next_state(self):
+        return self.state
 
     def _motion_data(self, processor):
         processor = processor or self._image_processor
@@ -180,65 +204,65 @@ class MeteoStep(MeteoBase):
 
     @property
     def shape(self):
-        return self.prev.shape
+        return self.state.shape
 
 
-class MeteoFlux(MeteoBase):
-    @classmethod
-    def from_images(cls, search_area, window, downsample, image_files, crop_rect=None):
-        states = [MeteoState.from_images([image_file], crop_rect)
-                    for image_file in image_files]
-        return cls.from_states(states, search_area, window, downsample)
-
-    @classmethod
-    def from_states(cls, states, search_area, window, downsample):
-        states = list(sorted(list(filter(lambda s: s.valid, states)),
-                             key=lambda s: s.time))
-
-        if len(states) < 2:
-            raise Exception('Need at least two states to calculate steps')
-
-        steps = [MeteoStep(prev_state, next_state, search_area, window, downsample)
-                   for prev_state, next_state in zip(states[:-1], states[1:])]
-
-        return cls(steps)
-
-    def __init__(self, steps):
-        self.steps = steps
-
-    def get_states(self):
-        yield self.steps[0].prev_state
-        for step in self.steps:
-            yield step.next_state
-
-    @property
-    def shape(self):
-        return self.steps[0].shape
-
-    def trail(self, start, transpose = False, backwards = False):
-        if not backwards:
-            result = np.array(reduce(lambda slist, step: slist + [step.trail_step(slist[-1])],
-                                     self.steps, [start]))
-        else:
-            result = np.array(reduce(lambda slist, step: [step.trail_step(slist[0], backwards=True)] + slist,
-                                     self.steps[::-1], [start]))
-        return np.transpose(result, (1, 0, 2)) if transpose else result
-
-    @property
-    def times(self):
-        return np.cumsum([0.0] + [step.timedelta.seconds // 60
-                            for step in self.steps])
-
-    def polys(self, start, deg, backwards = False):
-        trails = self.trail(start, transpose = True, backwards = backwards)
-        t = self.times
-        return [(np.polyfit(t, c, deg) for c in np.transpose(trail))
-                for trail in trails]
-
-    def polyfitted_trails(self, tstart, tstop, tstep, start, deg, backwards = False):
-        polys = self.polys(start, deg, backwards = backwards)
-        return [(np.polyval(poly, np.arange(tstart, tstop, tstep)) for poly in polypair)
-                    for polypair in polys]
+#class MeteoFlux(MeteoBase):
+#    @classmethod
+#    def from_images(cls, search_area, window, downsample, image_files, crop_rect=None):
+#        states = [MeteoState.from_images([image_file], crop_rect)
+#                    for image_file in image_files]
+#        return cls.from_states(states, search_area, window, downsample)
+#
+#    @classmethod
+#    def from_states(cls, states, search_area, window, downsample):
+#        states = list(sorted(list(filter(lambda s: s.valid, states)),
+#                             key=lambda s: s.time))
+#
+#        if len(states) < 2:
+#            raise Exception('Need at least two states to calculate steps')
+#
+#        steps = [MeteoStep(prev_state, next_state, search_area, window, downsample)
+#                   for prev_state, next_state in zip(states[:-1], states[1:])]
+#
+#        return cls(steps)
+#
+#    def __init__(self, steps):
+#        self.steps = steps
+#
+#    def get_states(self):
+#        yield self.steps[0].prev_state
+#        for step in self.steps:
+#            yield step.next_state
+#
+#    @property
+#    def shape(self):
+#        return self.steps[0].shape
+#
+#    def trail(self, start, transpose = False, backwards = False):
+#        if not backwards:
+#            result = np.array(reduce(lambda slist, step: slist + [step.trail_step(slist[-1])],
+#                                     self.steps, [start]))
+#        else:
+#            result = np.array(reduce(lambda slist, step: [step.trail_step(slist[0], backwards=True)] + slist,
+#                                     self.steps[::-1], [start]))
+#        return np.transpose(result, (1, 0, 2)) if transpose else result
+#
+#    @property
+#    def times(self):
+#        return np.cumsum([0.0] + [step.timedelta.seconds // 60
+#                            for step in self.steps])
+#
+#    def polys(self, start, deg, backwards = False):
+#        trails = self.trail(start, transpose = True, backwards = backwards)
+#        t = self.times
+#        return [(np.polyfit(t, c, deg) for c in np.transpose(trail))
+#                for trail in trails]
+#
+#    def polyfitted_trails(self, tstart, tstop, tstep, start, deg, backwards = False):
+#        polys = self.polys(start, deg, backwards = backwards)
+#        return [(np.polyval(poly, np.arange(tstart, tstop, tstep)) for poly in polypair)
+#                    for polypair in polys]
 
 
 class MeteoZone(object):
@@ -268,7 +292,7 @@ def main():
     images = sys.argv[1:]
 
     processor = image.CLImageProcessor(pyopencl)
-    MeteoData._image_processor = processor
+    MeteoStaticData._image_processor = processor
     MeteoStep._image_processor = processor
 
     (ds_x, ds_y) = (10, 10)

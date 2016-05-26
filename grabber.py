@@ -1,6 +1,6 @@
 
-from meteo import MeteoZone
-from meteo_raw import MeteoRawData
+from meteo import MeteoZone, MeteoStaticData
+import meteo
 
 import sql
 import urllib
@@ -27,7 +27,7 @@ class RawImageGrabber(object):
         url = self.file_url_schema % {
                     'channel': raw_data.channel,
                     'satellite': raw_data.satellite,
-                    'zone': raw_data.zone,
+                    'zone': raw_data.zone.name,
                     'filename': filename
                 }
         with urllib.request.urlopen(url) as response:
@@ -51,9 +51,9 @@ class RawImageGrabber(object):
                    html = response.read()
                    matches = set(re.findall('[0-9GI]{16}\.tif', str(html, 'ascii')))
 
-                raw_datas += [(match, MeteoRawData(
+                raw_datas += [(match, MeteoStaticData(
                                 datetime.strptime(match[:10], "%y%m%d%H%M"),
-                                self.zone.name,
+                                self.zone,
                                 satellite,
                                 channel))
                                     for match in set(matches)]
@@ -63,7 +63,7 @@ class RawImageGrabber(object):
         for match, data in raw_datas:
             print(match, data.__dict__)
         for match, data in raw_datas:
-            data.image = self._get_image(data, match)
+            data.image = meteo.crop_image(self._get_image(data, match), self.zone.config['crop_rect'])
 
         return [data for match, data in raw_datas]
 
@@ -76,10 +76,10 @@ file_url_schema = 'http://goes.gsfc.nasa.gov/%(satellite)s/%(zone)s/%(channel)s/
 with sql.session_scope() as session:
     def existing_data_filter(raw_data):
         (retval, ), = session.query(exists() \
-            .where(MeteoRawData.channel==raw_data.channel) \
-            .where(MeteoRawData.satellite==raw_data.satellite) \
-            .where(MeteoRawData.time==raw_data.time) \
-            .where(MeteoRawData.zone==raw_data.zone)
+            .where(MeteoStaticData.channel==raw_data.channel) \
+            .where(MeteoStaticData.satellite==raw_data.satellite) \
+            .where(MeteoStaticData.time==raw_data.time) \
+            .where(MeteoStaticData.zone==raw_data.zone)
             )
         return not retval
     grabbers = [RawImageGrabber(zone, index_url_schema, file_url_schema, existing_data_filter)

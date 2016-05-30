@@ -1,12 +1,17 @@
 package ar.com.itba.piedpiper.web.page;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.data.domain.Page;
@@ -22,14 +27,17 @@ public class ListImagePage extends AbstractWebPage {
 	@SpringBean
 	private MeteoStateService meteoStates;
 	
+	String filter = "";
+	
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		meteoStates.getLast();
 		long itemsPerPage = 20;
 		IDataProvider<MeteoState> meteoStateDataProvider = new SpringPageDataProvider<MeteoState>(itemsPerPage) {
 			@Override
 			protected Page<MeteoState> getPage(Pageable pageable) {
-				return meteoStates.findAll(pageable);
+				return meteoStates.suggest(filter, pageable);
 			}
 
 			public void detach() {}
@@ -45,7 +53,7 @@ public class ListImagePage extends AbstractWebPage {
 				item.add(new Image("image", new DynamicImageResource() {
 					@Override
 					protected byte[] getImageData(Attributes attributes) {
-						return meteoStates.findByFilename(meteoState.filename()).get().image();
+						return meteoStates.findByFilename(((MeteoState) item.getModelObject()).filename()).get().image();
 					}
 				}));
 			}
@@ -55,7 +63,18 @@ public class ListImagePage extends AbstractWebPage {
 		add(navigator.setOutputMarkupId(true));
 		final WebMarkupContainer listContainer = new WebMarkupContainer("container");
 		add(listContainer.add(meteoStateView).setOutputMarkupId(true));
-		
+		Form<Void> form = new Form<>("form");
+		final TextField<String> filenameTF = new TextField<>("filename", Model.of(filter));
+		form.add(filenameTF);
+		form.add(new AjaxButton("filter") {
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				filter = filenameTF.getModelObject();
+				target.add(listContainer);
+				target.add(navigator);
+			}
+		});
+		add(form);
 //		add(new Image("image", imageResource));
 	}
 }

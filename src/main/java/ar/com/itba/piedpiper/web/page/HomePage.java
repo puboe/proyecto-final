@@ -15,7 +15,7 @@ public class HomePage extends AbstractWebPage {
 	@Override
 		protected void onInitialize() {
 			super.onInitialize();
-			add(new Label("welcome", Model.of("Verwenden Sie das Hauptmenü starten.")));
+			add(new Label("welcome", Model.of("Use the menu up top to begin.")));
 		}
 	
 }

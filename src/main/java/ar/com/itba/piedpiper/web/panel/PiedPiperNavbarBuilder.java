@@ -17,7 +17,7 @@ public class PiedPiperNavbarBuilder implements NavbarBuilder {
 	@Override
 	public Navbar apply(String id) {
 		Navbar navbar = new Navbar(id);
-		navbar.setBrandName(Model.of("Anfang"));
+		navbar.setBrandName(Model.of("Welcome"));
 		navbar.fluid();
 		navbar.addComponents(transform(Navbar.ComponentPosition.LEFT, new NavbarButton<Void>(ListImagePage.class, Model.of("Image List")).setIconType(GlyphIconType.list)));
 		return navbar;

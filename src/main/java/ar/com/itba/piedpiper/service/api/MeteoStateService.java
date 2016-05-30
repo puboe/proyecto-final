@@ -13,4 +13,5 @@ public interface MeteoStateService extends AbstractService<MeteoState, Integer> 
 	
 	Page<MeteoState> suggest(String input, Pageable pageable);
 	
+	MeteoState getLast();
 }

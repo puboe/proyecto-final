@@ -26,6 +26,16 @@ class ImageProcessor(object):
     def downsample(self, image, ds):
         raise NotImplementedError()
 
+    def crop(self, image, crop_rect = None):
+        if crop_rect is None:
+            return image
+        (x, y, w, h) = crop_rect
+        return np.array(image[y:y+h, x:x+w], np.float32, copy=False, order='F')
+
+    def is_black(self, image):
+        return np.all(image == 0)
+
+
 class CLImageProcessor(ImageProcessor):
     def __init__(self, pyopencl, context=None, queue=None, program=None):
         if context is None:

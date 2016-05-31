@@ -1,6 +1,6 @@
 {
   "name": "argentina",
-  "map_image": "../pf/goes.gsfc.nasa.gov/goeseast/argentina/maps/argentina_coasts_countries.png",
+  "map_image": "resources/maps/argentina_coasts_countries.png",
   "config": {
     "crop_rect": [180, 160, 500, 300],
     "search_area": [15, 15],

@@ -1,4 +1,5 @@
-_CONNECT_URI = 'postgresql+psycopg2://piedpiper:piedpiper@exp/piedpiper'
+_CONNECT_URI = 'postgresql+psycopg2://piedpiper:piedpiper@gserver/piedpiper'
+#_CONNECT_URI = 'postgresql+psycopg2://piedpiper:piedpiper@exp/piedpiper'
 _ENGINE = None
 _SESSION_MAKER = None
 

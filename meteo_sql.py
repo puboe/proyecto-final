@@ -29,13 +29,17 @@ class MeteoStaticData(Base):
     zone_name = Column(MeteoZone.NAME_TYPE, nullable=False, primary_key=True)
     satellite = Column(String(32), nullable=True, primary_key=True)
     channel = Column(String(32), nullable=True, primary_key=True)
-    image = deferred(Column(NumpyArray, nullable=True))
-    # Relationships
-    state = relationship('MeteoState', backref='datas')
+    image = Column(NumpyArray, nullable=True)
+    is_valid = column_property(image.isnot(None))
 
-    @hybrid_property
-    def is_valid(self):
-        return self.image is not None
+    # Relationships
+    state = relationship('MeteoState', back_populates='datas')
+    image = deferred(image)
+
+
+    #@hybrid_property
+    #def is_valid(self):
+        #return self.image is not None
 
 
 class MeteoState(Base):
@@ -45,45 +49,33 @@ class MeteoState(Base):
     zone_name = Column(ForeignKey('meteo_zone.name'), primary_key=True, nullable=False)
     # Relationships
     zone = relationship('MeteoZone', backref='states')
+    datas = relationship('MeteoStaticData', back_populates='state')
 
-    is_valid = column_property(exists() \
-                .where(MeteoStaticData.time==time) \
-                .where(MeteoStaticData.zone_name==zone_name) \
-                .where(MeteoStaticData.image.isnot(None)))
+    @hybrid_method
+    def has_valid_data(self, satellite=None, channel=None):
+        datas = self.datas
+        if satellite is not None:
+            datas = filter(lambda d: d.satellite == satellite, datas)
+        if channel is not None:
+            datas = filter(lambda d: d.channel == channel, datas)
+        return any(map(lambda d: d.is_valid, datas))
 
-    prev_state = column_property(select(MeteoState) \
-                                 .where(
-
-    #@hybrid_property
-    #def prev_state(self):
-        #prev_states = list(filter(lambda s: s.time < self.time, self.zone.states))
-        #return max(prev_states, key=lambda s: s.time) \
-                #if len(prev_states) > 0 else None
-
-    #@hybrid_property
-    #def next_state(self):
-        #next_states = list(filter(lambda s: s.time > self.time, self.zone.states))
-        #return min(next_states, key=lambda s: s.time) \
-                #if len(next_states) > 0 else None
-
-    #@prev_state.expression
-    #def prev_state(cls):
-        #return select(MeteoState) \
-               #.where(MeteoState.zone == self.zone) \
-               #.where(MeteoState.time < self.time) \
-               #.order_by(MeteoState.time)
-
-    #@hybrid_property
-    #def is_valid(self):
-        #return any(map(lambda d: d.is_valid, self.datas))
-
-    #@is_valid.expression
-    #def is_valid(self):
-        #return exists() \
+    @has_valid_data.expression
+    def has_valid_data(cls, satellite=None, channel=None):
+        query = cls.datas.any().where(MeteoStaticData.is_valid)
+        #query = exists() \
                 #.where(MeteoStaticData.time==MeteoState.time) \
                 #.where(MeteoStaticData.zone_name==MeteoState.zone_name) \
-                #.where(MeteoStaticData.image.isnot(None))
+                #.where(MeteoStaticData.is_valid)
+        if satellite is not None:
+            query = query.where(MeteoStaticData.satellite==satellite)
+        if channel is not None:
+            query = query.where(MeteoStaticData.channel==channel)
+        return query
 
+    @hybrid_property
+    def has_motions(self):
+        return 
 
 class MeteoMotionData(Base):
     __tablename__ = 'meteo_motion_data'
@@ -106,6 +98,13 @@ class MeteoMotionData(Base):
     # Relationships
     prev_state = relationship('MeteoState', foreign_keys=[prev_time, zone_name], backref='next_motions')
     next_state = relationship('MeteoState', foreign_keys=[next_time, zone_name], backref='prev_motions')
+
+
+
+
+
+
+
     
 _CONNECT_URI = 'postgresql+psycopg2://piedpiper:piedpiper@exp/piedpiper'
 _ENGINE = None

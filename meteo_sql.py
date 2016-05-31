@@ -1,6 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import *
-from sqlalchemy.orm import sessionmaker, relationship, deferred, column_property
+from sqlalchemy.orm import relationship, deferred, column_property
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from meteo_sql_types import *
 
@@ -8,6 +8,7 @@ from contextlib import contextmanager
 
 
 Base = declarative_base()
+
 
 class MeteoZone(Base):
     __tablename__ = 'meteo_zone'
@@ -51,31 +52,6 @@ class MeteoState(Base):
     zone = relationship('MeteoZone', backref='states')
     datas = relationship('MeteoStaticData', back_populates='state')
 
-    @hybrid_method
-    def has_valid_data(self, satellite=None, channel=None):
-        datas = self.datas
-        if satellite is not None:
-            datas = filter(lambda d: d.satellite == satellite, datas)
-        if channel is not None:
-            datas = filter(lambda d: d.channel == channel, datas)
-        return any(map(lambda d: d.is_valid, datas))
-
-    @has_valid_data.expression
-    def has_valid_data(cls, satellite=None, channel=None):
-        query = cls.datas.any().where(MeteoStaticData.is_valid)
-        #query = exists() \
-                #.where(MeteoStaticData.time==MeteoState.time) \
-                #.where(MeteoStaticData.zone_name==MeteoState.zone_name) \
-                #.where(MeteoStaticData.is_valid)
-        if satellite is not None:
-            query = query.where(MeteoStaticData.satellite==satellite)
-        if channel is not None:
-            query = query.where(MeteoStaticData.channel==channel)
-        return query
-
-    @hybrid_property
-    def has_motions(self):
-        return 
 
 class MeteoMotionData(Base):
     __tablename__ = 'meteo_motion_data'
@@ -100,47 +76,7 @@ class MeteoMotionData(Base):
     next_state = relationship('MeteoState', foreign_keys=[next_time, zone_name], backref='prev_motions')
 
 
+    @hybrid_property
+    def timedelta(self):
+        return self.next_state.time - self.prev_state.time
 
-
-
-
-
-    
-_CONNECT_URI = 'postgresql+psycopg2://piedpiper:piedpiper@exp/piedpiper'
-_ENGINE = None
-_SESSION_MAKER = None
-
-def get_engine(*args, connect_uri=_CONNECT_URI, **kwargs):
-    global _ENGINE
-    if _ENGINE is None:
-        _ENGINE = create_engine(connect_uri)
-    return _ENGINE
-
-def get_session_maker(*args, **kwargs):
-    global _SESSION_MAKER
-    if _SESSION_MAKER is None:
-        _SESSION_MAKER = sessionmaker(*args, bind=get_engine(*args, **kwargs), **kwargs)
-    return _SESSION_MAKER
-
-def get_session(*args, **kwargs):
-    return get_session_maker(*args, **kwargs)()
-
-@contextmanager
-def session_scope():
-    """Provide a transactional scope around a series of operations."""
-    session = get_session()
-    try:
-        yield session
-        session.commit()
-    except:
-        session.rollback()
-        raise
-    finally:
-        session.close()
-
-if __name__ == '__main__':
-    import code
-    Base.metadata.create_all(get_engine())
-    Session = get_session_maker()
-    session = Session()
-    code.interact(local=locals())

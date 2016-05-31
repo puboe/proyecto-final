@@ -1,4 +1,5 @@
 from meteo_sql import *
+from connector import *
 
 import urllib
 import urllib.request

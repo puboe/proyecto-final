@@ -66,10 +66,18 @@ class MeteoMotionData(Base):
     prev_time = Column(DateTime, primary_key=True)
     next_time = Column(DateTime, primary_key=True)
     zone_name = Column(MeteoZone.NAME_TYPE, primary_key=True)
-    motion_x = deferred(Column(NumpyArray, nullable=True), group='motion')
-    motion_y = deferred(Column(NumpyArray, nullable=True), group='motion')
-    motion_x_ds = deferred(Column(NumpyArray, nullable=True), group='motion')
-    motion_y_ds = deferred(Column(NumpyArray, nullable=True), group='motion')
+    motion_x = Column(NumpyArray, nullable=True)
+    motion_y = Column(NumpyArray, nullable=True)
+    motion_x_ds = Column(NumpyArray, nullable=True)
+    motion_y_ds = Column(NumpyArray, nullable=True)
+    is_valid = column_property(and_(motion_x.isnot(None),
+                                    motion_y.isnot(None),
+                                    motion_x_ds.isnot(None),
+                                    motion_y_ds.isnot(None)))
+    motion_x = deferred(motion_x, group='motion')
+    motion_y = deferred(motion_y, group='motion')
+    motion_x_ds = deferred(motion_x_ds, group='motion')
+    motion_y_ds = deferred(motion_y_ds, group='motion')
 
     # Relationships
     prev_state = relationship('MeteoState', foreign_keys=[prev_time, zone_name], backref='next_motions')

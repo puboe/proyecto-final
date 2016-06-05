@@ -7,6 +7,9 @@ from contextlib import contextmanager
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 
+def pepe():
+    pass
+
 def get_engine(*args, connect_uri=_CONNECT_URI, **kwargs):
     global _ENGINE
     if _ENGINE is None:

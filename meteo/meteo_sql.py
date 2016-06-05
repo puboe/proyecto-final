@@ -2,7 +2,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import *
 from sqlalchemy.orm import relationship, deferred, column_property
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
-from meteo_sql_types import *
+from .meteo_sql_types import *
 
 from contextlib import contextmanager
 
@@ -38,11 +38,6 @@ class MeteoStaticData(Base):
     image = deferred(image)
 
 
-    #@hybrid_property
-    #def is_valid(self):
-        #return self.image is not None
-
-
 class MeteoState(Base):
     __tablename__ = 'meteo_state'
     # Attributes
@@ -51,6 +46,14 @@ class MeteoState(Base):
     # Relationships
     zone = relationship('MeteoZone', backref='states')
     datas = relationship('MeteoStaticData', back_populates='state')
+
+    @hybrid_property
+    def is_valid(self):
+        return any(map(lambda d: d.is_valid, self.datas))
+
+    @is_valid.expression
+    def is_valid(cls):
+        return cls.datas.any(is_valid=True)
 
 
 class MeteoMotionData(Base):

@@ -1,5 +1,5 @@
-from meteo_sql import *
-from connector import *
+from .meteo_sql import *
+from .connector import *
 
 import urllib
 import urllib.request
@@ -13,7 +13,7 @@ from PIL import Image
 from sqlalchemy import exists
 import io
 
-from image import ImageProcessor
+from .image import ImageProcessor
 
 
 class GOESScrapper(object):

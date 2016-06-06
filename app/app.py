@@ -30,7 +30,7 @@ def show_zone(zone_name):
                     .filter_by(zone=zone) \
                     .filter(MeteoState.is_valid) \
                     .order_by(MeteoState.time.desc()).first()
-    return redirect(url_for('show_state',
+    return redirect(url_for('state_data',
                             zone_name=last_state.zone.name,
                             timestr=last_state.time.isoformat()))
 

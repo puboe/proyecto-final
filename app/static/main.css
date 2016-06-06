@@ -50,3 +50,8 @@ h1 {
   text-align: left;
 
 }
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}

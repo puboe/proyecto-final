@@ -1,8 +1,10 @@
-from flask import Flask, jsonify, abort, send_file, render_template, redirect, url_for
+from flask import Flask, jsonify, abort, send_file, render_template, redirect, url_for, request
 from meteo.meteo_sql import MeteoStaticData, MeteoState, MeteoMotionData, MeteoZone
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import cast, String
 
 from datetime import datetime
+import dateutil.parser
 import io
 import numpy as np
 from PIL import Image
@@ -11,12 +13,6 @@ app =  Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://piedpiper:piedpiper@exp/piedpiper'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://piedpiper:piedpiper@gserver/piedpiper'
 db = SQLAlchemy(app)
-
-def to_timestr(time):
-    return time.strftime("%y%m%d%H%M")
-
-def from_timestr(timestr):
-    return datetime.strptime(timestr, "%y%m%d%H%M")
 
 @app.route('/')
 def root():
@@ -34,15 +30,12 @@ def show_zone(zone_name):
                     .filter_by(zone=zone) \
                     .filter(MeteoState.is_valid) \
                     .order_by(MeteoState.time.desc()).first()
-    return redirect(url_for('show_state', zone_name=last_state.zone.name, timestr=to_timestr(last_state.time)))
+    return redirect(url_for('show_state',
+                            zone_name=last_state.zone.name,
+                            timestr=last_state.time.isoformat()))
 
-@app.route('/<zone_name>/<timestr>/')
-def show_state(zone_name, timestr):
-    state = db.session.query(MeteoState) \
-                      .filter_by(zone_name=zone_name, time=from_timestr(timestr)) \
-                      .first()
-    if state is None:
-        abort(404)
+
+def get_related_states(state):
     prev_state = db.session.query(MeteoState) \
                            .filter_by(is_valid=True, zone=state.zone) \
                            .filter(MeteoState.time < state.time) \
@@ -61,12 +54,35 @@ def show_state(zone_name, timestr):
                            .filter_by(is_valid=True, zone=state.zone) \
                            .order_by(MeteoState.time.desc()) \
                            .first()
-    return render_template('map.html', state=state,
-                                       first_state=first_state,
-                                       prev_state=prev_state,
-                                       next_state=next_state,
-                                       last_state=last_state,
-                                       to_timestr=to_timestr)
+
+    return dict(first_state=first_state,
+                prev_state=prev_state,
+                next_state=next_state,
+                last_state=last_state)
+
+
+@app.route('/<zone_name>/<timestr>/')
+def state_data(zone_name, timestr):
+    state = db.session.query(MeteoState) \
+                      .filter_by(zone_name=zone_name, time=dateutil.parser.parse(timestr)) \
+                      .first()
+    if state is None:
+        abort(404)
+    return render_template('state_data.html', state=state,
+                                     target_state_view='state_data',
+                                     **get_related_states(state))
+
+
+@app.route('/<zone_name>/<timestr>/flow')
+def state_flow(zone_name, timestr):
+    state = db.session.query(MeteoState) \
+                      .filter_by(zone_name=zone_name, time=dateutil.parser.parse(timestr)) \
+                      .first()
+    if state is None:
+        abort(404)
+    return render_template('state_flow.html', state=state,
+                                     target_state_view='state_flow',
+                                     **get_related_states(state))
 
 @app.route('/<zone_name>/info')
 def zone(zone_name):
@@ -79,6 +95,17 @@ def zone(zone_name):
         return jsonify(zone_attrs)
     else:
         abort(404)
+
+@app.route('/<zone_name>/search_state')
+def zone_search_state(zone_name):
+    term = request.args.get("term")
+    search_terms = term.split(' ')
+    query = db.session.query(MeteoState).filter_by(zone_name=zone_name) \
+                                        .filter_by(is_valid=True)
+    for search_term in search_terms:
+        query = query.filter(cast(MeteoState.time, String).ilike('%' + search_term + '%'))
+    query = query.order_by(MeteoState.time)
+    return jsonify([state.time.isoformat() for state in query.all()])
 
 @app.route('/<zone_name>/map_image.png')
 def zone_map_image(zone_name):
@@ -104,9 +131,9 @@ def zone_valid_states(zone_name):
 
 @app.route('/<zone_name>/<timestr>/static/<satellite>/<channel>/')
 def static_data(zone_name, timestr, satellite, channel):
-    time = from_timestr(time)
+    time = dateutil.parser.parse(time)
     data = db.session.query(MeteoStaticData).filter_by(zone_name=zone_name,
-                                                       time=from_timestr(timestr),
+                                                       time=dateutil.parser.parse(timestr),
                                                        satellite=satellite,
                                                        channel=channel).first()
     if data is not None:
@@ -118,7 +145,7 @@ def static_data(zone_name, timestr, satellite, channel):
 @app.route('/<zone_name>/<timestr>/static/<satellite>/<channel>/image.png')
 def static_data_image(zone_name, timestr, satellite, channel):
     data = db.session.query(MeteoStaticData).filter_by(zone_name=zone_name,
-                                                       time=from_timestr(timestr),
+                                                       time=dateutil.parser.parse(timestr),
                                                        satellite=satellite,
                                                        channel=channel).first()
     if data is not None:

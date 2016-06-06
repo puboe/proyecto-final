@@ -18,6 +18,12 @@ def to_timestr(time):
 def from_timestr(timestr):
     return datetime.strptime(timestr, "%y%m%d%H%M")
 
+@app.route('/')
+def root():
+    first_zone = db.session.query(MeteoZone).first()
+    if first_zone is None:
+        abort(404)
+    return redirect(url_for('show_zone', zone_name=first_zone.name))
 
 @app.route('/<zone_name>/')
 def show_zone(zone_name):
@@ -32,10 +38,35 @@ def show_zone(zone_name):
 
 @app.route('/<zone_name>/<timestr>/')
 def show_state(zone_name, timestr):
-    zone = db.session.query(MeteoZone).filter_by(name=zone_name).first()
-    if zone is None:
+    state = db.session.query(MeteoState) \
+                      .filter_by(zone_name=zone_name, time=from_timestr(timestr)) \
+                      .first()
+    if state is None:
         abort(404)
-    return render_template('map.html')
+    prev_state = db.session.query(MeteoState) \
+                           .filter_by(is_valid=True, zone=state.zone) \
+                           .filter(MeteoState.time < state.time) \
+                           .order_by(MeteoState.time.desc()) \
+                           .first()
+    next_state = db.session.query(MeteoState) \
+                           .filter_by(is_valid=True, zone=state.zone) \
+                           .filter(MeteoState.time > state.time) \
+                           .order_by(MeteoState.time.asc()) \
+                           .first()
+    first_state = db.session.query(MeteoState) \
+                           .filter_by(is_valid=True, zone=state.zone) \
+                           .order_by(MeteoState.time.asc()) \
+                           .first()
+    last_state = db.session.query(MeteoState) \
+                           .filter_by(is_valid=True, zone=state.zone) \
+                           .order_by(MeteoState.time.desc()) \
+                           .first()
+    return render_template('map.html', state=state,
+                                       first_state=first_state,
+                                       prev_state=prev_state,
+                                       next_state=next_state,
+                                       last_state=last_state,
+                                       to_timestr=to_timestr)
 
 @app.route('/<zone_name>/info')
 def zone(zone_name):
@@ -53,8 +84,7 @@ def zone(zone_name):
 def zone_map_image(zone_name):
     zone = db.session.query(MeteoZone).filter_by(name=zone_name).first()
     if zone is not None:
-        image_array = zone.map_image
-        image = Image.fromarray((image_array*255.0).astype(np.uint8))
+        image = Image.fromarray((zone.map_image*255.0).astype(np.uint8))
         output = io.BytesIO()
         image.save(output, format='PNG')
         return send_file(io.BytesIO(output.getvalue()), mimetype='image/png')

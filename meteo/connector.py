@@ -40,7 +40,7 @@ def session_scope():
 
 if __name__ == '__main__':
     import code
-    from meteo_sql import *
+    from .meteo_sql import *
     Base.metadata.create_all(get_engine())
     Session = get_session_maker()
     session = Session()

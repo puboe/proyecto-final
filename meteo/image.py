@@ -3,7 +3,7 @@ import numpy as np
 
 import sys
 import logging
-import loggingtools
+from . import loggingtools
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 logger = logging.getLogger("image")
 timefunction = loggingtools.create_timefunction(logger)

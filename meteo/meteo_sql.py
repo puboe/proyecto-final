@@ -87,6 +87,23 @@ class MeteoMotionData(Base):
     next_state = relationship('MeteoState', foreign_keys=[next_time, zone_name], backref='prev_motions')
 
 
+    def calculate_motion(self, processor):
+        prev_image = next(filter(lambda d: d.channel == 'ir4', self.prev_state.datas)).image
+        next_image = next(filter(lambda d: d.channel == 'ir4', self.next_state.datas)).image
+        search_area = self.prev_state.zone.config['search_area']
+        window = self.prev_state.zone.config['window']
+        self.motion_x, self.motion_y = processor.bma(prev_image, next_image,
+                                                     search_area, window)
+
+    def calculate_motion_ds(self, processor):
+        if self.motion_x is None or self.motion_y is None:
+            self.calculate_motion(processor)
+        downsample = self.prev_state.zone.config['downsample']
+        self.motion_x_ds = processor.downsample(self.motion_x, downsample)
+        self.motion_y_ds = processor.downsample(self.motion_y, downsample)
+
+
+
     @hybrid_property
     def timedelta(self):
         return self.next_state.time - self.prev_state.time

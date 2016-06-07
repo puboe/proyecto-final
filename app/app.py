@@ -80,8 +80,22 @@ def state_flow(zone_name, timestr):
                       .first()
     if state is None:
         abort(404)
+    flow_states = db.session.query(MeteoState) \
+                            .filter_by(zone=state.zone, is_valid=True) \
+                            .filter(MeteoState.time < state.time) \
+                            .order_by(MeteoState.time.desc()) \
+                            .limit(10) \
+                            .all()
+    image_urls = [url_for('static_data_image',
+                          zone_name=fs.zone.name,
+                          timestr=fs.time.isoformat(),
+                          satellite='goeseast',
+                          channel='ir4')
+                        for fs in flow_states]
+    image_urls.reverse()
     return render_template('state_flow.html', state=state,
                                      target_state_view='state_flow',
+                                     image_urls=image_urls,
                                      **get_related_states(state))
 
 @app.route('/<zone_name>/info')

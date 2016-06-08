@@ -47,7 +47,8 @@ h1 {
 }
 
 .weather-flow-map {
-
+  padding: 0;
+  margin: 0;
 }
 
 .weather-flow-map-frame {

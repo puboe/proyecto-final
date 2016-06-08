@@ -6,6 +6,9 @@ from .meteo_sql_types import *
 
 from contextlib import contextmanager
 
+import numpy as np
+from functools import reduce
+
 
 Base = declarative_base()
 
@@ -98,13 +101,90 @@ class MeteoMotionData(Base):
     def calculate_motion_ds(self, processor):
         if self.motion_x is None or self.motion_y is None:
             self.calculate_motion(processor)
-        downsample = self.prev_state.zone.config['downsample']
-        self.motion_x_ds = processor.downsample(self.motion_x, downsample)
-        self.motion_y_ds = processor.downsample(self.motion_y, downsample)
+        self.motion_x_ds = processor.downsample(self.motion_x, self.downsample)
+        self.motion_y_ds = processor.downsample(self.motion_y, self.downsample)
 
 
+    #def trail_step(self, pos, backwards = False):
+        #dx, dy = self.motion_x_ds, self.motion_y_ds
+        #pos_index = tuple(np.transpose(np.fliplr(pos.astype(np.uint32)) // self.downsample))
+        #dpos = np.transpose(np.array([dy[pos_index], dx[pos_index]]))
+        #return pos - dpos if backwards else pos + dpos
+
+    def trail_step(self, pos, backwards = False):
+        dx, dy = self.motion_x, self.motion_y
+        pos_index = tuple(np.transpose(np.fliplr(pos.astype(np.uint32))))
+        dpos = np.transpose(np.array([dy[pos_index], dx[pos_index]]))
+        return pos - dpos if backwards else pos + dpos
 
     @hybrid_property
     def timedelta(self):
         return self.next_state.time - self.prev_state.time
+
+    @property
+    def shape(self):
+        return self.motion_x.shape
+
+    @property
+    def downsample(self):
+        return self.prev_state.zone.config['downsample']
+
+
+def arange2d(starts, stops, steps, dtype=None):
+    x, y = [np.arange(start, stop, step)
+            for start, stop, step in zip(starts, stops, steps)]
+    return np.transpose([np.tile(x, len(y)), np.repeat(y, len(x))])
+
+#def generate_flux_trail(motions, sx, sy, transpose=False):
+    #shape = motions[0].shape
+    ##start = np.fliplr(arange2d((sx, sy), shape, (sx, sy), dtype=np.float32) - (sx, sy))
+    #start = np.fliplr(arange2d((0.0, 0.0), shape, (sx, sy), dtype=np.float32))
+    #result = np.array(reduce(lambda slist, step: slist + [step.trail_step(slist[-1])],
+                                     #motions, [start]))
+    #return np.transpose(result, (1, 0, 2)) if transpose else result
+   
+
+class MeteoFlux(object):
+    def __init__(self, motions):
+        self.motions = motions
+
+    @property
+    def shape(self):
+        return self.motions[0].shape
+
+    def generate_start(self, sx, sy):
+        return np.fliplr(arange2d((0.0, 0.0), self.shape, (sx, sy), dtype=np.float32))
+
+    def trail(self, start, transpose = False, backwards = False):
+        if not backwards:
+            result = np.array(reduce(lambda slist, step: slist + [step.trail_step(slist[-1])],
+                                     self.motions, [start]))
+        else:
+            result = np.array(reduce(lambda slist, step: [step.trail_step(slist[0], backwards=True)] + slist,
+                                     self.motions[::-1], [start]))
+        return np.transpose(result, (1, 0, 2)) if transpose else result
+
+    @property
+    def times(self):
+        return np.cumsum([0.0] + [motion.timedelta.seconds // 60
+                            for motion in self.motions])
+
+    def polys(self, start, deg, backwards = False):
+        trails = self.trail(start, transpose = True, backwards = backwards)
+        t = self.times
+        return [[np.polyfit(t, c, deg) for c in np.transpose(trail)]
+                for trail in trails]
+
+    #def polyfitted_trails(self, tstart, tstop, tstep, start, deg, backwards = False):
+        #polys = self.polys(start, deg, backwards = backwards)
+        #return [(np.polyval(poly, np.arange(tstart, tstop, tstep)) for poly in polypair)
+                    #for polypair in polys]
+
+    def polyfitted_trails(self, times, start, deg, backwards = False):
+        polys = self.polys(start, deg, backwards = backwards)
+        return [np.array([np.polyval(poly, times) for poly in polypair])
+                    for polypair in polys]
+
+    def trim_noisy_trails(self, trails):
+        return trails[:, np.sum(np.linalg.norm(np.diff(trails, axis=0), axis=2), axis=0) > 30 ]
 

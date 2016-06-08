@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, abort, send_file, render_template, redirect, url_for, request
-from meteo.meteo_sql import MeteoStaticData, MeteoState, MeteoMotionData, MeteoZone
+from meteo.meteo_sql import MeteoStaticData, MeteoState, MeteoMotionData, MeteoZone, MeteoFlux
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import cast, String
 
@@ -86,16 +86,35 @@ def state_flow(zone_name, timestr):
                             .order_by(MeteoState.time.desc()) \
                             .limit(10) \
                             .all()
-    image_urls = [url_for('static_data_image',
-                          zone_name=fs.zone.name,
-                          timestr=fs.time.isoformat(),
-                          satellite='goeseast',
-                          channel='ir4')
-                        for fs in flow_states]
-    image_urls.reverse()
+    flow_states.reverse()
+
+    motions = [db.session.query(MeteoMotionData) \
+                         .filter_by(prev_state=prev_state, next_state=next_state) \
+                         .first()
+               for prev_state, next_state in zip(flow_states[:-1], flow_states[1:])]
+
+    #trail = list(generate_flux_trail(motions, 10.0, 10.0))
+    flux = MeteoFlux(motions)
+    trail = flux.trail(flux.generate_start(10.0, 10.0))
+    #trail = np.transpose(flux.polyfitted_trails(flux.times, flux.generate_start(10.0, 10.0), 6), (2, 0, 1))
+    trail = flux.trim_noisy_trails(trail)
+    #trail = list(map(lambda x: np.array(list(x)), trail))
+    #raise Exception(str(list(map(list, trail))))
+    #raise Exception(str(trail.shape) + ' ' + str(trail))
+
+    flow_states_info = [dict(
+                   time=fs.time.isoformat(),
+                   image_url=url_for('static_data_image',
+                                     zone_name=fs.zone.name,
+                                     timestr=fs.time.isoformat(),
+                                     satellite='goeseast',
+                                     channel='ir4'),
+                   marks=st.tolist()
+                      )
+                        for fs, st in zip(flow_states, trail)]
     return render_template('state_flow.html', state=state,
                                      target_state_view='state_flow',
-                                     image_urls=image_urls,
+                                     flow_states_info=flow_states_info,
                                      **get_related_states(state))
 
 @app.route('/<zone_name>/info')

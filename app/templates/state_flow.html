@@ -4,7 +4,7 @@
 {{ super() }}
 <script src="/static/weather-map.js"></script>
 <script>
-window.image_urls = {{ image_urls|tojson }};
+window.flow_states = {{ flow_states_info|tojson }};
 </script>
 {% endblock head %}
 
@@ -45,12 +45,19 @@ $(function () {
                    .append("g");
 
 
-  var images = [];
-  window.image_urls.forEach(function (img) {
-    images.push(svg.append("image")
-                   .attr("width", "100%")
-                   .attr("height", "100%")
-                   .attr("xlink:href", img));
+  window.flow_states.forEach(function (state) {
+    state.group = svg.append("g")
+                     .attr("visibility", "hidden");
+    state.group.append("image")
+               .attr("width", "100%")
+               .attr("height", "100%")
+               .attr("xlink:href", state.image_url);
+    state.marks.forEach(function (mark) {
+      state.group.append("circle")
+                 .attr("cx", mark[0])
+                 .attr("cy", mark[1])
+                 .attr("r", 2);
+    });
   });
 
   svg.append("image")
@@ -58,18 +65,14 @@ $(function () {
      .attr("height", "100%")
      .attr("xlink:href", "/argentina/map_image.png");
 
-  images.forEach(function (img) {
-    img.attr("visibility", "hidden");
-  });
-
   showing_image_index = 0;
-  images[showing_image_index].attr("visibility", "visible");
+  window.flow_states[showing_image_index].group.attr("visibility", "visible");
   
   var step_function = function () {
-    images[showing_image_index++].attr("visibility", "hidden");
-    if (showing_image_index >= images.length)
+    window.flow_states[showing_image_index++].group.attr("visibility", "hidden");
+    if (showing_image_index >= window.flow_states.length)
       showing_image_index = 0;
-    images[showing_image_index].attr("visibility", "visible");
+    window.flow_states[showing_image_index].group.attr("visibility", "visible");
     d3.timer(step_function, 200);
     return true;
   }
@@ -79,12 +82,6 @@ $(function () {
 
 });
 
-var timer_function = function () {
-  alert("Bongiorno mio caro.");
-  d3.timer(timer_function, 2000);
-  return true;
-}
-//d3.timer(timer_function, 2000);
 </script>
 
 {% endblock content %}

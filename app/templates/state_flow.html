@@ -73,11 +73,11 @@ $(function () {
     if (showing_image_index >= window.flow_states.length)
       showing_image_index = 0;
     window.flow_states[showing_image_index].group.attr("visibility", "visible");
-    d3.timer(step_function, 200);
+    d3.timer(step_function, 300);
     return true;
   }
 
-  d3.timer(step_function, 200);
+  d3.timer(step_function, 300);
   
 
 });

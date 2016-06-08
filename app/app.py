@@ -89,7 +89,9 @@ def state_flow(zone_name, timestr):
     flow_states.reverse()
 
     motions = [db.session.query(MeteoMotionData) \
-                         .filter_by(prev_state=prev_state, next_state=next_state) \
+                         .filter_by(prev_state=prev_state,
+                                    next_state=next_state,
+                                    method='gradient') \
                          .first()
                for prev_state, next_state in zip(flow_states[:-1], flow_states[1:])]
 

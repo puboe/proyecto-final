@@ -72,6 +72,7 @@ class MeteoMotionData(Base):
     prev_time = Column(DateTime, primary_key=True)
     next_time = Column(DateTime, primary_key=True)
     zone_name = Column(MeteoZone.NAME_TYPE, primary_key=True)
+    method = Column(String(64), primary_key=True)
     motion_x = Column(NumpyArray, nullable=True)
     motion_y = Column(NumpyArray, nullable=True)
     motion_x_ds = Column(NumpyArray, nullable=True)
@@ -93,6 +94,9 @@ class MeteoMotionData(Base):
     def calculate_motion(self, processor):
         prev_image = next(filter(lambda d: d.channel == 'ir4', self.prev_state.datas)).image
         next_image = next(filter(lambda d: d.channel == 'ir4', self.next_state.datas)).image
+        if self.method == 'gradient':
+            prev_image = processor.gradient(prev_image)
+            next_image = processor.gradient(next_image)
         search_area = self.prev_state.zone.config['search_area']
         window = self.prev_state.zone.config['window']
         self.motion_x, self.motion_y = processor.bma(prev_image, next_image,

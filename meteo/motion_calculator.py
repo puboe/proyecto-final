@@ -2,19 +2,26 @@ from .connector import session_scope
 from .meteo_sql import *
 from . import image
 import pyopencl
+import sys
 
+if len(sys.argv) < 2:
+    raise ValueError('Please specify method')
+
+method = sys.argv[1]
+if method not in ('value', 'gradient'):
+    raise ValueError('Invalid method')
 
 # Create missing motions
 with session_scope() as session:
     print('State count', session.query(MeteoState).filter_by(is_valid=True).count())
     motionless = session.query(MeteoState) \
                         .filter_by(is_valid=True) \
-                        .filter(~MeteoState.next_motions.any()) \
+                        .filter(~MeteoState.next_motions.any(method=method)) \
                         .order_by(MeteoState.time).all()
     
     print('Motionless count', len(motionless))
 
-    motions = [MeteoMotionData(prev_state=prev_state, next_state=next_state)
+    motions = [MeteoMotionData(prev_state=prev_state, next_state=next_state, method=method)
                 for prev_state, next_state in zip(motionless[:-1], motionless[1:])]
 
     for motion in motions:

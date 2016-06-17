@@ -32,6 +32,8 @@ def root():
 @app.route('/<zone_name>/')
 def show_zone(zone_name):
     zone = db.session.query(MeteoZone).filter_by(name=zone_name).first()
+    if zone is None:
+        abort(404)
     if request_wants_json():
         query = db.session.query(MeteoState).filter_by(zone=zone)
         first_state = query.order_by(MeteoState.time.asc()).first()
@@ -43,8 +45,6 @@ def show_zone(zone_name):
                         last_state_time=last_state.time.isoformat()
                     ))
     else:
-        if zone is None:
-            abort(404)
         last_state = db.session.query(MeteoState) \
                         .filter_by(zone=zone) \
                         .filter(MeteoState.is_valid) \
@@ -81,15 +81,34 @@ def get_related_states(state):
 
 
 @app.route('/<zone_name>/<timestr>/')
-def state_data(zone_name, timestr):
+def show_state(zone_name, timestr):
     state = db.session.query(MeteoState) \
                       .filter_by(zone_name=zone_name, time=dateutil.parser.parse(timestr)) \
                       .first()
     if state is None:
         abort(404)
-    return render_template('state_data.html', state=state,
-                                     target_state_view='state_data',
-                                     **get_related_states(state))
+    related_states = get_related_states(state)
+    if request_wants_json():
+        datas = [dict(
+                        satellite=data.satellite,
+                        channel=data.channel
+                     )
+                   for data in state.datas]
+        prev_state = related_states.get('prev_state', None)
+        next_state = related_states.get('next_state', None)
+        prev_state_time = prev_state.time.isoformat() if prev_state else None
+        next_state_time = next_state.time.isoformat() if next_state else None
+        return jsonify(dict(
+                        zone_name=state.zone.name,
+                        time=state.time.isoformat(),
+                        prev_state_time=prev_state_time,
+                        next_state_time=next_state_time,
+                        datas=datas
+                      ))
+    else:
+        return render_template('state_data.html', state=state,
+                                         target_state_view='show_state',
+                                         **related_states)
 
 
 @app.route('/<zone_name>/<timestr>/flow')

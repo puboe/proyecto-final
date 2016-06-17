@@ -39,9 +39,9 @@ def show_zone(zone_name):
         return jsonify(dict(
                         name=zone.name,
                         config=zone.config,
-                        first_state=first_state,
-                        last_state=last_state
-                    )
+                        first_state_time=first_state.time.isoformat(),
+                        last_state_time=last_state.time.isoformat()
+                    ))
     else:
         if zone is None:
             abort(404)

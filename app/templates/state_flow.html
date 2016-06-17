@@ -11,7 +11,7 @@ window.flow_states = {{ flow_states_info|tojson }};
 {% block content %}
 
 <ul class="nav nav-tabs">
-  <li role="presentation"><a href="{{url_for('state_data', zone_name=state.zone.name, timestr=state.time.isoformat())}}">Data</a></li>
+  <li role="presentation"><a href="{{url_for('show_state', zone_name=state.zone.name, timestr=state.time.isoformat())}}">Information</a></li>
   <li role="presentation" class="active"><a href="{{url_for('state_flow', zone_name=state.zone.name, timestr=state.time.isoformat())}}">Flow</a></li>
 </ul>
 

@@ -49,7 +49,7 @@ def show_zone(zone_name):
                         .filter_by(zone=zone) \
                         .filter(MeteoState.is_valid) \
                         .order_by(MeteoState.time.desc()).first()
-        return redirect(url_for('state_data',
+        return redirect(url_for('show_state',
                                 zone_name=last_state.zone.name,
                                 timestr=last_state.time.isoformat()))
 
@@ -83,7 +83,9 @@ def get_related_states(state):
 @app.route('/<zone_name>/<timestr>/')
 def show_state(zone_name, timestr):
     state = db.session.query(MeteoState) \
-                      .filter_by(zone_name=zone_name, time=dateutil.parser.parse(timestr)) \
+                      .filter_by(zone_name=zone_name,
+                                 time=dateutil.parser.parse(timestr),
+                                 is_valid=True) \
                       .first()
     if state is None:
         abort(404)

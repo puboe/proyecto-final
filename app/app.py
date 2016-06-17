@@ -14,6 +14,14 @@ app =  Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://piedpiper:piedpiper@gserver/piedpiper'
 db = SQLAlchemy(app)
 
+
+def request_wants_json():
+    best = request.accept_mimetypes \
+        .best_match(['application/json', 'text/html'])
+    return best == 'application/json' and \
+        request.accept_mimetypes[best] > \
+        request.accept_mimetypes['text/html']
+
 @app.route('/')
 def root():
     first_zone = db.session.query(MeteoZone).first()
@@ -24,15 +32,26 @@ def root():
 @app.route('/<zone_name>/')
 def show_zone(zone_name):
     zone = db.session.query(MeteoZone).filter_by(name=zone_name).first()
-    if zone is None:
-        abort(404)
-    last_state = db.session.query(MeteoState) \
-                    .filter_by(zone=zone) \
-                    .filter(MeteoState.is_valid) \
-                    .order_by(MeteoState.time.desc()).first()
-    return redirect(url_for('state_data',
-                            zone_name=last_state.zone.name,
-                            timestr=last_state.time.isoformat()))
+    if request_wants_json():
+        query = db.session.query(MeteoState).filter_by(zone=zone)
+        first_state = query.order_by(MeteoState.time.asc()).first()
+        last_state = query.order_by(MeteoState.time.desc()).first()
+        return jsonify(dict(
+                        name=zone.name,
+                        config=zone.config,
+                        first_state=first_state,
+                        last_state=last_state
+                    )
+    else:
+        if zone is None:
+            abort(404)
+        last_state = db.session.query(MeteoState) \
+                        .filter_by(zone=zone) \
+                        .filter(MeteoState.is_valid) \
+                        .order_by(MeteoState.time.desc()).first()
+        return redirect(url_for('state_data',
+                                zone_name=last_state.zone.name,
+                                timestr=last_state.time.isoformat()))
 
 
 def get_related_states(state):

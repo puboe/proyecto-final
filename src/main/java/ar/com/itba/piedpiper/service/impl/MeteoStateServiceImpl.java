@@ -5,6 +5,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +44,28 @@ public class MeteoStateServiceImpl extends AbstractServiceImpl<MeteoState, Integ
 			@Override
 			public Predicate toPredicate(Root<MeteoState> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				return query.orderBy(cb.desc(root.get("date"))).getRestriction();
+			}
+		}).get(0);
+	}
+	
+	@Override
+	public MeteoState getNext(LocalDateTime date) {
+		return specificationExecutor().findAll(new Specification<MeteoState>() {
+			@Override
+			public Predicate toPredicate(Root<MeteoState> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return query
+					.where(cb.greaterThan(root.get("date"), date)).getRestriction();
+			}
+		}).get(0);
+	}
+	
+	@Override
+	public MeteoState getPrevious(LocalDateTime date) {
+		return specificationExecutor().findAll(new Specification<MeteoState>() {
+			@Override
+			public Predicate toPredicate(Root<MeteoState> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return query
+					.where(cb.lessThan(root.get("date"), date)).getRestriction();
 			}
 		}).get(0);
 	}

@@ -1,5 +1,6 @@
 package ar.com.itba.piedpiper.service.api;
 
+import org.joda.time.LocalDateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -10,8 +11,12 @@ import ar.com.itba.piedpiper.model.entity.MeteoState;
 public interface MeteoStateService extends AbstractService<MeteoState, Integer> {
 
 	Optional<MeteoState> findByFilename(String filename);
-	
+
 	Page<MeteoState> suggest(String input, Pageable pageable);
-	
+
 	MeteoState getLast();
+
+	MeteoState getNext(LocalDateTime date);
+
+	MeteoState getPrevious(LocalDateTime date);
 }

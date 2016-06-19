@@ -11,6 +11,7 @@ import ar.com.itba.piedpiper.web.page.MainPage;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
+
 @SuppressWarnings("serial")
 @Component
 public class PiedPiperNavbarBuilder implements NavbarBuilder {

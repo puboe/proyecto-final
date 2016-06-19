@@ -1,7 +1,5 @@
 package ar.com.itba.piedpiper.model.entity;
 
-import java.util.Date;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDateTime;
 
 @Entity
 @Table(name = "meteo_state")
@@ -35,9 +34,9 @@ public class MeteoState extends PersistentEntity<Integer> {
 	@Column(name = "zone", nullable = false)
 	String zone;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "date", nullable = false)
-	private Date date;
+	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+	private LocalDateTime date;
 
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
@@ -89,11 +88,11 @@ public class MeteoState extends PersistentEntity<Integer> {
 		return image;
 	}
 	
-	public Date date() {
+	public LocalDateTime date() {
 		return date;
 	}
 	
-	public void date(Date date) {
+	public void date(LocalDateTime date) {
 		this.date = date;
 	}
 	

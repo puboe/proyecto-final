@@ -1,19 +1,20 @@
 <wicket:extend>
 	<div class="container">
-		<div class="row">
+		<div class="row well">
 			<div class="col-md-12">
+				<div class="text-center" wicket:id="stateDate"></div>
+				<div class="text-center" wicket:id="stateFilename"></div>
 				<img wicket:id="image" height="512" width="1024">
 			</div>
-			
 		</div>
 		<br>
 		<div class="row">
 			<div class="col-md-1 col-md-offset-9">
-				<button type="button" class="btn btn-primary">Previous</button>
+				<button wicket:id="previous" type="button" class="btn btn-primary">Previous</button>
 			</div>
 			<div class="col-md-1">
-				<button type="button" class="btn btn-primary">Next</button>
+				<button wicket:id="next" type="button" class="btn btn-primary">Next</button>
 			</div>
 		</div>
 	</div>
-</wicket:extend>>
+</wicket:extend>

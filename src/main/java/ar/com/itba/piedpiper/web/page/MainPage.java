@@ -38,37 +38,7 @@ public class MainPage extends AbstractWebPage {
 	
 	@Override
 	protected void onInitialize() {
-		//client connect test
 		super.onInitialize();
-//		Client client = ClientBuilder.newClient();
-//		HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic("weather", "121212piedpiper");
-//		client.register(feature);
-//		WebTarget target = client.target("http://weather.superfreak.com.ar");
-//
-//		int response = target.path("argentina/").request().get().getStatus();
-
-		ClientConfig clientConfig = new ClientConfig();
-//		clientConfig.register(MyClientResponseFilter.class);
-//		clientConfig.register(new AnotherClientFilter());
-		 
-		Client client = ClientBuilder.newClient(clientConfig);
-//		client.register(ThirdClientFilter.class);
-		 
-		WebTarget webTarget = client.target("http://example.com/rest");
-//		webTarget.register(FilterForExampleCom.class);
-		WebTarget resourceWebTarget = webTarget.path("resource");
-		WebTarget helloworldWebTarget = resourceWebTarget.path("helloworld");
-		WebTarget helloworldWebTargetWithQueryParam =
-		        helloworldWebTarget.queryParam("greeting", "Hi World!");
-		 
-		Invocation.Builder invocationBuilder =
-		        helloworldWebTargetWithQueryParam.request(MediaType.TEXT_PLAIN_TYPE);
-		invocationBuilder.header("some-header", "true");
-		 
-		Response response = invocationBuilder.get();
-		System.out.println(response.getStatus());
-		System.out.println(response.readEntity(String.class));
-		
 		final MeteoState lastState = meteoStateService.getLast();
 		final LocalDateTime date = lastState.date();
 		stateDate = new Label("stateDate", date);

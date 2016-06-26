@@ -49,11 +49,11 @@ def show_state(zone_name, time):
                    for data in state.datas]
         prev_state = related_states.get('prev_state', None)
         next_state = related_states.get('next_state', None)
-        prev_state_time = prev_state.time.isoformat() if prev_state else None
-        next_state_time = next_state.time.isoformat() if next_state else None
+        prev_state_time = prev_state.time if prev_state else None
+        next_state_time = next_state.time if next_state else None
         return jsonify(dict(
                         zone_name=state.zone.name,
-                        time=state.time.isoformat(),
+                        time=state.time,
                         prev_state_time=prev_state_time,
                         next_state_time=next_state_time,
                         datas=datas
@@ -97,10 +97,10 @@ def state_flow(zone_name, time):
     #raise Exception(str(trail.shape) + ' ' + str(trail))
 
     flow_states_info = [dict(
-                   time=fs.time.isoformat(),
+                   time=fs.time,
                    image_url=url_for('static_data_image',
                                      zone_name=fs.zone.name,
-                                     timestr=fs.time.isoformat(),
+                                     time=fs.time,
                                      satellite='goeseast',
                                      channel='ir4'),
                    marks=st.tolist()

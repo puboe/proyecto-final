@@ -1,4 +1,6 @@
 from flask import request, send_file
+from flask.json import JSONEncoder
+from datetime import datetime
 import dateutil.parser
 from werkzeug.routing import BaseConverter
 import numpy as np
@@ -10,7 +12,16 @@ class DateTimeConverter(BaseConverter):
         return dateutil.parser.parse(value)
 
     def to_url(self, value):
+        # TODO: REMOVE HORRIBLE HACK
+        if value == '_PARAM_TIMESTR': return value
+
         return value.isoformat()
+
+class DateTimeJSONEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return super(DateTimeJSONEncoder, self).default(obj)
 
 def render_image_array(array):
     image = Image.fromarray((array*255.0).astype(np.uint8))

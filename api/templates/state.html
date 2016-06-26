@@ -57,32 +57,32 @@
       </ul>
       <form class="navbar-form navbar-right" role="search">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search by date" id="search-text" data-source="{{ url_for('zone_search_state', zone_name=state.zone.name) }}" data-target="{{ url_for(target_state_view, zone_name=state.zone.name, timestr='_PARAM_TIMESTR') }}">
+          <input type="text" class="form-control" placeholder="Search by date" id="search-text" data-source="{{ url_for('zone_search_state', zone_name=state.zone.name) }}" data-target="{{ url_for(target_state_view, zone_name=state.zone.name, time='_PARAM_TIMESTR' ) }}">
         </div>
       </form>
       <ul class="nav navbar-nav navbar-right">
         {% if first_state and first_state != state %}
-        <li><a href="{{ url_for(target_state_view, zone_name=first_state.zone.name, timestr=first_state.time.isoformat())}}"><span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span></a></li>
+        <li><a href="{{ url_for(target_state_view, zone_name=first_state.zone.name, time=first_state.time)}}"><span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span></a></li>
         {% else %}
         <li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span></a></li>
         {% endif %}
         {% if prev_state %}
-        <li><a href="{{ url_for(target_state_view, zone_name=prev_state.zone.name, timestr=prev_state.time.isoformat())}}"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></a></li>
+        <li><a href="{{ url_for(target_state_view, zone_name=prev_state.zone.name, time=prev_state.time)}}"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></a></li>
         {% else %}
         <li class="disabled"><a href="#"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></a></li>
         {% endif %}
         {% if next_state %}
-        <li><a href="{{ url_for(target_state_view, zone_name=next_state.zone.name, timestr=next_state.time.isoformat())}}"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></a></li>
+        <li><a href="{{ url_for(target_state_view, zone_name=next_state.zone.name, time=next_state.time)}}"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></a></li>
         {% else %}
         <li class="disabled"><a href="#"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></a></li>
         {% endif %}
         {% if last_state and last_state != state %}
-        <li><a href="{{ url_for(target_state_view, zone_name=last_state.zone.name, timestr=last_state.time.isoformat())}}"><span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span></a></li>
+        <li><a href="{{ url_for(target_state_view, zone_name=last_state.zone.name, time=last_state.time)}}"><span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span></a></li>
         {% else %}
         <li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span></a></li>
         {% endif %}
       </ul>
-      <p class="navbar-text navbar-right date-label"><strong>date:</strong> {{ state.time.isoformat() }}</a>
+      <p class="navbar-text navbar-right date-label"><strong>date:</strong> {{ state.time }}</a>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>

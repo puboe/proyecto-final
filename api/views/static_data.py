@@ -13,7 +13,11 @@ def static_data(zone_name, time, satellite, channel):
     if data is None:
         abort(404)
 
-    data_dict = dict(time=data.state.time.isoformat(), zone_name=data.state.zone.name, satellite=data.satellite, channel=data.channel, size=data.image.shape)
+    data_dict = dict(time=data.state.time,
+                     zone_name=data.state.zone.name,
+                     satellite=data.satellite,
+                     channel=data.channel,
+                     size=data.image.shape)
     return jsonify(data_dict)
 
 @app.route('/<zone_name>/<datetime:time>/static/<satellite>/<channel>/image.png')

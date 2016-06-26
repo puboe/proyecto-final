@@ -1,4 +1,5 @@
-from flask import jsonify, redirect, url_for, send_file
+from flask import jsonify, redirect, url_for, send_file, request
+from sqlalchemy import cast, String, Date
 from api import app, db
 from api.util import request_wants_json, render_image_array
 from meteo.meteo_sql import MeteoZone, MeteoState
@@ -18,8 +19,8 @@ def show_zone(zone_name):
         return jsonify(dict(
                         name=zone.name,
                         config=zone.config,
-                        first_state_time=first_state.time.isoformat(),
-                        last_state_time=last_state.time.isoformat()
+                        first_state_time=first_state.time,
+                        last_state_time=last_state.time
                     ))
     else:
         last_state = db.session.query(MeteoState) \
@@ -28,7 +29,7 @@ def show_zone(zone_name):
                         .order_by(MeteoState.time.desc()).first()
         return redirect(url_for('show_state',
                                 zone_name=last_state.zone.name,
-                                timestr=last_state.time.isoformat()))
+                                time=last_state.time))
 
 @app.route('/<zone_name>/map_image.png')
 def zone_map_image(zone_name):
@@ -46,15 +47,16 @@ def zone_search_state(zone_name):
     for search_term in search_terms:
         query = query.filter(cast(MeteoState.time, String).ilike('%' + search_term + '%'))
     query = query.order_by(MeteoState.time)
-    return jsonify([state.time.isoformat() for state in query.all()])
+    return jsonify([state.time for state in query.all()])
 
 
 @app.route('/<zone_name>/states')
 def zone_valid_states(zone_name):
+    zone = db.session.query(MeteoZone).filter_by(name=zone_name).first()
     states = db.session.query(MeteoState) \
                 .filter_by(zone_name=zone_name) \
                 .filter(MeteoState.is_valid).all()
-    state_times = [state.time.isoformat() for state in states]
+    state_times = [state.time for state in states]
     if zone is not None:
         return jsonify(state_times)
     else:

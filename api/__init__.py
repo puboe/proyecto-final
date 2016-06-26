@@ -1,11 +1,12 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from api.util import DateTimeConverter
+from api.util import DateTimeConverter, DateTimeJSONEncoder
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.url_map.converters['datetime'] = DateTimeConverter
+app.json_encoder = DateTimeJSONEncoder
 db = SQLAlchemy(app)
 
 import api.views.zone

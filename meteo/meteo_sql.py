@@ -133,6 +133,10 @@ class MeteoMotionData(Base):
     def downsample(self):
         return self.prev_state.zone.config['downsample']
 
+    @classmethod
+    def suitable_state(cls):
+        return MeteoState.datas.any(is_valid=True, channel='ir4')
+
 
 def arange2d(starts, stops, steps, dtype=None):
     x, y = [np.arange(start, stop, step)

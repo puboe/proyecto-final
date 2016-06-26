@@ -13,9 +13,9 @@ if method not in ('value', 'gradient'):
 
 # Create missing motions
 with session_scope() as session:
-    print('State count', session.query(MeteoState).filter_by(is_valid=True).count())
+    print('State count', session.query(MeteoState).filter(MeteoMotionData.suitable_state()).count())
     motionless = session.query(MeteoState) \
-                        .filter_by(is_valid=True) \
+                        .filter(MeteoMotionData.suitable_state()) \
                         .filter(~MeteoState.next_motions.any(method=method)) \
                         .order_by(MeteoState.time).all()
     

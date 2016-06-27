@@ -109,17 +109,17 @@ class MeteoMotionData(Base):
         self.motion_y_ds = processor.downsample(self.motion_y, self.downsample)
 
 
-    #def trail_step(self, pos, backwards = False):
-        #dx, dy = self.motion_x_ds, self.motion_y_ds
-        #pos_index = tuple(np.transpose(np.fliplr(pos.astype(np.uint32)) // self.downsample))
-        #dpos = np.transpose(np.array([dy[pos_index], dx[pos_index]]))
-        #return pos - dpos if backwards else pos + dpos
-
     def trail_step(self, pos, backwards = False):
-        dx, dy = self.motion_x, self.motion_y
-        pos_index = tuple(np.transpose(np.fliplr(pos.astype(np.uint32))))
+        dx, dy = self.motion_x_ds, self.motion_y_ds
+        pos_index = tuple(np.transpose(np.fliplr(pos.astype(np.uint32)) // self.downsample))
         dpos = np.transpose(np.array([dy[pos_index], dx[pos_index]]))
         return pos - dpos if backwards else pos + dpos
+
+    #def trail_step(self, pos, backwards = False):
+        #dx, dy = self.motion_x, self.motion_y
+        #pos_index = tuple(np.transpose(np.fliplr(pos.astype(np.uint32))))
+        #dpos = np.transpose(np.array([dy[pos_index], dx[pos_index]]))
+        #return pos - dpos if backwards else pos + dpos
 
     @hybrid_property
     def timedelta(self):

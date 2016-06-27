@@ -25,6 +25,9 @@ class DateTimeJSONEncoder(JSONEncoder):
 
 def render_image_array(array):
     image = Image.fromarray((array*255.0).astype(np.uint8))
+    return render_image(image)
+
+def render_image(image):
     output = io.BytesIO()
     image.save(output, format='PNG')
     return send_file(io.BytesIO(output.getvalue()), mimetype='image/png')

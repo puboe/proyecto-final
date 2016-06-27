@@ -12,6 +12,7 @@ db = SQLAlchemy(app)
 import api.views.zone
 import api.views.state
 import api.views.static_data
+import api.views.flow
 
 from flask import redirect, url_for
 from meteo.meteo_sql import MeteoZone

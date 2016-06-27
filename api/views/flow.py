@@ -15,7 +15,7 @@ def show_flow(zone_name, start_time, end_time):
              .all()
     return jsonify([state.time for state in states])
 
-@app.route('/<zone_name>/<datetime:start_time>/<datetime:end_time>/trails')
+@app.route('/<zone_name>/<datetime:start_time>/<datetime:end_time>/trails.png')
 def show_flow_trails(zone_name, start_time, end_time):
     states = db.session.query(MeteoState) \
              .filter_by(zone_name=zone_name) \

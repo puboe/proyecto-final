@@ -1,0 +1,24 @@
+<wicket:panel>
+	<form class="form-inline margin-top-5 margin-right-5 pull-right" wicket:id="form">
+		<small>
+			<label>Channel:</label>
+		</small>
+		<div class="form-group">
+			<select class="form-control input-sm" wicket:id="channel" ></select>
+		</div>
+		<small>
+			<label>From:</label>
+		</small>
+		<div class="form-group">
+			<input type="text" class="form-control input-sm" wicket:id="from">
+<!-- 			<span type="text" class="form-control input-sm" wicket:id="from"> </span> -->
+		</div>			
+		<small>
+			<label>To:</label>
+		</small>
+		<div class="form-group">
+			<input type="text" class="form-control input-sm" wicket:id="to">
+		</div>
+		<button type="submit" class="btn btn-primary btn-sm" wicket:id="search">Get</button>
+	</form>
+</wicket:panel>

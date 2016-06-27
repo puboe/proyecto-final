@@ -1,15 +1,24 @@
 <wicket:extend>
 	<div class="container">
+		<div class="row well" wicket:id="filterPanel">
+		</div>
 		<div class="row well">
-			<div class="col-md-12">
+		<div class="row">
+			<div class="col-md-6">
 				<div class="text-center" wicket:id="stateDate"></div>
 				<div class="text-center" wicket:id="stateFilename"></div>
-				<img wicket:id="image" height="512" width="1024">
+			</div>
+		</div>
+			<div>
+				<img class="col-md-6" wicket:id="imageAnim">
+			</div>
+			<div>
+				<img class="col-md-6" wicket:id="imagePred">
 			</div>
 		</div>
 		<br>
 		<div class="row">
-			<div class="col-md-1 col-md-offset-9">
+			<div class="col-md-1 col-md-offset-10">
 				<button wicket:id="previous" type="button" class="btn btn-primary">Previous</button>
 			</div>
 			<div class="col-md-1">

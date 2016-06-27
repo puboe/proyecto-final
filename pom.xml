@@ -43,16 +43,32 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>${apache.commons.version}</version>
 		</dependency>
+		<!-- Wicket Bootstrap -->
 		<dependency>
 			<groupId>de.agilecoders.wicket</groupId>
 			<artifactId>wicket-bootstrap-core</artifactId>
 			<version>${wicket.bootstrap.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>de.agilecoders.wicket</groupId>
+		    <artifactId>wicket-bootstrap-extensions</artifactId>
+		    <version>${wicket.bootstrap.version}</version>
 		</dependency>
 		<!-- Wicket Dependencies -->
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-core</artifactId>
 			<version>${wicket.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.wicket</groupId>
+		    <artifactId>wicket-extensions</artifactId>
+		    <version>${wicket.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.wicket</groupId>
+		    <artifactId>wicket-datetime</artifactId>
+		    <version>7.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>

@@ -1,12 +1,5 @@
 package ar.com.itba.piedpiper.web.page;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -15,13 +8,14 @@ import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.glassfish.jersey.client.ClientConfig;
 import org.joda.time.LocalDateTime;
 
 import ar.com.itba.piedpiper.model.entity.MeteoState;
 import ar.com.itba.piedpiper.service.api.MeteoStateService;
 import ar.com.itba.piedpiper.service.api.TransactionService;
 import ar.com.itba.piedpiper.service.api.TransactionService.TransactionalOperationWithoutReturn;
+import ar.com.itba.piedpiper.web.panel.StateFilterPanel;
+import ar.com.itba.piedpiper.web.panel.StateFilterPanel.StateFilterModel;
 
 @SuppressWarnings("serial")
 public class MainPage extends AbstractWebPage {
@@ -34,7 +28,9 @@ public class MainPage extends AbstractWebPage {
 	
 	private Label stateDate;
 	private Label stateFilename;
-	private Image image;
+	private Image imageAnimation;
+	private Image predictionImage;
+	private StateFilterModel stateFilterModel;
 	
 	@Override
 	protected void onInitialize() {
@@ -45,16 +41,31 @@ public class MainPage extends AbstractWebPage {
 		stateDate.setOutputMarkupId(true);
 		stateFilename = new Label("stateFilename", lastState.filename());
 		stateFilename.setOutputMarkupId(true);
-		image = new NonCachingImage("image", Model.of(new DynamicImageResource() {
+		imageAnimation = new NonCachingImage("imageAnim", Model.of(new DynamicImageResource() {
 			@Override
 			protected byte[] getImageData(Attributes attributes) {
 				return meteoStateService.getLast().image();
 			}
 		}));
-		image.setOutputMarkupId(true);
-		add(stateDate);
-		add(stateFilename);
-		add(image);
+		imageAnimation.setOutputMarkupId(true);
+		predictionImage = new NonCachingImage("imagePred", Model.of(new DynamicImageResource() {
+			@Override
+			protected byte[] getImageData(Attributes attributes) {
+				return meteoStateService.getLast().image();
+			}
+		}));
+		add(stateDate).add(stateFilename).add(predictionImage).add(imageAnimation);
+		stateFilterModel = new StateFilterModel();
+		add(new StateFilterPanel("filterPanel", stateFilterModel, this) {
+			@Override
+			public void onSearch(AjaxRequestTarget target) {
+				target.add(imageAnimation);
+				//XXX: Get stuff through API here
+				System.out.println(stateFilterModel.channelModel());
+				System.out.println(stateFilterModel.dataRangeModel().getObject().from());
+				System.out.println(stateFilterModel.dataRangeModel().getObject().to());
+			}
+		});
 		add(new AjaxLink<Void>("next") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
@@ -62,7 +73,7 @@ public class MainPage extends AbstractWebPage {
 					@Override
 					public void execute() {
 						final MeteoState state = meteoStateService.findOne(1).get();
-						image.setDefaultModelObject(
+						imageAnimation.setDefaultModelObject(
 							new NonCachingImage("image", new DynamicImageResource() {
 								@Override
 								protected byte[] getImageData(Attributes attributes) {
@@ -74,9 +85,7 @@ public class MainPage extends AbstractWebPage {
 						stateFilename.setDefaultModelObject(state.filename());
 					}
 				});
-				target.add(stateDate);
-				target.add(stateFilename);
-				target.add(image);
+				target.add(stateDate, stateFilename, imageAnimation);
 			}
 		});
 		add(new AjaxLink<Void>("previous") {
@@ -86,7 +95,7 @@ public class MainPage extends AbstractWebPage {
 					@Override
 					public void execute() {
 						final MeteoState state = meteoStateService.findOne(2).get();
-						image.setDefaultModelObject(
+						imageAnimation.setDefaultModelObject(
 							new NonCachingImage("image", new DynamicImageResource() {
 								@Override
 								protected byte[] getImageData(Attributes attributes) {
@@ -98,9 +107,7 @@ public class MainPage extends AbstractWebPage {
 						stateFilename.setDefaultModelObject(state.filename());
 					}
 				});
-				target.add(stateDate);
-				target.add(stateFilename);
-				target.add(image);
+				target.add(stateDate, stateFilename, imageAnimation);
 			}
 		});
 	}

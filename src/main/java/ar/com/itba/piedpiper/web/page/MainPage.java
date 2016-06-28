@@ -9,6 +9,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDateTime;
+import org.joda.time.format.ISODateTimeFormat;
 
 import ar.com.itba.piedpiper.model.entity.MeteoState;
 import ar.com.itba.piedpiper.service.api.MeteoStateService;
@@ -62,8 +63,8 @@ public class MainPage extends AbstractWebPage {
 				target.add(imageAnimation);
 				//XXX: Get stuff through API here
 				System.out.println(stateFilterModel.channelModel());
-				System.out.println(stateFilterModel.dataRangeModel().getObject().from());
-				System.out.println(stateFilterModel.dataRangeModel().getObject().to());
+				System.out.println(stateFilterModel.dataRangeModel().getObject().from().toString(ISODateTimeFormat.dateTimeNoMillis()));
+				System.out.println(stateFilterModel.dataRangeModel().getObject().to().toString(ISODateTimeFormat.dateTimeNoMillis()));
 			}
 		});
 		add(new AjaxLink<Void>("next") {

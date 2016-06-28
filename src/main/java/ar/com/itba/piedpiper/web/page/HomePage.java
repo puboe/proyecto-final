@@ -12,12 +12,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 
 import ar.com.itba.piedpiper.service.api.ConfigurationService;
 
@@ -27,30 +29,31 @@ public class HomePage extends AbstractWebPage {
 	@SpringBean
 	ConfigurationService configurations;
 	
-	private String mainWebTargetPath;
-	
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-	}
-
 	@Override
 	protected void onInitialize() {
-		mainWebTargetPath = configurations.findByName("mainWebTargetPath").value();
 		super.onInitialize();
 		add(new Label("welcome", Model.of("Use the menu up top to begin.")));
-		dumpToImageTest();
-		//restClientGetImageTest();
-//		restClient();
+		WebTarget webTarget = setupApiConnection();
+//		dumpToImageTest(webTarget);
+//		restClientTest(webTarget);
+		JSONArray dates = stateDatesBetween(DateTime.parse("2016-06-16T15:00:00"), DateTime.parse("2016-06-16T20:00:00"), webTarget);
+		imagesForDates(dates, webTarget);
 	}
 
-	void dumpToImageTest() {
+	private WebTarget setupApiConnection() {
+		String mainWebTargetPath = configurations.findByName("mainWebTargetPath").value();
+		String username = configurations.findByName("username").value();
+		String password = configurations.findByName("password").value();
 		ClientConfig clientConfig = new ClientConfig();
 		Client client = ClientBuilder.newClient(clientConfig);
-		HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic("weather", "121212piedpiper");
+		HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(username, password);
 		client.register(feature);
-		WebTarget webTarget = client.target(mainWebTargetPath + "/argentina/2016-06-16T21:35:00/static/goeseast/ir2/image.png");
-		Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_OCTET_STREAM);                                                  
+		return client.target(mainWebTargetPath);
+	}
+	
+	private void dumpToImageTest(WebTarget webTarget) {
+		WebTarget resourceWebTarget = webTarget.path("argentina/2016-06-16T21:35:00/static/goeseast/ir2/image.png");
+		Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_OCTET_STREAM);                                                  
 		Response response = invocationBuilder.get();
 		InputStream input = (InputStream)response.getEntity();
 		byte[] SWFByteArray;
@@ -61,32 +64,12 @@ public class HomePage extends AbstractWebPage {
 			fos.flush();
 			fos.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
 	}
 	
-	void restClientGetImageTest() {
-		ClientConfig clientConfig = new ClientConfig();
-		Client client = ClientBuilder.newClient(clientConfig);
-		HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic("weather", "121212piedpiper");
-		client.register(feature);
-		WebTarget webTarget = client.target(mainWebTargetPath + "/argentina/2016-06-16T21:35:00/static/goeseast/ir2/image.png");
-//		WebTarget resourceWebTarget = webTarget.path("argentina");
-		Invocation.Builder invocationBuilder =
-				webTarget.request();
-		//invocationBuilder.header("some-header", "true");
-		Response response = invocationBuilder.get();
-		System.out.println(response.getStatus());
-		System.out.println(response.readEntity(String.class));
-	}
-	
-	void restClientTest() {
-		ClientConfig clientConfig = new ClientConfig();
-		Client client = ClientBuilder.newClient(clientConfig);
-		HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic("weather", "121212piedpiper");
-		client.register(feature);
-		WebTarget webTarget = client.target(mainWebTargetPath);
-		WebTarget resourceWebTarget = webTarget.path("argentina");
+	private void restClientTest(WebTarget webTarget) {
+		WebTarget resourceWebTarget = webTarget.path("argentina/2016-06-16T15:00:00/2016-06-16T20:00:00");
 		Invocation.Builder invocationBuilder =
 				resourceWebTarget.request(MediaType.APPLICATION_JSON);
 		//invocationBuilder.header("some-header", "true");
@@ -95,4 +78,37 @@ public class HomePage extends AbstractWebPage {
 		System.out.println(response.readEntity(String.class));
 	}
 	
+	private JSONArray stateDatesBetween(DateTime startTime, DateTime endtime, WebTarget webTarget) {
+		String starTimeString = startTime.toString(ISODateTimeFormat.dateTimeNoMillis());
+		String endTimeString = endtime.toString(ISODateTimeFormat.dateTimeNoMillis());
+		WebTarget resourceWebTarget = webTarget.path("argentina/" + starTimeString + "/" + endTimeString);
+		Invocation.Builder invocationBuilder =
+				resourceWebTarget.request(MediaType.APPLICATION_JSON);
+		Response response = invocationBuilder.get();
+//		System.out.println(response.getStatus());
+		return new JSONArray(response.readEntity(String.class));
+	}
+
+	private void imagesForDates(JSONArray dates, WebTarget webTarget) {
+		for (int i = 0; i < dates.length(); i++) {
+			String date = (String) dates.get(i);
+			System.out.println(date);
+			WebTarget resourceWebTarget = webTarget.path("argentina/" + date + "/static/goeseast/ir2/image.png");
+			Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_OCTET_STREAM);                                                  
+			Response response = invocationBuilder.get();
+			InputStream input = (InputStream) response.getEntity();
+			byte[] SWFByteArray;
+			try {
+				SWFByteArray = IOUtils.toByteArray(input);
+				FileOutputStream fos = new FileOutputStream(new File(i + ".png"));
+				fos.write(SWFByteArray);
+				fos.flush();
+				fos.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 }
+

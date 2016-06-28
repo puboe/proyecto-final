@@ -5,7 +5,6 @@ import java.util.Date;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
 
 import com.google.common.base.Optional;
 
@@ -18,38 +17,38 @@ public class DateRange implements Serializable {
 		return optionalDateRange;
 	}
 	
-	private LocalDate from;
-	private LocalDate to;
+	private LocalDateTime from;
+	private LocalDateTime to;
 
 	public DateRange() {
-		this((LocalDate) null, (LocalDate) null);
+		this((LocalDateTime) null, (LocalDateTime) null);
 	}
 
 	public DateRange(Date from, Date to) {
 		this(
-			from == null ? null : new LocalDate(from), 
-			to == null ? null : new LocalDate(to)
+			from == null ? null : new LocalDateTime(from), 
+			to == null ? null : new LocalDateTime(to)
 		);
 	}
 
-	public DateRange(LocalDate from, LocalDate to) {
+	public DateRange(LocalDateTime from, LocalDateTime to) {
 		this.from = from;
 		this.to = to;
 	}
 
-	public LocalDate to() {
+	public LocalDateTime to() {
 		return to;
 	}
 
-	public LocalDateTime toAsLocalDateTime() {
-		return to == null ? null : to.toLocalDateTime(LocalTime.MIDNIGHT);
+	public LocalDate toAsLocalDate() {
+		return to == null ? null : to.toLocalDate();
 	}
 	
-	public LocalDateTime fromAsLocalDateTime() {
-		return from == null ? null : from.toLocalDateTime(LocalTime.MIDNIGHT);
+	public LocalDate fromAsLocalDate() {
+		return from == null ? null : from.toLocalDate();
 	}
 	
-	public LocalDate from() {
+	public LocalDateTime from() {
 		return from;
 	}
 

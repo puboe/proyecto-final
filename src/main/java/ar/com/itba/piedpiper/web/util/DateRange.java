@@ -3,8 +3,8 @@ package ar.com.itba.piedpiper.web.util;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 
 import com.google.common.base.Optional;
 
@@ -17,26 +17,26 @@ public class DateRange implements Serializable {
 		return optionalDateRange;
 	}
 	
-	private LocalDateTime from;
-	private LocalDateTime to;
+	private DateTime from;
+	private DateTime to;
 
 	public DateRange() {
-		this((LocalDateTime) null, (LocalDateTime) null);
+		this((DateTime) null, (DateTime) null);
 	}
 
 	public DateRange(Date from, Date to) {
 		this(
-			from == null ? null : new LocalDateTime(from), 
-			to == null ? null : new LocalDateTime(to)
+			from == null ? null : new DateTime(from), 
+			to == null ? null : new DateTime(to)
 		);
 	}
 
-	public DateRange(LocalDateTime from, LocalDateTime to) {
+	public DateRange(DateTime from, DateTime to) {
 		this.from = from;
 		this.to = to;
 	}
 
-	public LocalDateTime to() {
+	public DateTime to() {
 		return to;
 	}
 
@@ -48,7 +48,7 @@ public class DateRange implements Serializable {
 		return from == null ? null : from.toLocalDate();
 	}
 	
-	public LocalDateTime from() {
+	public DateTime from() {
 		return from;
 	}
 

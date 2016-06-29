@@ -1,18 +1,32 @@
 package ar.com.itba.piedpiper.web.page;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.NonCachingImage;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.resource.DynamicImageResource;
+import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDateTime;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 
-import ar.com.itba.piedpiper.model.entity.MeteoState;
-import ar.com.itba.piedpiper.service.api.MeteoStateService;
+import ar.com.itba.piedpiper.service.api.ConfigurationService;
 import ar.com.itba.piedpiper.service.api.TransactionService;
 import ar.com.itba.piedpiper.service.api.TransactionService.TransactionalOperationWithoutReturn;
 import ar.com.itba.piedpiper.web.panel.StateFilterPanel;
@@ -22,39 +36,28 @@ import ar.com.itba.piedpiper.web.panel.StateFilterPanel.StateFilterModel;
 public class MainPage extends AbstractWebPage {
 
 	@SpringBean
-	private MeteoStateService meteoStateService;
+	private TransactionService transactions;
 	
 	@SpringBean
-	private TransactionService transactions;
+	private ConfigurationService configurations;
 	
 	private Label stateDate;
 	private Label stateFilename;
-	private Image imageAnimation;
-	private Image predictionImage;
+	private IModel<PackageResourceReference> imageModel;
+	private NonCachingImage predictionImage;
 	private StateFilterModel stateFilterModel;
 	
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		final MeteoState lastState = meteoStateService.getLast();
-		final LocalDateTime date = lastState.date();
-		stateDate = new Label("stateDate", date);
+		stateDate = new Label("stateDate");
 		stateDate.setOutputMarkupId(true);
-		stateFilename = new Label("stateFilename", lastState.filename());
+		stateFilename = new Label("stateFilename");
 		stateFilename.setOutputMarkupId(true);
-		imageAnimation = new NonCachingImage("imageAnim", Model.of(new DynamicImageResource() {
-			@Override
-			protected byte[] getImageData(Attributes attributes) {
-				return meteoStateService.getLast().image();
-			}
-		}));
+		imageModel = Model.of(new PackageResourceReference(MainPage.class, "1.png"));
+		NonCachingImage imageAnimation = new NonCachingImage("imageAnim", imageModel);
 		imageAnimation.setOutputMarkupId(true);
-		predictionImage = new NonCachingImage("imagePred", Model.of(new DynamicImageResource() {
-			@Override
-			protected byte[] getImageData(Attributes attributes) {
-				return meteoStateService.getLast().image();
-			}
-		}));
+		predictionImage = new NonCachingImage("imagePred", Model.of(new PackageResourceReference(MainPage.class, "2.png")));
 		add(stateDate).add(stateFilename).add(predictionImage).add(imageAnimation);
 		stateFilterModel = new StateFilterModel();
 		add(new StateFilterPanel("filterPanel", stateFilterModel, this) {
@@ -62,9 +65,11 @@ public class MainPage extends AbstractWebPage {
 			public void onSearch(AjaxRequestTarget target) {
 				target.add(imageAnimation);
 				//XXX: Get stuff through API here
-				System.out.println(stateFilterModel.channelModel());
-				System.out.println(stateFilterModel.dataRangeModel().getObject().from().toString(ISODateTimeFormat.dateTimeNoMillis()));
-				System.out.println(stateFilterModel.dataRangeModel().getObject().to().toString(ISODateTimeFormat.dateTimeNoMillis()));
+				DateTime from = stateFilterModel.dataRangeModel().getObject().from();
+				DateTime to = stateFilterModel.dataRangeModel().getObject().to();
+				WebTarget webTarget = setupApiConnection();
+				JSONArray dates = stateDatesBetween(from, to, webTarget);
+				imagesForDates(dates, webTarget);
 			}
 		});
 		add(new AjaxLink<Void>("next") {
@@ -73,17 +78,9 @@ public class MainPage extends AbstractWebPage {
 				transactions.execute(new TransactionalOperationWithoutReturn() {
 					@Override
 					public void execute() {
-						final MeteoState state = meteoStateService.findOne(1).get();
-						imageAnimation.setDefaultModelObject(
-							new NonCachingImage("image", new DynamicImageResource() {
-								@Override
-								protected byte[] getImageData(Attributes attributes) {
-									return state.image();
-								}
-							})
-						);
-						stateDate.setDefaultModelObject(state.date());
-						stateFilename.setDefaultModelObject(state.filename());
+						imageModel = Model.of(new PackageResourceReference(MainPage.class, "1.png"));
+						imageAnimation.setDefaultModel(imageModel);
+						System.out.println(imageModel.getObject().getKey());
 					}
 				});
 				target.add(stateDate, stateFilename, imageAnimation);
@@ -95,17 +92,9 @@ public class MainPage extends AbstractWebPage {
 				transactions.execute(new TransactionalOperationWithoutReturn() {
 					@Override
 					public void execute() {
-						final MeteoState state = meteoStateService.findOne(2).get();
-						imageAnimation.setDefaultModelObject(
-							new NonCachingImage("image", new DynamicImageResource() {
-								@Override
-								protected byte[] getImageData(Attributes attributes) {
-									return state.image();
-								}
-							})	
-						);
-						stateDate.setDefaultModelObject(state.date());
-						stateFilename.setDefaultModelObject(state.filename());
+						imageModel = Model.of(new PackageResourceReference(MainPage.class, "2.png"));
+						imageAnimation.setDefaultModel(imageModel);
+						System.out.println(imageModel.getObject().getKey());
 					}
 				});
 				target.add(stateDate, stateFilename, imageAnimation);
@@ -113,4 +102,46 @@ public class MainPage extends AbstractWebPage {
 		});
 	}
 	
+	private JSONArray stateDatesBetween(DateTime startTime, DateTime endtime, WebTarget webTarget) {
+		String starTimeString = startTime.toString(ISODateTimeFormat.dateTimeNoMillis());
+		String endTimeString = endtime.toString(ISODateTimeFormat.dateTimeNoMillis());
+		WebTarget resourceWebTarget = webTarget.path("argentina/" + starTimeString + "/" + endTimeString);
+		Invocation.Builder invocationBuilder =
+				resourceWebTarget.request(MediaType.APPLICATION_JSON);
+		Response response = invocationBuilder.get();
+//		System.out.println(response.getStatus());
+		return new JSONArray(response.readEntity(String.class));
+	}
+
+	private void imagesForDates(JSONArray dates, WebTarget webTarget) {
+		for (int i = 0; i < dates.length(); i++) {
+			String date = (String) dates.get(i);
+			System.out.println(date);
+			WebTarget resourceWebTarget = webTarget.path("argentina/" + date + "/static/goeseast/ir2/image.png");
+			Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_OCTET_STREAM);                                                  
+			Response response = invocationBuilder.get();
+			InputStream input = (InputStream) response.getEntity();
+			byte[] SWFByteArray;
+			try {
+				SWFByteArray = IOUtils.toByteArray(input);
+				FileOutputStream fos = new FileOutputStream(new File(i + ".png"));
+				fos.write(SWFByteArray);
+				fos.flush();
+				fos.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private WebTarget setupApiConnection() {
+		String mainWebTargetPath = configurations.findByName("mainWebTargetPath").value();
+		String username = configurations.findByName("username").value();
+		String password = configurations.findByName("password").value();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(username, password);
+		client.register(feature);
+		return client.target(mainWebTargetPath);
+	}
 }

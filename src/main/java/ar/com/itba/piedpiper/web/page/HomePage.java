@@ -33,11 +33,11 @@ public class HomePage extends AbstractWebPage {
 	protected void onInitialize() {
 		super.onInitialize();
 		add(new Label("welcome", Model.of("Use the menu up top to begin.")));
-		WebTarget webTarget = setupApiConnection();
+		//WebTarget webTarget = setupApiConnection();
 //		dumpToImageTest(webTarget);
 //		restClientTest(webTarget);
-		JSONArray dates = stateDatesBetween(DateTime.parse("2016-06-16T15:00:00"), DateTime.parse("2016-06-16T20:00:00"), webTarget);
-		imagesForDates(dates, webTarget);
+//		JSONArray dates = stateDatesBetween(DateTime.parse("2016-06-16T15:00:00"), DateTime.parse("2016-06-16T20:00:00"), webTarget);
+//		imagesForDates(dates, webTarget);
 	}
 
 	private WebTarget setupApiConnection() {

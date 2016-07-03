@@ -43,6 +43,12 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>${apache.commons.version}</version>
 		</dependency>
+		<!-- Gig Library -->
+		<dependency>
+		    <groupId>com.madgag</groupId>
+		    <artifactId>animated-gif-lib</artifactId>
+		    <version>1.2</version>
+		</dependency>
 		<!-- Wicket Bootstrap -->
 		<dependency>
 			<groupId>de.agilecoders.wicket</groupId>

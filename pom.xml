@@ -43,7 +43,7 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>${apache.commons.version}</version>
 		</dependency>
-		<!-- Gig Library -->
+		<!-- Gif Library -->
 		<dependency>
 		    <groupId>com.madgag</groupId>
 		    <artifactId>animated-gif-lib</artifactId>

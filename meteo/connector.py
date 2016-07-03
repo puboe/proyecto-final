@@ -1,14 +1,11 @@
-_CONNECT_URI = 'postgresql+psycopg2://piedpiper:piedpiper@gserver/piedpiper'
-#_CONNECT_URI = 'postgresql+psycopg2://piedpiper:piedpiper@exp/piedpiper'
+import config
+_CONNECT_URI = config.EnvironmentConfig.SQLALCHEMY_DATABASE_URI
 _ENGINE = None
 _SESSION_MAKER = None
 
 from contextlib import contextmanager
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-
-def pepe():
-    pass
 
 def get_engine(*args, connect_uri=_CONNECT_URI, **kwargs):
     global _ENGINE

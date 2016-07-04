@@ -1,0 +1,27 @@
+<wicket:extend>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div wicket:id="feedback"></div>
+				<br>
+				<div class="table-responsive">
+					<table wicket:id="container" class="table table-bordered table-condensed table-hover table-striped">
+						<tbody>
+							<thead>
+								<th>Variable Name</th>
+								<th>Description</th>
+								<th>Value (Click to edit)</th>
+							</thead>
+							<tr wicket:id="configurationList">
+								<td><span wicket:id="displayName">name</span></td>
+								<td><span wicket:id="description">description</span></td>
+								<td><span wicket:id="editableValue">value</span></td>
+							</tr>
+						</tbody>
+					</table>
+					<div wicket:id="navigator"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</wicket:extend>

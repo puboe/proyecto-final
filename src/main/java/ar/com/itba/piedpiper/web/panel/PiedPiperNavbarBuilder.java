@@ -6,7 +6,7 @@ import org.apache.wicket.model.Model;
 import org.springframework.stereotype.Component;
 
 import ar.com.itba.piedpiper.web.NavbarBuilder;
-import ar.com.itba.piedpiper.web.page.ListImagePage;
+import ar.com.itba.piedpiper.web.page.EditConfigurationPage;
 import ar.com.itba.piedpiper.web.page.MainPage;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
@@ -23,7 +23,7 @@ public class PiedPiperNavbarBuilder implements NavbarBuilder {
 		navbar.fluid();
 		navbar
 			.addComponents(transform(Navbar.ComponentPosition.LEFT, new NavbarButton<Void>(MainPage.class, Model.of("Main")).setIconType(GlyphIconType.cloud)))
-			.addComponents(transform(Navbar.ComponentPosition.LEFT, new NavbarButton<Void>(ListImagePage.class, Model.of("Image List")).setIconType(GlyphIconType.list)));
+			.addComponents(transform(Navbar.ComponentPosition.LEFT, new NavbarButton<Void>(EditConfigurationPage.class, Model.of("Configuration")).setIconType(GlyphIconType.cog)));
 		return navbar;
 	}
 

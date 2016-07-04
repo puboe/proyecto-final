@@ -2,25 +2,18 @@ package ar.com.itba;
 
 import org.apache.wicket.util.time.Duration;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.bio.SocketConnector;
-import org.eclipse.jetty.server.ssl.SslSocketConnector;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public class Start {
     public static void main(String[] args) throws Exception {
-        int timeout = (int) Duration.ONE_HOUR.getMilliseconds();
-
         Server server = new Server();
-        SocketConnector connector = new SocketConnector();
-
-        // Set some timeout options to make debugging easier.
-        connector.setMaxIdleTime(timeout);
+        ServerConnector connector = new ServerConnector(server);
         connector.setSoLingerTime(-1);
         connector.setPort(7001);
         server.addConnector(connector);
-
         Resource keystore = Resource.newClassPathResource("/keystore");
         if (keystore != null && keystore.exists()) {
             // if a keystore for a SSL certificate is available, start a SSL
@@ -30,18 +23,18 @@ public class Start {
             // use this certificate anywhere important as the passwords are
             // available in the source.
 
-            connector.setConfidentialPort(8443);
+//            connector.setConfidentialPort(8443);
 
             SslContextFactory factory = new SslContextFactory();
             factory.setKeyStoreResource(keystore);
             factory.setKeyStorePassword("wicket");
             factory.setTrustStoreResource(keystore);
             factory.setKeyManagerPassword("wicket");
-            SslSocketConnector sslConnector = new SslSocketConnector(factory);
-            sslConnector.setMaxIdleTime(timeout);
-            sslConnector.setPort(8443);
-            sslConnector.setAcceptors(4);
-            server.addConnector(sslConnector);
+//            SslSocketConnector sslConnector = new SslSocketConnector(factory);
+//            sslConnector.setMaxIdleTime(timeout);
+//            sslConnector.setPort(8443);
+//            sslConnector.setAcceptors(4);
+//            server.addConnector(sslConnector);
 
             System.out.println("SSL access to the quickstart has been enabled on port 8443");
             System.out.println("You can access the application using SSL on https://localhost:8443");
@@ -60,7 +53,6 @@ public class Start {
         // mBeanContainer.start();
 
         server.setHandler(bb);
-
         try {
             System.out.println(">>> STARTING EMBEDDED JETTY SERVER, PRESS ANY KEY TO STOP");
             server.start();

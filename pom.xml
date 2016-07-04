@@ -10,7 +10,7 @@
 	<description></description>
 	<properties>
 		<wicket.version>7.3.0</wicket.version>
-		<jetty.version>8.1.19.v20160209</jetty.version>
+		<jetty.version>9.3.10.v20160621</jetty.version>
 		<spring.version>4.2.6.RELEASE</spring.version>
 		<spring.data.version>1.10.1.RELEASE</spring.data.version>
 		<hibernate.version>4.3.11.Final</hibernate.version>
@@ -170,10 +170,14 @@
 		</dependency>
 		<!-- Jetty Dependecies for testing -->
 		<dependency>
-			<groupId>org.eclipse.jetty.aggregate</groupId>
-			<artifactId>jetty-all-server</artifactId>
-			<version>${jetty.version}</version>
-			<scope>provided</scope>
+    <groupId>org.eclipse.jetty</groupId>
+    	<artifactId>jetty-webapp</artifactId>
+    	<version>${jetty.version}</version>
+		</dependency>
+		<dependency>
+    	<groupId>org.eclipse.jetty</groupId>
+    	<artifactId>jetty-webapp</artifactId>
+    	<version>${jetty.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

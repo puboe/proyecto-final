@@ -14,6 +14,7 @@ Base = declarative_base()
 
 
 class MeteoZone(Base):
+    # TODO: Should fit zone dimensions in a regular field somewhere here
     __tablename__ = 'meteo_zone'
     NAME_TYPE = String(64)
     # Attributes
@@ -83,8 +84,8 @@ class MeteoMotionData(Base):
                                     motion_y_ds.isnot(None)))
     motion_x = deferred(motion_x, group='motion')
     motion_y = deferred(motion_y, group='motion')
-    motion_x_ds = deferred(motion_x_ds, group='motion')
-    motion_y_ds = deferred(motion_y_ds, group='motion')
+    motion_x_ds = deferred(motion_x_ds, group='motion_ds')
+    motion_y_ds = deferred(motion_y_ds, group='motion_ds')
 
     # Relationships
     prev_state = relationship('MeteoState', foreign_keys=[prev_time, zone_name], backref='next_motions')
@@ -127,7 +128,10 @@ class MeteoMotionData(Base):
 
     @property
     def shape(self):
-        return self.motion_x.shape
+        # TODO: Shape should be taken from an accesible field, not the image.
+        #       Currently using the downsampled array as it's faster
+        # return self.motion_x.shape
+        return np.array(self.motion_x_ds.shape) * self.downsample
 
     @property
     def downsample(self):
@@ -138,19 +142,6 @@ class MeteoMotionData(Base):
         return MeteoState.datas.any(is_valid=True, channel='ir4')
 
 
-def arange2d(starts, stops, steps, dtype=None):
-    x, y = [np.arange(start, stop, step)
-            for start, stop, step in zip(starts, stops, steps)]
-    return np.transpose([np.tile(x, len(y)), np.repeat(y, len(x))])
-
-#def generate_flux_trail(motions, sx, sy, transpose=False):
-    #shape = motions[0].shape
-    ##start = np.fliplr(arange2d((sx, sy), shape, (sx, sy), dtype=np.float32) - (sx, sy))
-    #start = np.fliplr(arange2d((0.0, 0.0), shape, (sx, sy), dtype=np.float32))
-    #result = np.array(reduce(lambda slist, step: slist + [step.trail_step(slist[-1])],
-                                     #motions, [start]))
-    #return np.transpose(result, (1, 0, 2)) if transpose else result
-   
 
 class MeteoFlux(object):
     def __init__(self, motions):
@@ -160,8 +151,13 @@ class MeteoFlux(object):
     def shape(self):
         return self.motions[0].shape
 
+    def _arange2d(self, starts, stops, steps, dtype=None):
+        x, y = [np.arange(start, stop, step)
+                for start, stop, step in zip(starts, stops, steps)]
+        return np.transpose([np.tile(x, len(y)), np.repeat(y, len(x))])
+
     def generate_start(self, sx, sy):
-        return np.fliplr(arange2d((0.0, 0.0), self.shape, (sx, sy), dtype=np.float32))
+        return np.fliplr(self._arange2d((0.0, 0.0), self.shape, (sx, sy), dtype=np.float32))
 
     def trail(self, start, transpose = False, backwards = False):
         if not backwards:
@@ -176,6 +172,14 @@ class MeteoFlux(object):
     def times(self):
         return np.cumsum([0.0] + [motion.timedelta.seconds // 60
                             for motion in self.motions])
+
+    @property
+    def timedelta(self):
+        return self.motions[-1].next_time - self.motions[0].prev_time
+
+    
+    def smooth_times(self, minutes_interval):
+        return np.arange(0.0, self.timedelta.seconds // 60, minutes_interval)
 
     def polys(self, start, deg, backwards = False):
         trails = self.trail(start, transpose = True, backwards = backwards)

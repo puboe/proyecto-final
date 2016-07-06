@@ -9,7 +9,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
 class DevelopmentExternalConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://piedpiper:piedpiper@localhost/piedpiper'
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://piedpiper:piedpiper@gserver.superfreak.com.ar/piedpiper'
     DEBUG = True
 
 class DevelopmentLocalConfig(Config):

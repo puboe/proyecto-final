@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.url_map.converters['datetime'] = DateTimeConverter
 app.json_encoder = DateTimeJSONEncoder
-db = SQLAlchemy(app)
+db = SQLAlchemy(app, session_options={'autocommit': False})
 
 import api.views.zone
 import api.views.state

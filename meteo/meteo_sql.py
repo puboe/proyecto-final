@@ -50,6 +50,7 @@ class MeteoState(Base):
     # Relationships
     zone = relationship('MeteoZone', backref='states')
     datas = relationship('MeteoStaticData', back_populates='state')
+    predictions = relationship('MeteoPredictionData', back_populates='state')
 
     @hybrid_property
     def is_valid(self):
@@ -58,6 +59,23 @@ class MeteoState(Base):
     @is_valid.expression
     def is_valid(cls):
         return cls.datas.any(is_valid=True)
+
+class MeteoPredictionData(Base):
+    __tablename__ = 'meteo_prediction_data'
+    __table_args__ = (
+            ForeignKeyConstraint(['time', 'zone_name'],
+                                 ['meteo_state.time', 'meteo_state.zone_name']),
+            )
+    # Attributes
+    time = Column(DateTime, nullable=False, primary_key=True )
+    zone_name = Column(MeteoZone.NAME_TYPE, nullable=False, primary_key=True)
+
+    image = Column(NumpyArray, nullable=True)
+    is_valid = column_property(image.isnot(None))
+
+    # Relationships
+    state = relationship('MeteoState', back_populates='predictions')
+    image = deferred(image)
 
 
 class MeteoMotionData(Base):

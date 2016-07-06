@@ -22,7 +22,7 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -34,7 +34,7 @@ import com.madgag.gif.fmsware.AnimatedGifEncoder;
 import ar.com.itba.piedpiper.service.api.ConfigurationService;
 import ar.com.itba.piedpiper.web.panel.StateFilterPanel;
 import ar.com.itba.piedpiper.web.panel.StateFilterPanel.StateFilterModel;
-import ar.com.itba.piedpiper.web.res.ApplicationResources;
+import ar.com.itba.piedpiper.web.util.ImageResource;
 
 @SuppressWarnings("serial")
 public class MainPage extends AbstractWebPage {
@@ -46,7 +46,7 @@ public class MainPage extends AbstractWebPage {
 	private ConfigurationService configurations;
 	
 	private IModel<String> stateDateInfoModel;
-	private IModel<PackageResourceReference> animationModel;
+	private IModel<ImageResource> animationModel;
 	private Image prediction;
 	private StateFilterModel stateFilterModel;
 //	private int currentImageNumber = 0;
@@ -62,12 +62,12 @@ public class MainPage extends AbstractWebPage {
 		stateDateInfoModel = Model.of("");
 		Label stateDateInfo = new Label("stateDate", stateDateInfoModel);
 		stateDateInfo.setOutputMarkupId(true);
-		IModel<PackageResourceReference> trailModel = Model.of(new PackageResourceReference(ApplicationResources.class, "trails.png"));
+		IModel<DynamicImageResource> trailModel = Model.of(new ImageResource(resourcePath, "trails.png"));
 		Image trail = new Image("trail", trailModel);
-		animationModel = Model.of(new PackageResourceReference(ApplicationResources.class, "animation.gif"));
+		animationModel = Model.of(new ImageResource(resourcePath, "animation.gif"));
 		NonCachingImage animation = new NonCachingImage("imageAnim", animationModel);
 		animation.setOutputMarkupId(true);
-		prediction = new Image("imagePred", Model.of(new PackageResourceReference(ApplicationResources.class, datesLength - 1 + ".png")));
+		prediction = new Image("imagePred", Model.of(new ImageResource(resourcePath, datesLength - 1 + ".png")));
 		add(stateDateInfo).add(prediction).add(animation).add(trail);
 		stateFilterModel = new StateFilterModel();
 //		add(new AbstractAjaxTimerBehavior(Duration.milliseconds(200)) {

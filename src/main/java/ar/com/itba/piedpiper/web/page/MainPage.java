@@ -52,11 +52,13 @@ public class MainPage extends AbstractWebPage {
 //	private int currentImageNumber = 0;
 	private int datesLength = 11;
 	//XXX: Move to config
-	private String resourcePath= System.getProperty("user.dir") + "/src/main/java/ar/com/itba/piedpiper/web/res/";
+	private String separator = System.getProperty("file.separator");
+	private String resourcePath = configurations.findByName("imagePath").value();
 	
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		resourcePath = addEndingSeparator(resourcePath);
 		stateDateInfoModel = Model.of("");
 		Label stateDateInfo = new Label("stateDate", stateDateInfoModel);
 		stateDateInfo.setOutputMarkupId(true);
@@ -65,7 +67,7 @@ public class MainPage extends AbstractWebPage {
 		animationModel = Model.of(new PackageResourceReference(ApplicationResources.class, "animation.gif"));
 		NonCachingImage animation = new NonCachingImage("imageAnim", animationModel);
 		animation.setOutputMarkupId(true);
-		prediction = new Image("imagePred", Model.of(new PackageResourceReference(ApplicationResources.class, datesLength - 1+ ".png")));
+		prediction = new Image("imagePred", Model.of(new PackageResourceReference(ApplicationResources.class, datesLength - 1 + ".png")));
 		add(stateDateInfo).add(prediction).add(animation).add(trail);
 		stateFilterModel = new StateFilterModel();
 //		add(new AbstractAjaxTimerBehavior(Duration.milliseconds(200)) {
@@ -98,6 +100,7 @@ public class MainPage extends AbstractWebPage {
 				stateDateInfoModel = Model.of("Playing " + datesLength + " frames from " + from.toString(ISODateTimeFormat.dateHourMinuteSecond()) + " to " + to.toString(ISODateTimeFormat.dateHourMinuteSecond()) + ".");
 				stateDateInfo.setDefaultModel(stateDateInfoModel);
 				target.add(animation, stateDateInfo);
+				setResponsePage(MainPage.class);
 			}
 		});
 //		add(new AjaxLink<Void>("next") {
@@ -136,6 +139,10 @@ public class MainPage extends AbstractWebPage {
 //		});
 	}
 	
+	private String addEndingSeparator(String resourcePath) {
+		return String.valueOf(resourcePath.charAt(resourcePath.length() - 1)) == separator ? resourcePath : resourcePath + separator;
+	}
+
 	private JSONArray stateDatesBetween(DateTime startTime, DateTime endTime, WebTarget webTarget) {
 		String startTimeString = startTime.toString(ISODateTimeFormat.dateTimeNoMillis());
 		String endTimeString = endTime.toString(ISODateTimeFormat.dateTimeNoMillis());
@@ -202,7 +209,7 @@ public class MainPage extends AbstractWebPage {
 		for (int i = 0; i < datesLength; i++) {
 			try {
 				BufferedImage image;
-				image = ImageIO.read(new File(resourcePath + "/" + i +".png"));
+				image = ImageIO.read(new File(resourcePath + i +".png"));
 				gif.addFrame(image);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

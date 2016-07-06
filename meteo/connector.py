@@ -38,7 +38,8 @@ def session_scope():
 if __name__ == '__main__':
     import code
     from .meteo_sql import *
-    Base.metadata.create_all(get_engine())
+    engine = get_engine()
+    Base.metadata.create_all(engine)
     Session = get_session_maker()
     session = Session()
     code.interact(local=locals())

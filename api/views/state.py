@@ -1,4 +1,4 @@
-from api import app, db
+from api import blueprint, db
 from flask import Flask, jsonify, abort, send_file, render_template, redirect, url_for, request
 from meteo.meteo_sql import MeteoStaticData, MeteoState, MeteoMotionData, MeteoZone, MeteoFlux
 from flask_sqlalchemy import SQLAlchemy
@@ -31,7 +31,7 @@ def get_related_states(state):
                 last_state=last_state)
 
 
-@app.route('/<zone_name>/<datetime:time>/')
+@blueprint.route('/<zone_name>/<datetime:time>/')
 def show_state(zone_name, time):
     state = db.session.query(MeteoState) \
                       .filter_by(zone_name=zone_name,
@@ -60,12 +60,12 @@ def show_state(zone_name, time):
                       ))
     else:
         return render_template('state_data.html', state=state,
-                                         target_state_view='show_state',
+                                         target_state_view='blueprint.show_state',
                                          **related_states)
 
 
 
-@app.route('/<zone_name>/<datetime:time>/flow')
+@blueprint.route('/<zone_name>/<datetime:time>/flow')
 def state_flow(zone_name, time):
     state = db.session.query(MeteoState) \
                       .filter_by(zone_name=zone_name, time=time) \
@@ -98,7 +98,7 @@ def state_flow(zone_name, time):
 
     flow_states_info = [dict(
                    time=fs.time,
-                   image_url=url_for('static_data_image',
+                   image_url=url_for('blueprint.static_data_image',
                                      zone_name=fs.zone.name,
                                      time=fs.time,
                                      satellite='goeseast',
@@ -107,7 +107,7 @@ def state_flow(zone_name, time):
                       )
                         for fs, st in zip(flow_states, trail)]
     return render_template('state_flow.html', state=state,
-                                     target_state_view='state_flow',
+                                     target_state_view='blueprint.state_flow',
                                      flow_states_info=flow_states_info,
                                      **get_related_states(state))
 

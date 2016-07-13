@@ -1,13 +1,13 @@
 from flask import jsonify, redirect, url_for, send_file, request, abort
 from sqlalchemy import cast, String, Date
-from api import app, db
+from api import blueprint, db
 from api.util import request_wants_json, render_image_array
 from meteo.meteo_sql import MeteoZone, MeteoState
 from PIL import Image
 import numpy as np
 import io
 
-@app.route('/<zone_name>/')
+@blueprint.route('/<zone_name>/')
 def show_zone(zone_name):
     zone = db.session.query(MeteoZone).filter_by(name=zone_name).first()
     if zone is None:
@@ -27,18 +27,18 @@ def show_zone(zone_name):
                         .filter_by(zone=zone) \
                         .filter(MeteoState.is_valid) \
                         .order_by(MeteoState.time.desc()).first()
-        return redirect(url_for('show_state',
+        return redirect(url_for('blueprint.show_state',
                                 zone_name=last_state.zone.name,
                                 time=last_state.time))
 
-@app.route('/<zone_name>/map_image.png')
+@blueprint.route('/<zone_name>/map_image.png')
 def zone_map_image(zone_name):
     zone = db.session.query(MeteoZone).filter_by(name=zone_name).first()
     if zone is None:
         abort(404)
     return render_image_array(zone.map_image)
 
-@app.route('/<zone_name>/search_state')
+@blueprint.route('/<zone_name>/search_state')
 def zone_search_state(zone_name):
     term = request.args.get("term")
     search_terms = term.split(' ')
@@ -50,7 +50,7 @@ def zone_search_state(zone_name):
     return jsonify([state.time for state in query.all()])
 
 
-@app.route('/<zone_name>/states')
+@blueprint.route('/<zone_name>/states')
 def zone_valid_states(zone_name):
     zone = db.session.query(MeteoZone).filter_by(name=zone_name).first()
     states = db.session.query(MeteoState) \

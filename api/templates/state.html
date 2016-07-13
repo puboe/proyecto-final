@@ -57,7 +57,7 @@
       </ul>
       <form class="navbar-form navbar-right" role="search">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search by date" id="search-text" data-source="{{ url_for('zone_search_state', zone_name=state.zone.name) }}" data-target="{{ url_for(target_state_view, zone_name=state.zone.name, time='_PARAM_TIMESTR' ) }}">
+          <input type="text" class="form-control" placeholder="Search by date" id="search-text" data-source="{{ url_for('blueprint.zone_search_state', zone_name=state.zone.name) }}" data-target="{{ url_for(target_state_view, zone_name=state.zone.name, time='_PARAM_TIMESTR' ) }}">
         </div>
       </form>
       <ul class="nav navbar-nav navbar-right">

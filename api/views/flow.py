@@ -1,11 +1,11 @@
 from flask import jsonify
-from api import app, db
+from api import db, blueprint
 from meteo.meteo_sql import MeteoState, MeteoMotionData, MeteoFlux
 from PIL import Image, ImageDraw
 from api.util import render_image
 import numpy as np
 
-@app.route('/<zone_name>/<datetime:start_time>/<datetime:end_time>/')
+@blueprint.route('/<zone_name>/<datetime:start_time>/<datetime:end_time>/')
 def show_flow(zone_name, start_time, end_time):
     states = db.session.query(MeteoState).filter_by(zone_name=zone_name) \
              .filter(MeteoState.time >= start_time) \
@@ -15,7 +15,7 @@ def show_flow(zone_name, start_time, end_time):
              .all()
     return jsonify([state.time for state in states])
 
-@app.route('/<zone_name>/<datetime:start_time>/<datetime:end_time>/trails.png')
+@blueprint.route('/<zone_name>/<datetime:start_time>/<datetime:end_time>/trails.png')
 def show_flow_trails(zone_name, start_time, end_time):
     states = db.session.query(MeteoState) \
              .filter_by(zone_name=zone_name) \

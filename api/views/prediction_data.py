@@ -1,10 +1,10 @@
 from flask import jsonify, send_file, abort
-from api import app, db
+from api import blueprint, db
 from api.util import render_image_array
 from meteo.meteo_sql import MeteoPredictionData
 
 
-@app.route('/<zone_name>/<datetime:time>/prediction/')
+@blueprint.route('/<zone_name>/<datetime:time>/prediction/')
 def prediction_data(zone_name, time):
     data = db.session.query(MeteoPredictionData).filter_by(zone_name=zone_name,
                                                        time=time).first()
@@ -16,7 +16,7 @@ def prediction_data(zone_name, time):
                      size=data.image.shape)
     return jsonify(data_dict)
 
-@app.route('/<zone_name>/<datetime:time>/prediction/image.png')
+@blueprint.route('/<zone_name>/<datetime:time>/prediction/image.png')
 def prediction_data_image(zone_name, time):
     data = db.session.query(MeteoPredictionData).filter_by(zone_name=zone_name,
                                                        time=time).first()
@@ -25,7 +25,7 @@ def prediction_data_image(zone_name, time):
 
     return render_image_array(data.image)
 
-@app.route('/<zone_name>/<datetime:time>/prediction/diff_image.png')
+@blueprint.route('/<zone_name>/<datetime:time>/prediction/diff_image.png')
 def prediction_data_image_difference(zone_name, time):
     data = db.session.query(MeteoPredictionData).filter_by(zone_name=zone_name,
                                                        time=time).first()

@@ -2,7 +2,7 @@ import importlib
 import os
 
 class Config(object):
-    pass
+    APPLICATION_ROOT = '/api'
 
 class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://piedpiper:piedpiper@gserver/piedpiper'

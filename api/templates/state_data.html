@@ -8,8 +8,8 @@
 {% block content %}
 
 <ul class="nav nav-tabs">
-  <li role="presentation" class="active"><a href="{{url_for('show_state', zone_name=state.zone.name, time=state.time)}}">Information</a></li>
-  <li role="presentation"><a href="{{url_for('state_flow', zone_name=state.zone.name, time=state.time)}}">Flow</a></li>
+  <li role="presentation" class="active"><a href="{{url_for('blueprint.show_state', zone_name=state.zone.name, time=state.time)}}">Information</a></li>
+  <li role="presentation"><a href="{{url_for('blueprint.state_flow', zone_name=state.zone.name, time=state.time)}}">Flow</a></li>
 </ul>
 
 <div class="weather-maps">
@@ -18,8 +18,8 @@
 <div class="panel panel-default weather-map-panel">
   <div class="panel-heading weather-map-panel-heading">{{ data.satellite }}/{{ data.channel }}</div>
   <div class="panel-body weather-map"
-       data-image="{{ url_for('static_data_image', zone_name=state.zone.name, time=state.time, satellite=data.satellite, channel=data.channel) }}"
-       data-map-image="{{ url_for('zone_map_image', zone_name=state.zone.name) }}"
+       data-image="{{ url_for('blueprint.static_data_image', zone_name=state.zone.name, time=state.time, satellite=data.satellite, channel=data.channel) }}"
+       data-map-image="{{ url_for('blueprint.zone_map_image', zone_name=state.zone.name) }}"
        data-width="{{state.zone.config['crop_rect'][2]}}px" 
        data-height="{{state.zone.config['crop_rect'][3]}}px" >
   </div>

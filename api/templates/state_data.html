@@ -2,7 +2,7 @@
 
 {% block head %}
 {{ super() }}
-<script src="/static/weather-map.js"></script>
+<script src="{{ url_for('blueprint.static', filename='weather-map.js') }}"></script>
 {% endblock head %}
 
 {% block content %}

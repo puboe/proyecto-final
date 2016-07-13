@@ -2,7 +2,7 @@
 
 {% block head %}
 {{ super() }}
-<script src="/static/weather-map.js"></script>
+<script src="{{ url_for('blueprint.static', filename='weather-map.js') }}"></script>
 <script>
 window.flow_states = {{ flow_states_info|tojson }};
 </script>

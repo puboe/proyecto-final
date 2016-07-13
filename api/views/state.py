@@ -65,7 +65,7 @@ def show_state(zone_name, time):
 
 
 
-@blueprint.route('/<zone_name>/<datetime:time>/flow')
+@blueprint.route('/<zone_name>/<datetime:time>/flow_view')
 def state_flow(zone_name, time):
     state = db.session.query(MeteoState) \
                       .filter_by(zone_name=zone_name, time=time) \

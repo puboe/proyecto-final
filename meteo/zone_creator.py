@@ -1,8 +1,8 @@
 import json
 import sys
-from meteo_sql import MeteoZone
-from connector import session_scope
-from image import ImageProcessor
+from .meteo_sql import MeteoZone
+from .connector import session_scope
+from .image import ImageProcessor
 from PIL import Image
 import numpy as np
 

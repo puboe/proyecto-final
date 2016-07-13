@@ -1,4 +1,4 @@
-from flask import jsonify, redirect, url_for, send_file, request
+from flask import jsonify, redirect, url_for, send_file, request, abort
 from sqlalchemy import cast, String, Date
 from api import app, db
 from api.util import request_wants_json, render_image_array

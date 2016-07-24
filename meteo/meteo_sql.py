@@ -162,6 +162,43 @@ class MeteoMotionData(Base):
 
 
 class MeteoFlux(object):
+    @classmethod
+    def from_interval(cls, session, zone_name, start_time, end_time):
+        states = db.session.query(MeteoState) \
+                     .filter_by(zone_name=zone_name) \
+                     .filter(MeteoState.time >= start_time) \
+                     .filter(MeteoState.time <= end_time) \
+                     .filter(MeteoMotionData.suitable_state()) \
+                     .order_by(MeteoState.time.asc()) \
+                     .all()
+        state_times = [state.time for state in states]
+        motions = db.session.query(MeteoMotionData) \
+                  .filter_by(zone_name=zone_name, method='gradient') \
+                  .filter(MeteoMotionData.prev_time.in_(state_times)) \
+                  .filter(MeteoMotionData.next_time.in_(state_times)) \
+                  .order_by(MeteoMotionData.prev_time.asc()) \
+                  .all()
+        return cls(motions)
+
+    @classmethod
+    def from_prev_states(cls, session, zone_name, end_time, steps):
+        states = db.session.query(MeteoState).filter_by(zone_name=zone_name) \
+                     .filter(MeteoState.time <= end_time) \
+                     .filter(MeteoMotionData.suitable_state()) \
+                     .order_by(MeteoState.time.desc()) \
+                     .limit(steps) \
+                     .all()
+        states.reverse()
+        state_times = [state.time for state in states]
+        motions = db.session.query(MeteoMotionData) \
+                  .filter_by(zone_name=zone_name, method='gradient') \
+                  .filter(MeteoMotionData.prev_time.in_(state_times)) \
+                  .filter(MeteoMotionData.next_time.in_(state_times)) \
+                  .order_by(MeteoMotionData.prev_time.asc()) \
+                  .all()
+        return cls(motions)
+
+
     def __init__(self, motions):
         self.motions = motions
 

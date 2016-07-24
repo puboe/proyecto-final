@@ -7,18 +7,16 @@
 			<select class="form-control input-sm" wicket:id="channel" ></select>
 		</div>
 		<small>
-			<label>From:</label>
-		</small>
-		<div class="form-group">
-<!-- 			<input type="text" class="form-control input-sm" wicket:id="from"> -->
-			<span type="text" wicket:id="from"> </span>
-		</div>			
-		<small>
 			<label>To:</label>
 		</small>
 		<div class="form-group">
-<!-- 			<input type="text" class="form-control input-sm" wicket:id="to"> -->
 			<span type="text" wicket:id="to"> </span>
+		</div>
+		<small>
+			<label>Steps:</label>
+		</small>
+		<div class="form-group">
+			<input type="text" wicket:id="steps"/>
 		</div>
 		<button type="submit" class="btn btn-primary btn-sm" wicket:id="search">Get</button>
 	</form>

@@ -11,6 +11,7 @@ public class ImageResource extends DynamicImageResource {
 
 	private String path;
 	private String name;
+	private boolean fileFound;
 	
 	public ImageResource(String path, String name) {
 		this.path = path;
@@ -21,12 +22,15 @@ public class ImageResource extends DynamicImageResource {
 	protected byte[] getImageData(Attributes attributes) {
 		try {
 			File imgPath = new File(path + name);
+			fileFound = true;
 			return Files.readAllBytes(imgPath.toPath());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fileFound = false;
 		}
 		return null;
 	}
 	
+	public boolean fileFound() {
+		return fileFound;
+	}
 }

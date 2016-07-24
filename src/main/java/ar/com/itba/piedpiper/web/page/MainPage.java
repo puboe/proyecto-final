@@ -14,6 +14,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.json.JSONArray;
@@ -39,125 +40,75 @@ import ar.com.itba.piedpiper.web.util.ImageResource;
 @SuppressWarnings("serial")
 public class MainPage extends AbstractWebPage {
 
-//	@SpringBean
-//	private TransactionService transactions;
-	
 	@SpringBean
 	private ConfigurationService configurations;
-	
-	private IModel<String> stateDateInfoModel;
-	private IModel<ImageResource> animationModel;
-	private Image prediction;
+
 	private StateFilterModel stateFilterModel;
-//	private int currentImageNumber = 0;
-	private int datesLength = 11;
-	//XXX: Move to config
-	private String separator = System.getProperty("file.separator");
-	private String resourcePath = configurations.findByName("imagePath").value();
-	
+	private int datesLength = 0;
+	// XXX: Move to config
+	private final String trailsFilename = "trails.png";
+	private final String imageFilename = "image.png";
+	private final String mapFilename = "map_image.png";
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		resourcePath = addEndingSeparator(resourcePath);
-		stateDateInfoModel = Model.of("");
+		final String resourcePath = configurations.findByName("imagePath").value();
+		createDir(resourcePath);
+		IModel<String> stateDateInfoModel = Model.of("");
 		Label stateDateInfo = new Label("stateDate", stateDateInfoModel);
 		stateDateInfo.setOutputMarkupId(true);
-		IModel<DynamicImageResource> trailModel = Model.of(new ImageResource(resourcePath, "trails.png"));
+		IModel<DynamicImageResource> mapModel = Model.of(new ImageResource(resourcePath, mapFilename));
+		Image map = new Image("map", mapModel);
+		map.setOutputMarkupId(true);
+		IModel<DynamicImageResource> trailModel = Model.of(new ImageResource(resourcePath, trailsFilename));
 		Image trail = new Image("trail", trailModel);
-		animationModel = Model.of(new ImageResource(resourcePath, "animation.gif"));
+		trail.setOutputMarkupId(true);
+		IModel<ImageResource> animationModel = Model.of(new ImageResource(resourcePath, "animation.gif"));
 		NonCachingImage animation = new NonCachingImage("imageAnim", animationModel);
 		animation.setOutputMarkupId(true);
-		prediction = new Image("imagePred", Model.of(new ImageResource(resourcePath, datesLength - 1 + ".png")));
-		add(stateDateInfo).add(prediction).add(animation).add(trail);
+		// TODO: Load Prediction Image here
+		ImageResource predictionResource = new ImageResource(resourcePath, datesLength + ".png");
+		Image prediction = new Image("imagePred", Model.of(predictionResource));
+		prediction.setOutputMarkupId(true);
+		prediction.setVisible(predictionResource.fileFound());
+		add(stateDateInfo, prediction, animation, trail, map);
 		stateFilterModel = new StateFilterModel();
-//		add(new AbstractAjaxTimerBehavior(Duration.milliseconds(200)) {
-//            @Override
-//            protected void onTimer(AjaxRequestTarget target) {
-//            	imageModel = Model.of(
-//				new PackageResourceReference(	
-//					ApplicationResources.class, (currentImageNumber++) + ".png")
-//				);
-//            	if(currentImageNumber == datesLength - 1) {
-//            		currentImageNumber = 0;
-//            	}
-//				animation.setDefaultModel(imageModel);
-//				System.out.println(imageModel.getObject().getKey());
-//				target.add(animation);
-//            }
-//        });
 		add(new StateFilterPanel("filterPanel", stateFilterModel, this) {
 			@Override
 			public void onSearch(AjaxRequestTarget target) {
-				//XXX: Get stuff through API here
-				DateTime from = stateFilterModel.dataRangeModel().getObject().from();
-				DateTime to = stateFilterModel.dataRangeModel().getObject().to();
+				// XXX: Get stuff through API here
+				resetDir(resourcePath);
+				DateTime to = new DateTime(stateFilterModel.toModel().getObject());
+				int steps = new Integer(stateFilterModel.stepsModel().getObject());
 				WebTarget webTarget = setupApiConnection();
-				JSONArray dates = stateDatesBetween(from, to, webTarget);
+				JSONArray dates = statesUpTo(to, steps, webTarget);
 				datesLength = dates.length();
-				imagesForDatesToDisk(dates, webTarget);
-				trailForImageToDisk(dates, webTarget);
-				buildGif();
-				stateDateInfoModel = Model.of("Playing " + datesLength + " frames from " + from.toString(ISODateTimeFormat.dateHourMinuteSecond()) + " to " + to.toString(ISODateTimeFormat.dateHourMinuteSecond()) + ".");
-				stateDateInfo.setDefaultModel(stateDateInfoModel);
-				target.add(animation, stateDateInfo);
-				setResponsePage(MainPage.class);
+				imagesForDatesToDisk(dates, webTarget, resourcePath);
+				zoneMapToDisk(webTarget, resourcePath);
+				trailForImageToDiskBySteps(dates, steps, webTarget, resourcePath);
+				buildGif(resourcePath);
+				stateDateInfo.setDefaultModel(Model.of("Playing " + datesLength + " frames from " + dates.get(1)
+					+ " leading to " + dates.get(dates.length() - 1) + "."));
+				target.add(animation, stateDateInfo, trail, prediction, map);
 			}
 		});
-//		add(new AjaxLink<Void>("next") {
-//			@Override
-//			public void onClick(AjaxRequestTarget target) {
-//				transactions.execute(new TransactionalOperationWithoutReturn() {
-//					@Override
-//					public void execute() {
-//						animationModel = Model.of(
-//							new PackageResourceReference(
-//								ApplicationResources.class,  ((currentImageNumber < datesLength-1) ? currentImageNumber++ : currentImageNumber) + ".png")
-//						);
-//						animation.setDefaultModel(animationModel);
-//						System.out.println(animationModel.getObject().getKey());
-//					}
-//				});
-//				target.add(stateDateInfo, animation);
-//			}
-//		});
-//		add(new AjaxLink<Void>("previous") {
-//			@Override
-//			public void onClick(AjaxRequestTarget target) {
-//				transactions.execute(new TransactionalOperationWithoutReturn() {
-//					@Override
-//					public void execute() {
-//						animationModel = Model.of(
-//							new PackageResourceReference(	
-//								ApplicationResources.class, ((currentImageNumber > 0) ? currentImageNumber-- : currentImageNumber) + ".png")
-//							);
-//						animation.setDefaultModel(animationModel);
-//						System.out.println(animationModel.getObject().getKey());
-//					}
-//				});
-//				target.add(stateDateInfo, animation);
-//			}
-//		});
-	}
-	
-	private String addEndingSeparator(String resourcePath) {
-		return String.valueOf(resourcePath.charAt(resourcePath.length() - 1)) == separator ? resourcePath : resourcePath + separator;
 	}
 
-	private JSONArray stateDatesBetween(DateTime startTime, DateTime endTime, WebTarget webTarget) {
-		String startTimeString = startTime.toString(ISODateTimeFormat.dateTimeNoMillis());
-		String endTimeString = endTime.toString(ISODateTimeFormat.dateTimeNoMillis());
-		WebTarget resourceWebTarget = webTarget.path("argentina/" + startTimeString + "/" + endTimeString);
+	private JSONArray buildJSONArray(WebTarget webTarget, String path) {
+		WebTarget resourceWebTarget = webTarget.path(path);
 		Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_JSON);
 		Response response = invocationBuilder.get();
 		return new JSONArray(response.readEntity(String.class));
 	}
 
-	private void imagesForDatesToDisk(JSONArray dates, WebTarget webTarget) {
+	private void imagesForDatesToDisk(JSONArray dates, WebTarget webTarget, String resourcePath) {
 		for (int i = 0; i < dates.length(); i++) {
 			String date = (String) dates.get(i);
-			System.out.println(date);
-			WebTarget resourceWebTarget = webTarget.path("argentina/" + date + "/static/goeseast/ir2/image.png");
-			Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_OCTET_STREAM);                                                  
+			String path = "argentina/" + date + "/static/goeseast/ir2/" + imageFilename;
+			System.out.println("Requesting: " + path);
+			WebTarget resourceWebTarget = webTarget.path(path);
+			Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_OCTET_STREAM);
 			Response response = invocationBuilder.get();
 			try {
 				byte[] SWFByteArray;
@@ -172,16 +123,31 @@ public class MainPage extends AbstractWebPage {
 		}
 	}
 
-	private void trailForImageToDisk(JSONArray dates, WebTarget webTarget) {
-		String startTime = (String) dates.get(1);
-		String endTime= (String) dates.get(dates.length() - 1);
-		WebTarget resourceWebTarget = webTarget.path("argentina/" + startTime + "/" + endTime + "/trails.png");
-		Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_OCTET_STREAM);                                                  
-		Response response = invocationBuilder.get();
+	private JSONArray statesUpTo(DateTime endTime, int steps, WebTarget webTarget) {
+		String endTimeString = endTime.toString(ISODateTimeFormat.dateTimeNoMillis());
+		String path = "argentina/" + endTimeString + "/flow/" + steps;
+		System.out.println("Requesting: " + path);
+		return buildJSONArray(webTarget, path);
+	}
+
+	private Response trailsBySteps(JSONArray dates, int steps, WebTarget webTarget) {
+		String endTime = (String) dates.get(dates.length() - 1);
+		String path = "argentina/" + endTime + "/flow/" + steps + "/" + trailsFilename;
+		System.out.println("Requesting: " + path);
+		WebTarget resourceWebTarget = webTarget.path(path);
+		Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_OCTET_STREAM);
+		return invocationBuilder.get();
+	}
+
+	private void zoneMapToDisk(WebTarget webTarget, String resourcePath) {
+		String path = "argentina/" + mapFilename;
+		System.out.println("Requesting: " + path);
+		WebTarget resourceWebTarget = webTarget.path(path);
+		Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_OCTET_STREAM);
 		try {
 			byte[] SWFByteArray;
-			SWFByteArray = IOUtils.toByteArray((InputStream) response.getEntity());
-			FileOutputStream fos = new FileOutputStream(new File(resourcePath + "trails.png"));
+			SWFByteArray = IOUtils.toByteArray((InputStream) invocationBuilder.get().getEntity());
+			FileOutputStream fos = new FileOutputStream(new File(resourcePath + mapFilename));
 			fos.write(SWFByteArray);
 			fos.flush();
 			fos.close();
@@ -189,7 +155,21 @@ public class MainPage extends AbstractWebPage {
 			e.printStackTrace();
 		}
 	}
-	
+
+	private void trailForImageToDiskBySteps(JSONArray dates, int steps, WebTarget webTarget, String resourcePath) {
+		Response response = trailsBySteps(dates, steps, webTarget);
+		try {
+			byte[] SWFByteArray;
+			SWFByteArray = IOUtils.toByteArray((InputStream) response.getEntity());
+			FileOutputStream fos = new FileOutputStream(new File(resourcePath + trailsFilename));
+			fos.write(SWFByteArray);
+			fos.flush();
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private WebTarget setupApiConnection() {
 		String mainWebTargetPath = configurations.findByName("mainWebTargetPath").value();
 		String username = configurations.findByName("username").value();
@@ -200,8 +180,8 @@ public class MainPage extends AbstractWebPage {
 		client.register(feature);
 		return client.target(mainWebTargetPath);
 	}
-	
-	private void buildGif() {
+
+	private void buildGif(String resourcePath) {
 		AnimatedGifEncoder gif = new AnimatedGifEncoder();
 		gif.setRepeat(0);
 		gif.setDelay(100);
@@ -209,7 +189,7 @@ public class MainPage extends AbstractWebPage {
 		for (int i = 0; i < datesLength; i++) {
 			try {
 				BufferedImage image;
-				image = ImageIO.read(new File(resourcePath + i +".png"));
+				image = ImageIO.read(new File(resourcePath + i + ".png"));
 				gif.addFrame(image);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -217,5 +197,23 @@ public class MainPage extends AbstractWebPage {
 			}
 		}
 		gif.finish();
+	}
+
+	private void resetDir(String resourcePath) {
+		removeDir(resourcePath);
+		createDir(resourcePath);
+	}
+
+	private void createDir(String resourcePath) {
+		new File(resourcePath).mkdir();
+	}
+
+	private void removeDir(String resourcePath) {
+		try {
+			FileUtils.deleteDirectory(new File(resourcePath));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 }

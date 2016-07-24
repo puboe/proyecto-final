@@ -1,14 +1,18 @@
 <wicket:extend>
 	<div class="container">
-		<div class="row well" wicket:id="filterPanel">
-		</div>
+		<div class="row well" wicket:id="filterPanel"></div>
 		<div class="row well">
-		<div class="row">
-			<div class="text-center" wicket:id="stateDate"></div>
-		</div>
+			<div class="row">
+				<div class="text-center" wicket:id="stateDate"></div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 text-center">Images</div>
+				<div class="col-md-6 text-center">Prediction</div>
+			</div>
 			<div style="position: relative; left: 0; top: 0;">
 				<img class="col-md-6" style="position: relative; top: 0; left: 0;" wicket:id="imageAnim"/>
 				<img class="col-md-6" style="position: absolute; top: 0; left: 0;" wicket:id="trail">
+				<img class="col-md-6" style="position: absolute; top: 0; left: 0;" wicket:id="map">
 			</div>
 			<div>
 				<img class="col-md-6" wicket:id="imagePred">

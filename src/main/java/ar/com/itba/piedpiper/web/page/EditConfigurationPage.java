@@ -18,7 +18,6 @@ import ar.com.itba.piedpiper.service.api.ConfigurationService;
 import ar.com.itba.piedpiper.service.api.TransactionService;
 import ar.com.itba.piedpiper.web.dataprovider.api.SpringPageDataProvider;
 import ar.com.itba.piedpiper.web.panel.AjaxTransactionalEditableLabel;
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 
 @SuppressWarnings("serial")
 public class EditConfigurationPage extends AbstractWebPage {
@@ -54,6 +53,11 @@ public class EditConfigurationPage extends AbstractWebPage {
 					public void transactionalOperation(String input) {
 						configurationModel.getObject().value(input);
 						configurations.flushCaches();
+					}
+
+					@Override
+					public boolean isEnabled() {
+						return configurationModel.getObject().isActive();
 					}
 				});
 			}

@@ -27,6 +27,9 @@ public class Configuration extends PersistentEntity<Integer> {
 	@Column(name = "display_name")
 	private String displayName;
 
+	@Column(name = "active")
+	private boolean isActive;
+	
 	@Override
 	public Integer getId() {
 		return id;
@@ -69,5 +72,9 @@ public class Configuration extends PersistentEntity<Integer> {
 	
 	public String displayName() {
 		return displayName;
+	}
+	
+	public boolean isActive() {
+		return isActive;
 	}
 }

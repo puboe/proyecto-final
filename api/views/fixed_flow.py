@@ -73,7 +73,7 @@ def show_fixed_flow_trails(zone_name, end_time, steps):
                 b = pstart - normal
                 c = pend
                 draw.polygon(a.tolist() + b.tolist() + c.tolist(), fill=(0, 0, 255))
-                idraw.polygon(a.tolist() + b.tolist() + c.tolist(), fill=(255, 255, 255, 72))
+                idraw.polygon(a.tolist() + b.tolist() + c.tolist(), fill=(255, 255, 255, 52))
     del draw
     image.putalpha(imask.split()[0])
     #image = image.resize((width, height), Image.ANTIALIAS)
@@ -110,7 +110,7 @@ def show_fixed_flow_arrows(zone_name, end_time, steps):
     flux = MeteoFlux(motions)
     #trail = flux.trail(flux.generate_start(15.0, 15.0), transpose=False)
     minutes = flux.timedelta.seconds // 60
-    trail = np.transpose(flux.polyfitted_trails([minutes*0.3, minutes*0.7], flux.generate_start(10.0, 10.0), 2), (2, 0, 1))
+    trail = np.transpose(flux.polyfitted_trails([minutes*0.33, minutes*0.66, minutes], flux.generate_start(20.0, 20.0), 2), (2, 0, 1))
     trail = flux.trim_noisy_trails(trail)
     trail = np.transpose(trail, (1, 0, 2))
 
@@ -135,7 +135,7 @@ def show_fixed_flow_arrows(zone_name, end_time, steps):
                 b = pstart - normal
                 c = pend
                 draw.polygon(a.tolist() + b.tolist() + c.tolist(), fill=(128, 0, 0))
-                idraw.polygon(a.tolist() + b.tolist() + c.tolist(), fill=(255, 255, 255, 192))
+                idraw.polygon(a.tolist() + b.tolist() + c.tolist(), fill=(255, 255, 255, 148))
     del draw
     image.putalpha(imask.split()[0])
     #image = image.resize((width, height), Image.ANTIALIAS)

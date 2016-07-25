@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.ws.rs.client.Client;
@@ -47,8 +48,10 @@ public class MainPage extends AbstractWebPage {
 	private int datesLength = 0;
 	// XXX: Move to config
 	private final String trailsFilename = "trails.png";
+	private final String arrowsFilename = "arrows.png";
 	private final String imageFilename = "image.png";
 	private final String mapFilename = "map_image.png";
+	private List<InputStream> streams;
 
 	@Override
 	protected void onInitialize() {
@@ -61,18 +64,21 @@ public class MainPage extends AbstractWebPage {
 		IModel<DynamicImageResource> mapModel = Model.of(new ImageResource(resourcePath, mapFilename));
 		Image map = new Image("map", mapModel);
 		map.setOutputMarkupId(true);
+		IModel<DynamicImageResource> arrowsModel = Model.of(new ImageResource(resourcePath, arrowsFilename));
+		Image arrows = new Image("arrows", arrowsModel);
+		arrows.setOutputMarkupId(true);
 		IModel<DynamicImageResource> trailModel = Model.of(new ImageResource(resourcePath, trailsFilename));
-		Image trail = new Image("trail", trailModel);
+		Image trail = new Image("trails", trailModel);
 		trail.setOutputMarkupId(true);
 		IModel<ImageResource> animationModel = Model.of(new ImageResource(resourcePath, "animation.gif"));
 		NonCachingImage animation = new NonCachingImage("imageAnim", animationModel);
 		animation.setOutputMarkupId(true);
 		// TODO: Load Prediction Image here
-		ImageResource predictionResource = new ImageResource(resourcePath, datesLength + ".png");
-		Image prediction = new Image("imagePred", Model.of(predictionResource));
-		prediction.setOutputMarkupId(true);
-		prediction.setVisible(predictionResource.fileFound());
-		add(stateDateInfo, prediction, animation, trail, map);
+//		ImageResource predictionResource = new ImageResource(resourcePath, datesLength + ".png");
+//		Image prediction = new Image("imagePred", Model.of(predictionResource));
+//		prediction.setOutputMarkupId(true);
+//		prediction.setVisible(predictionResource.fileFound());
+		add(stateDateInfo, /*prediction,*/ animation, trail, map, arrows);
 		stateFilterModel = new StateFilterModel();
 		add(new StateFilterPanel("filterPanel", stateFilterModel, this) {
 			@Override
@@ -86,11 +92,12 @@ public class MainPage extends AbstractWebPage {
 				datesLength = dates.length();
 				imagesForDatesToDisk(dates, webTarget, resourcePath);
 				zoneMapToDisk(webTarget, resourcePath);
-				trailForImageToDiskBySteps(dates, steps, webTarget, resourcePath);
+				dumpToDiskBySteps(dates, steps, webTarget, resourcePath, arrowsFilename);
+				dumpToDiskBySteps(dates, steps, webTarget, resourcePath, trailsFilename);
 				buildGif(resourcePath);
 				stateDateInfo.setDefaultModel(Model.of("Playing " + datesLength + " frames from " + dates.get(1)
 					+ " leading to " + dates.get(dates.length() - 1) + "."));
-				target.add(animation, stateDateInfo, trail, prediction, map);
+				target.add(animation, stateDateInfo, trail, /*prediction,*/ map, arrows);
 			}
 		});
 	}
@@ -130,15 +137,14 @@ public class MainPage extends AbstractWebPage {
 		return buildJSONArray(webTarget, path);
 	}
 
-	private Response trailsBySteps(JSONArray dates, int steps, WebTarget webTarget) {
-		String endTime = (String) dates.get(dates.length() - 1);
-		String path = "argentina/" + endTime + "/flow/" + steps + "/" + trailsFilename;
+	private Response arrowsBySteps(String endTime, int steps, WebTarget webTarget, String filename) {
+		String path = "argentina/" + endTime + "/flow/" + steps + "/" + filename;
 		System.out.println("Requesting: " + path);
 		WebTarget resourceWebTarget = webTarget.path(path);
 		Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_OCTET_STREAM);
 		return invocationBuilder.get();
 	}
-
+	
 	private void zoneMapToDisk(WebTarget webTarget, String resourcePath) {
 		String path = "argentina/" + mapFilename;
 		System.out.println("Requesting: " + path);
@@ -156,12 +162,12 @@ public class MainPage extends AbstractWebPage {
 		}
 	}
 
-	private void trailForImageToDiskBySteps(JSONArray dates, int steps, WebTarget webTarget, String resourcePath) {
-		Response response = trailsBySteps(dates, steps, webTarget);
+	private void dumpToDiskBySteps(JSONArray dates, int steps, WebTarget webTarget, String resourcePath, String fileName) {
+		Response response = arrowsBySteps((String) dates.get(dates.length() - 1), steps, webTarget, fileName);
 		try {
 			byte[] SWFByteArray;
 			SWFByteArray = IOUtils.toByteArray((InputStream) response.getEntity());
-			FileOutputStream fos = new FileOutputStream(new File(resourcePath + trailsFilename));
+			FileOutputStream fos = new FileOutputStream(new File(resourcePath + fileName));
 			fos.write(SWFByteArray);
 			fos.flush();
 			fos.close();
@@ -169,7 +175,7 @@ public class MainPage extends AbstractWebPage {
 			e.printStackTrace();
 		}
 	}
-
+	
 	private WebTarget setupApiConnection() {
 		String mainWebTargetPath = configurations.findByName("mainWebTargetPath").value();
 		String username = configurations.findByName("username").value();
@@ -185,7 +191,7 @@ public class MainPage extends AbstractWebPage {
 		AnimatedGifEncoder gif = new AnimatedGifEncoder();
 		gif.setRepeat(0);
 		gif.setDelay(100);
-		gif.start(resourcePath + "/animation.gif");
+		gif.start(resourcePath + "animation.gif");
 		for (int i = 0; i < datesLength; i++) {
 			try {
 				BufferedImage image;

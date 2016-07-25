@@ -111,7 +111,7 @@ def show_fixed_flow_arrows(zone_name, end_time, steps):
     #trail = flux.trail(flux.generate_start(15.0, 15.0), transpose=False)
     minutes = flux.timedelta.seconds // 60
     trail = np.transpose(flux.polyfitted_trails([minutes*0.33, minutes*0.66, minutes], flux.generate_start(20.0, 20.0), 2), (2, 0, 1))
-    trail = flux.trim_noisy_trails(trail)
+    trail = flux.trim_noisy_trails(trail, 1.5)
     trail = np.transpose(trail, (1, 0, 2))
 
     height, width = flux.shape

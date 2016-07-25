@@ -215,9 +215,9 @@ class MeteoFlux(object):
         return [np.array([np.polyval(poly, times) for poly in polypair])
                     for polypair in polys]
 
-    def trim_noisy_trails(self, trails):
+    def trim_noisy_trails(self, trails, factor=1.0):
         lengths = np.sum(np.linalg.norm(np.diff(trails, axis=0), axis=2), axis=0)
         mean = np.mean(lengths)
         std = np.std(lengths)
-        return trails[:, lengths > mean + std]
+        return trails[:, lengths > mean + (std*factor)]
 

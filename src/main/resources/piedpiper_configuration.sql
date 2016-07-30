@@ -18,3 +18,10 @@ INSERT INTO `configuration` VALUES
 (4,'Weather API password','Password','password','121212piedpiper'),
 (5,'Image operation path','Image Path','imagePath','/tmp/');
 UNLOCK TABLES;
+
+CREATE TABLE `saved_state` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date_time` datetime NOT NULL,
+  `steps` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -22,7 +22,7 @@ public abstract class StateFilterPanel extends Panel {
 
 	public StateFilterPanel(String id, StateFilterModel model, Component resourceComponent) {
 		super(id);
-		Form<StateFilterModel> form = new Form<>("form");
+		Form<Integer> form = new Form<>("form");
 		form
 			.add(new EnumDropDownChoice("channel", resourceComponent, Channel.values()).setDefaultModel(model.channelModel()))
 			.add(new DateTimeField("to", model.toModel()))

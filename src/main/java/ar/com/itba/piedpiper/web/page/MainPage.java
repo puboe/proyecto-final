@@ -19,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.json.JSONArray;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.NonCachingImage;
@@ -67,18 +68,32 @@ public class MainPage extends AbstractWebPage {
 		IModel<DynamicImageResource> arrowsModel = Model.of(new ImageResource(resourcePath, arrowsFilename));
 		Image arrows = new Image("arrows", arrowsModel);
 		arrows.setOutputMarkupId(true);
+		arrows.setOutputMarkupPlaceholderTag(true);
 		IModel<DynamicImageResource> trailModel = Model.of(new ImageResource(resourcePath, trailsFilename));
-		Image trail = new Image("trails", trailModel);
-		trail.setOutputMarkupId(true);
+		Image trails = new Image("trails", trailModel);
+		trails.setOutputMarkupId(true);
+		trails.setOutputMarkupPlaceholderTag(true);
 		IModel<ImageResource> animationModel = Model.of(new ImageResource(resourcePath, "animation.gif"));
 		NonCachingImage animation = new NonCachingImage("imageAnim", animationModel);
 		animation.setOutputMarkupId(true);
 		// TODO: Load Prediction Image here
-//		ImageResource predictionResource = new ImageResource(resourcePath, datesLength + ".png");
-//		Image prediction = new Image("imagePred", Model.of(predictionResource));
-//		prediction.setOutputMarkupId(true);
-//		prediction.setVisible(predictionResource.fileFound());
-		add(stateDateInfo, /*prediction,*/ animation, trail, map, arrows);
+		// ImageResource predictionResource = new ImageResource(resourcePath, datesLength + ".png");
+		// Image prediction = new Image("imagePred", Model.of(predictionResource));
+		// prediction.setOutputMarkupId(true);
+		// prediction.setVisible(predictionResource.fileFound());
+		add(new AjaxLink<Void>("trailsToggle") {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				target.add(trails.setVisible(!trails.isVisible()));
+			}
+		});
+		add(new AjaxLink<Void>("arrowsToggle") {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				target.add(arrows.setVisible(!arrows.isVisible()));
+			}
+		});
+		add(stateDateInfo, /* prediction, */ animation, trails, map, arrows);
 		stateFilterModel = new StateFilterModel();
 		add(new StateFilterPanel("filterPanel", stateFilterModel, this) {
 			@Override
@@ -95,9 +110,9 @@ public class MainPage extends AbstractWebPage {
 				dumpToDiskBySteps(dates, steps, webTarget, resourcePath, arrowsFilename);
 				dumpToDiskBySteps(dates, steps, webTarget, resourcePath, trailsFilename);
 				buildGif(resourcePath);
-				stateDateInfo.setDefaultModel(Model.of("Playing " + datesLength + " frames from " + dates.get(1)
-					+ " leading to " + dates.get(dates.length() - 1) + "."));
-				target.add(animation, stateDateInfo, trail, /*prediction,*/ map, arrows);
+				stateDateInfo.setDefaultModel(Model.of("Playing " + datesLength + " frames from " + dates.get(1) + " leading to "
+						+ dates.get(dates.length() - 1) + "."));
+				target.add(animation, stateDateInfo, trails, /* prediction, */ map, arrows);
 			}
 		});
 	}
@@ -144,7 +159,7 @@ public class MainPage extends AbstractWebPage {
 		Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_OCTET_STREAM);
 		return invocationBuilder.get();
 	}
-	
+
 	private void zoneMapToDisk(WebTarget webTarget, String resourcePath) {
 		String path = "argentina/" + mapFilename;
 		System.out.println("Requesting: " + path);
@@ -175,7 +190,7 @@ public class MainPage extends AbstractWebPage {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private WebTarget setupApiConnection() {
 		String mainWebTargetPath = configurations.findByName("mainWebTargetPath").value();
 		String username = configurations.findByName("username").value();

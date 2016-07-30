@@ -10,15 +10,15 @@
 				<div class="col-md-6 text-center">Prediction</div>
 			</div>
 			<div style="position: relative; left: 0; top: 0;">
-				<img class="col-md-12" style="position: relative; top: 0; left: 0;" wicket:id="imageAnim"/>
-				<img class="col-md-12" style="position: absolute; top: 0; left: 0;" wicket:id="trails">
-				<img class="col-md-12" style="position: absolute; top: 0; left: 0;" wicket:id="arrows">
-				<img class="col-md-12" style="position: absolute; top: 0; left: 0;" wicket:id="map">
+				<img class="col-md-6" style="position: relative; top: 0; left: 0;" wicket:id="imageAnim"/>
+				<img class="col-md-6" style="position: absolute; top: 0; left: 0;" wicket:id="trails">
+				<img class="col-md-6" style="position: absolute; top: 0; left: 0;" wicket:id="arrows">
+				<img class="col-md-6" style="position: absolute; top: 0; left: 0;" wicket:id="map">
 			</div>
 <!-- 			<div> -->
 <!-- 				<img class="col-md-6" wicket:id="imagePred"> -->
 <!-- 			</div> -->
-		</div>
+<!-- 		</div> -->
 		<br>
 <!-- 		<div class="row"> -->
 <!-- 			<div class="col-md-1 col-md-offset-10"> -->
@@ -28,5 +28,14 @@
 <!-- 				<button wicket:id="next" type="button" class="btn btn-primary">Next</button> -->
 <!-- 			</div> -->
 <!-- 		</div> -->
+		</div>
+		<div class="row">
+			<div class="col-md-1 col-md-offset-10">
+				<button wicket:id="trailsToggle" type="button" class="btn btn-primary">Hide Trails</button>
+			</div>
+			<div class="col-md-1">
+				<button wicket:id="arrowsToggle" type="button" class="btn btn-primary">Hide Arrows</button>
+			</div>
+		</div>
 	</div>
 </wicket:extend>

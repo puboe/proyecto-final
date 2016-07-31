@@ -42,9 +42,14 @@ public abstract class StateFilterPanel extends Panel {
 		
 		private IModel<Enum<?>> channelModel = Model.of();
 		private IModel<Date> toDateModel = Model.of(new LocalDate().toDate());
-		private IModel<String> stepsModel = Model.of();
-	
-		public IModel<Enum<?>> channelModel(){
+		private IModel<String> stepsModel;
+		
+		
+		public StateFilterModel(String steps) {
+			stepsModel = Model.of(steps);
+		}
+		
+		public IModel<Enum<?>> channelModel() {
 			return channelModel;
 		}
 		
@@ -55,5 +60,6 @@ public abstract class StateFilterPanel extends Panel {
 		public IModel<String> stepsModel() {
 			return stepsModel;
 		}
+		
 	}
 }

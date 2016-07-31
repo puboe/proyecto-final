@@ -1,6 +1,5 @@
 package ar.com.itba.piedpiper.service.impl;
 
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -19,10 +18,10 @@ public class SavedStateServiceImpl extends AbstractServiceImpl<SavedState, Integ
 	public JpaRepository<SavedState, Integer> repository() {
 		return repo;
 	}
-
+	
 	@Override
-	public SavedState findByDateTime(DateTime dateTime) {
-		return repo.findByDateTime(dateTime);
+	public SavedState findOne(SavedState savedState) {
+		return repo.findOne(savedState.dateTime(), savedState.steps());
 	}
 
 }

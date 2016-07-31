@@ -9,7 +9,7 @@ import ar.com.itba.piedpiper.model.entity.SavedState;
 
 public interface SavedStateRepository extends JpaRepository<SavedState, Integer> {
 
-	@Query("SELECT savedSate from SavedSate savedSate WHERE dateTime = :dateTime")
-	SavedState findByDateTime(@Param("dateTime") DateTime dateTime);
-
+	@Query("SELECT savedState FROM SavedState savedState WHERE dateTime = :dateTime AND steps = :steps")
+	SavedState findOne(@Param("dateTime") DateTime dateTime, @Param("steps") int steps);
+	
 }

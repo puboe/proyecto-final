@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -27,6 +28,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.time.Duration;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.joda.time.DateTime;
@@ -42,6 +44,7 @@ import ar.com.itba.piedpiper.service.api.TransactionService.TransactionalOperati
 import ar.com.itba.piedpiper.web.panel.StateFilterPanel;
 import ar.com.itba.piedpiper.web.panel.StateFilterPanel.StateFilterModel;
 import ar.com.itba.piedpiper.web.util.ImageResource;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 @SuppressWarnings("serial")
 public class MainPage extends AbstractWebPage {
@@ -63,12 +66,17 @@ public class MainPage extends AbstractWebPage {
 	private final String imageFilename = "image.png";
 	private final String mapFilename = "map_image.png";
 	private List<InputStream> streams;
+	private NotificationPanel feedback;
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
 		final String resourcePath = configurations.findByName("imagePath").value();
 		createDir(resourcePath);
+		feedback = new NotificationPanel("feedback");
+		feedback.setOutputMarkupId(true);
+		feedback.hideAfter(Duration.seconds(5));
+		add(feedback);
 		IModel<String> stateDateInfoModel = Model.of("");
 		Label stateDateInfo = new Label("stateDate", stateDateInfoModel);
 		stateDateInfo.setOutputMarkupId(true);
@@ -109,22 +117,32 @@ public class MainPage extends AbstractWebPage {
 				transactions.execute(new TransactionalOperationWithoutReturn() {
 					@Override
 					public void execute() {
-						savedStates.save(new SavedState());
+						DateTime dateTime = new DateTime(stateFilterModel.toModel().getObject());
+						int steps = new Integer(stateFilterModel.stepsModel().getObject());
+						SavedState savedState = new SavedState(dateTime, steps);
+							if(savedStates.findOne(savedState) == null) {
+								savedStates.save(savedState);
+								success("State saved!");
+							} else {
+								error("State is already saved.");
+							}
+						target.add(feedback);
 					}
 				});
 			}
+			
 		});
 		add(stateDateInfo, /* prediction, */ animation, trails, map, arrows);
-		stateFilterModel = new StateFilterModel();
+		stateFilterModel = new StateFilterModel(configurations.findByName("startupStates").value());
 		add(new StateFilterPanel("filterPanel", stateFilterModel, this) {
 			@Override
 			public void onSearch(AjaxRequestTarget target) {
 				// XXX: Get stuff through API here
 				resetDir(resourcePath);
-				DateTime to = new DateTime(stateFilterModel.toModel().getObject());
+				DateTime dateTime = new DateTime(stateFilterModel.toModel().getObject());
 				int steps = new Integer(stateFilterModel.stepsModel().getObject());
 				WebTarget webTarget = setupApiConnection();
-				JSONArray dates = statesUpTo(to, steps, webTarget);
+				JSONArray dates = statesUpTo(dateTime, steps, webTarget);
 				datesLength = dates.length();
 				imagesForDatesToDisk(dates, webTarget, resourcePath);
 				zoneMapToDisk(webTarget, resourcePath);

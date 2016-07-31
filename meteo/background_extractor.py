@@ -22,7 +22,7 @@ with session_scope() as session:
                                                        channel=channel)
 
         data_query = session.query(MeteoStaticData) \
-                            .filter_by(zone_name=zone.name) \
+                            .filter_by(zone_name=zone.name, is_valid=True) \
                             .filter(MeteoStaticData.channel == channel) \
                             .filter(MeteoStaticData.satellite == satellite)
 

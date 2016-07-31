@@ -12,13 +12,14 @@ CREATE TABLE `configuration` (
 LOCK TABLES `configuration` WRITE;
 
 INSERT INTO `configuration` VALUES 
-(1,'Ammount of states to show by default','Startup States','startupStates	','10'),
-(2,'Web target main path','Web Target Main Path','mainWebTargetPath','http://clouds.it.itba.edu.ar/api/'),
-(3,'Weather API username','Username','username','weather'),
-(4,'Weather API password','Password','password','121212piedpiper'),
-(5,'Image operation path','Image Path','imagePath','/tmp/');
+(1,'Ammount of states to show by default','Startup States','startupStates','10', '1'),
+(2,'Web target main path','Web Target Main Path','mainWebTargetPath','http://clouds.it.itba.edu.ar/api/', '0'),
+(3,'Weather API username','Username','username','weather', '0'),
+(4,'Weather API password','Password','password','121212piedpiper', '0'),
+(5,'Image operation path','Image Path','imagePath','/tmp/', '1');
 UNLOCK TABLES;
 
+DROP TABLE IF EXISTS `saved_state`;
 CREATE TABLE `saved_state` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date_time` datetime NOT NULL,

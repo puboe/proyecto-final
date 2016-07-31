@@ -24,6 +24,15 @@ public class SavedState extends PersistentEntity<Integer> {
 	@Column(name = "steps")
 	private int steps;
 	
+	public SavedState() {
+		//Required by hibernate
+	}
+	
+	public SavedState(DateTime dateTime, int steps) {
+		this.dateTime = dateTime;
+		this.steps = steps;
+	}
+	
 	@Override
 	public Integer getId() {
 		return id;

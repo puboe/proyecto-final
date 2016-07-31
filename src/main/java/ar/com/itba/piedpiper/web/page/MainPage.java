@@ -34,7 +34,11 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import com.madgag.gif.fmsware.AnimatedGifEncoder;
 
+import ar.com.itba.piedpiper.model.entity.SavedState;
 import ar.com.itba.piedpiper.service.api.ConfigurationService;
+import ar.com.itba.piedpiper.service.api.SavedStateService;
+import ar.com.itba.piedpiper.service.api.TransactionService;
+import ar.com.itba.piedpiper.service.api.TransactionService.TransactionalOperationWithoutReturn;
 import ar.com.itba.piedpiper.web.panel.StateFilterPanel;
 import ar.com.itba.piedpiper.web.panel.StateFilterPanel.StateFilterModel;
 import ar.com.itba.piedpiper.web.util.ImageResource;
@@ -44,6 +48,12 @@ public class MainPage extends AbstractWebPage {
 
 	@SpringBean
 	private ConfigurationService configurations;
+	
+	@SpringBean
+	private TransactionService transactions;
+	
+	@SpringBean
+	private SavedStateService savedStates;
 
 	private StateFilterModel stateFilterModel;
 	private int datesLength = 0;
@@ -91,6 +101,17 @@ public class MainPage extends AbstractWebPage {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				target.add(arrows.setVisible(!arrows.isVisible()));
+			}
+		});
+		add(new AjaxLink<Void>("saveState") {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				transactions.execute(new TransactionalOperationWithoutReturn() {
+					@Override
+					public void execute() {
+						savedStates.save(new SavedState());
+					}
+				});
 			}
 		});
 		add(stateDateInfo, /* prediction, */ animation, trails, map, arrows);

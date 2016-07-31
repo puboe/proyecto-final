@@ -164,7 +164,7 @@ class MeteoMotionData(Base):
 class MeteoFlux(object):
     @classmethod
     def from_interval(cls, session, zone_name, start_time, end_time):
-        states = db.session.query(MeteoState) \
+        states = session.query(MeteoState) \
                      .filter_by(zone_name=zone_name) \
                      .filter(MeteoState.time >= start_time) \
                      .filter(MeteoState.time <= end_time) \
@@ -172,7 +172,7 @@ class MeteoFlux(object):
                      .order_by(MeteoState.time.asc()) \
                      .all()
         state_times = [state.time for state in states]
-        motions = db.session.query(MeteoMotionData) \
+        motions = session.query(MeteoMotionData) \
                   .filter_by(zone_name=zone_name, method='gradient') \
                   .filter(MeteoMotionData.prev_time.in_(state_times)) \
                   .filter(MeteoMotionData.next_time.in_(state_times)) \
@@ -182,15 +182,15 @@ class MeteoFlux(object):
 
     @classmethod
     def from_prev_states(cls, session, zone_name, end_time, steps):
-        states = db.session.query(MeteoState).filter_by(zone_name=zone_name) \
-                     .filter(MeteoState.time <= end_time) \
-                     .filter(MeteoMotionData.suitable_state()) \
-                     .order_by(MeteoState.time.desc()) \
-                     .limit(steps) \
-                     .all()
+        states = session.query(MeteoState).filter_by(zone_name=zone_name) \
+                   .filter(MeteoState.time <= end_time) \
+                   .filter(MeteoMotionData.suitable_state()) \
+                   .order_by(MeteoState.time.desc()) \
+                   .limit(steps) \
+                   .all()
         states.reverse()
         state_times = [state.time for state in states]
-        motions = db.session.query(MeteoMotionData) \
+        motions = session.query(MeteoMotionData) \
                   .filter_by(zone_name=zone_name, method='gradient') \
                   .filter(MeteoMotionData.prev_time.in_(state_times)) \
                   .filter(MeteoMotionData.next_time.in_(state_times)) \
@@ -230,8 +230,15 @@ class MeteoFlux(object):
 
     @property
     def timedelta(self):
-        return self.motions[-1].next_time - self.motions[0].prev_time
+        return self.end_time - self.start_time
 
+    @property
+    def start_time(self):
+        return self.motions[0].prev_time
+
+    @property
+    def end_time(self):
+        return self.motions[-1].next_time
     
     def smooth_times(self, minutes_interval):
         return np.arange(0.0, self.timedelta.seconds // 60, minutes_interval)

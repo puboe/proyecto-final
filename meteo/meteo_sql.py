@@ -22,6 +22,19 @@ class MeteoZone(Base):
     map_image = deferred(Column(NumpyArray, nullable=True))
     config = Column(JSONType, nullable=True)
 
+class MeteoBackgroundData(Base):
+    __tablename__ = 'meteo_background_data'
+    # Attributes
+    zone_name = Column(ForeignKey('meteo_zone.name'), nullable=False, primary_key=True)
+    satellite = Column(String(32), nullable=True, primary_key=True)
+    channel = Column(String(32), nullable=True, primary_key=True)
+    image = Column(NumpyArray, nullable=True)
+    is_valid = column_property(image.isnot(None))
+
+    # Relationships
+    zone = relationship('MeteoZone', backref='background_datas')
+    image = deferred(image)
+
 class MeteoStaticData(Base):
     __tablename__ = 'meteo_static_data'
     __table_args__ = (
@@ -111,15 +124,29 @@ class MeteoMotionData(Base):
 
 
     def calculate_motion(self, processor):
-        prev_image = next(filter(lambda d: d.channel == 'ir4', self.prev_state.datas)).image
-        next_image = next(filter(lambda d: d.channel == 'ir4', self.next_state.datas)).image
-        if self.method == 'gradient':
+        if 'composite' in self.method:
+            motion_x_ir4, motion_y_ir4 = self._calculate_motion(processor, 'ir4')
+            motion_x_ir2, motion_y_ir2 = self._calculate_motion(processor, 'ir2')
+            self.motion_x = motion_x_ir4/2.0 + motion_x_ir2/2.0
+            self.motion_y = motion_y_ir4/2.0 + motion_y_ir2/2.0
+        else:
+            self.motion_x, self.motion_y = self._calculate_motion(processor, 'ir4')
+
+    def _calculate_motion(self, processor, channel):
+        prev_image = next(filter(lambda d: d.channel == channel, self.prev_state.datas)).image
+        next_image = next(filter(lambda d: d.channel == channel, self.next_state.datas)).image
+        if 'back' in self.method:
+            background = next(filter(lambda d: d.channel == channel, self.prev_state.zone.background_datas)).image
+            prev_image = prev_image - background
+            next_image = next_image - background
+        if 'gradient' in self.method:
             prev_image = processor.gradient(prev_image)
             next_image = processor.gradient(next_image)
         search_area = self.prev_state.zone.config['search_area']
         window = self.prev_state.zone.config['window']
-        self.motion_x, self.motion_y = processor.bma(prev_image, next_image,
+        motion_x, motion_y = processor.bma(prev_image, next_image,
                                                      search_area, window)
+        return motion_x, motion_y
 
     def calculate_motion_ds(self, processor):
         if self.motion_x is None or self.motion_y is None:
@@ -163,7 +190,7 @@ class MeteoMotionData(Base):
 
 class MeteoFlux(object):
     @classmethod
-    def from_interval(cls, session, zone_name, start_time, end_time):
+    def from_interval(cls, session, zone_name, start_time, end_time, method):
         states = session.query(MeteoState) \
                      .filter_by(zone_name=zone_name) \
                      .filter(MeteoState.time >= start_time) \
@@ -173,7 +200,7 @@ class MeteoFlux(object):
                      .all()
         state_times = [state.time for state in states]
         motions = session.query(MeteoMotionData) \
-                  .filter_by(zone_name=zone_name, method='gradient') \
+                  .filter_by(zone_name=zone_name, method=method) \
                   .filter(MeteoMotionData.prev_time.in_(state_times)) \
                   .filter(MeteoMotionData.next_time.in_(state_times)) \
                   .order_by(MeteoMotionData.prev_time.asc()) \
@@ -181,7 +208,7 @@ class MeteoFlux(object):
         return cls(motions)
 
     @classmethod
-    def from_prev_states(cls, session, zone_name, end_time, steps):
+    def from_prev_states(cls, session, zone_name, end_time, steps, method):
         states = session.query(MeteoState).filter_by(zone_name=zone_name) \
                    .filter(MeteoState.time <= end_time) \
                    .filter(MeteoMotionData.suitable_state()) \
@@ -191,7 +218,7 @@ class MeteoFlux(object):
         states.reverse()
         state_times = [state.time for state in states]
         motions = session.query(MeteoMotionData) \
-                  .filter_by(zone_name=zone_name, method='gradient') \
+                  .filter_by(zone_name=zone_name, method=method) \
                   .filter(MeteoMotionData.prev_time.in_(state_times)) \
                   .filter(MeteoMotionData.next_time.in_(state_times)) \
                   .order_by(MeteoMotionData.prev_time.asc()) \
@@ -239,6 +266,10 @@ class MeteoFlux(object):
     @property
     def end_time(self):
         return self.motions[-1].next_time
+
+    @property
+    def states(self):
+        return [self.motions[0].prev_state] + [motion.next_state for motion in self.motions]
     
     def smooth_times(self, minutes_interval):
         return np.arange(0.0, self.timedelta.seconds // 60, minutes_interval)

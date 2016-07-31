@@ -13,29 +13,55 @@ def calculate_prediction_data(state, flux):
     extrapolation_time = (state.time - flux.start_time).seconds // 60
     print('end_time', end_time)
     print('extrapolation_time', extrapolation_time)
-    trail = np.transpose(flux.polyfitted_trails([end_time, extrapolation_time] , flux.generate_start(10.0, 10.0), 2), (2, 0, 1))
-    trail = flux.trim_noisy_trails(trail)
+    trail = np.transpose(flux.polyfitted_trails([end_time, extrapolation_time] , flux.generate_start(5.0, 5.0), 2), (2, 0, 1))
+
+    #trail = flux.trim_noisy_trails(trail)
     trail = np.transpose(trail, (1, 0, 2))
 
-    prediction = np.zeros(flux.shape)
+    base = next((data for data in flux.states[-1].datas if data.channel == 'ir4'))
+
+    prediction = np.zeros(base.image.shape)
     count = np.zeros_like(prediction)
 
-    for t in trail:
-        pass
+    dx, dy = (5, 5)
 
-    print(trail)
+    prediction[:,:] = base.image[:,:]*0.1
 
-    prediction = MeteoPredictionData(state=state)
-    return prediction
+
+    for t in trail.astype(np.int):
+        #(ex, ey), (sx, sy) = t
+        (sx, sy), (ex, ey) = t
+
+
+        if (ey-dy >= 0 and ex-dx >= 0 and ex+dx < base.image.shape[1] and ey+dy < base.image.shape[0]) and (sy-dy >= 0 and sx-dx >= 0 and sx+dx < base.image.shape[1] and sy+dy < base.image.shape[0]):
+            print((ex,ey),(sx,sy))
+            prediction[ey-dy:ey+dy, ex-dx:ex+dx] += base.image[sy-dy:sy+dy, sx-dx:sx+dx]
+            #prediction[ey-dy:ey+dy, ex-dx:ex+dx] = 1.0
+            #prediction[sy-dy:sy+dy, sx-dx:sx+dx] = 0.0
+            count[ey-dy:ey+dy, ex-dx:ex+dx] += 1.0
+    prediction = prediction/(count + 0.1)
+
+    comp = next((data for data in state.datas if data.channel == 'ir4'))
+
+    print(np.sum(np.abs(prediction-comp.image)))
+
+    prediction_data = MeteoPredictionData(state=state, image=prediction) if len(state.predictions) == 0 else state.predictions[0]
+
+    prediction_data.image = prediction
+
+    print(base.time)
+
+    return prediction_data
+
 
 
 with session_scope() as session:
-    state = session.query(MeteoState).order_by(MeteoState.time.desc()).first()
-    end_time = state.time - datetime.timedelta(hours=1)
-    start_time = end_time - datetime.timedelta(hours=4)
-    flux = MeteoFlux.from_interval(session, state.zone.name, start_time, end_time)
+    state = session.query(MeteoState).order_by(MeteoState.time.desc()).all()[100]
+    end_time = state.time - datetime.timedelta(hours=2)
+    start_time = end_time - datetime.timedelta(hours=6)
+    flux = MeteoFlux.from_interval(session, state.zone.name, start_time, end_time, 'gradient')
     prediction = calculate_prediction_data(state, flux)
-    session.rollback()
+    #session.rollback()
     
 
 

@@ -8,7 +8,7 @@ if len(sys.argv) < 2:
     raise ValueError('Please specify method')
 
 method = sys.argv[1]
-if method not in ('value', 'gradient'):
+if method not in ('value', 'gradient', 'value-back-composite'):
     raise ValueError('Invalid method')
 
 # Create missing motions

@@ -1,5 +1,5 @@
 from flask import jsonify
-from api import db, blueprint
+from api import db, blueprint, app
 from meteo.meteo_sql import MeteoState, MeteoMotionData, MeteoFlux
 from PIL import Image, ImageDraw
 from api.util import render_image
@@ -17,29 +17,8 @@ def show_flow(zone_name, start_time, end_time):
 
 @blueprint.route('/<zone_name>/<datetime:start_time>/<datetime:end_time>/trails.png')
 def show_flow_trails(zone_name, start_time, end_time):
-    states = db.session.query(MeteoState) \
-             .filter_by(zone_name=zone_name) \
-             .filter(MeteoState.time >= start_time) \
-             .filter(MeteoState.time <= end_time) \
-             .filter(MeteoMotionData.suitable_state()) \
-             .order_by(MeteoState.time.asc()) \
-             .all()
-    state_times = [state.time for state in states]
-    motions = db.session.query(MeteoMotionData) \
-              .filter_by(zone_name=zone_name, method='gradient') \
-              .filter(MeteoMotionData.prev_time.in_(state_times)) \
-              .filter(MeteoMotionData.next_time.in_(state_times)) \
-              .order_by(MeteoMotionData.prev_time.asc()) \
-              .all()
-
-    #motions = [db.session.query(MeteoMotionData) \
-               #.filter_by(prev_state=prev_state,
-                          #next_state=next_state,
-                          #method='gradient')
-               #.first()
-                    #for prev_state, next_state in zip(states[:-1], states[1:])]
-
-    flux = MeteoFlux(motions)
+    method = app.config['DEFAULT_MOTION_METHOD']
+    flux = MeteoFlux.from_interval(db.session, zone_name, start_time, end_time, method)
     #trail = flux.trail(flux.generate_start(15.0, 15.0), transpose=False)
     trail = np.transpose(flux.polyfitted_trails(flux.smooth_times(30), flux.generate_start(10.0, 10.0), 2), (2, 0, 1))
     trail = flux.trim_noisy_trails(trail)

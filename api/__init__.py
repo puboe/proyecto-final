@@ -19,6 +19,7 @@ import api.views.static_data
 import api.views.prediction_data
 import api.views.flow
 import api.views.fixed_flow
+import api.views.background
 
 from flask import redirect, url_for
 from meteo.meteo_sql import MeteoZone

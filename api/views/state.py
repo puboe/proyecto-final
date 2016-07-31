@@ -1,4 +1,4 @@
-from api import blueprint, db
+from api import blueprint, db, app
 from flask import Flask, jsonify, abort, send_file, render_template, redirect, url_for, request
 from meteo.meteo_sql import MeteoStaticData, MeteoState, MeteoMotionData, MeteoZone, MeteoFlux
 from flask_sqlalchemy import SQLAlchemy
@@ -79,11 +79,11 @@ def state_flow(zone_name, time):
                             .limit(10) \
                             .all()
     flow_states.reverse()
-
+    method = app.config['DEFAULT_MOTION_METHOD']
     motions = [db.session.query(MeteoMotionData) \
                          .filter_by(prev_state=prev_state,
                                     next_state=next_state,
-                                    method='gradient') \
+                                    method=method) \
                          .first()
                for prev_state, next_state in zip(flow_states[:-1], flow_states[1:])]
 

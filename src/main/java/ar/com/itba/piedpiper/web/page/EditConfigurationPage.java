@@ -52,6 +52,7 @@ public class EditConfigurationPage extends AbstractWebPage {
 					@Override
 					public void transactionalOperation(String input) {
 						configurationModel.getObject().value(input);
+						configurations.save(configurationModel.getObject());
 						configurations.flushCaches();
 					}
 

@@ -1,0 +1,26 @@
+<wicket:extend>
+	<div class="container">
+		<div class="row">
+			<div class="table-responsive">
+				<table wicket:id="container" class="table table-bordered table-condensed table-hover table-striped">
+					<tbody>
+						<thead>
+							<th>DateTime</th>
+							<th>Steps</th>
+							<th>Action</th>
+						</thead>
+						<tr wicket:id="savedStateList">
+							<td><span wicket:id="dateTime"></span></td>
+							<td><span wicket:id="steps"></span></td>
+							<td>
+								<button class="btn btn-default btn-sm" wicket:id="getState" style="margin-right:30px">Fetch State</button>
+								<button class="btn btn-danger btn-sm glyphicon glyphicon-remove" style="margin-left:30px" wicket:id="removeState"></button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div wicket:id="navigator"></div>
+			</div>
+		</div>
+	</div>
+</wicket:extend>>

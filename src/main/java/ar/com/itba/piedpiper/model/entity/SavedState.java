@@ -2,6 +2,8 @@ package ar.com.itba.piedpiper.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,13 +29,22 @@ public class SavedState extends PersistentEntity<Integer> {
 	@Column(name = "steps")
 	private int steps;
 	
+	@Column(name = "channel", length = 3)
+	@Enumerated(EnumType.STRING)
+	private Channel channel;
+	
+	@Column(name = "enhanced")
+	private boolean enhanced;
+	
 	public SavedState() {
 		//Required by hibernate
 	}
 	
-	public SavedState(DateTime dateTime, int steps) {
+	public SavedState(DateTime dateTime, int steps, Channel channel, boolean enhanced) {
 		this.dateTime = dateTime;
 		this.steps = steps;
+		this.channel = channel;
+		this.enhanced = enhanced;
 	}
 	
 	@Override
@@ -47,6 +58,14 @@ public class SavedState extends PersistentEntity<Integer> {
 	
 	public int steps() {
 		return steps;
+	}
+	
+	public Channel channel() {
+		return channel;
+	}
+	
+	public boolean enhanced() {
+		return enhanced;
 	}
 	
 }

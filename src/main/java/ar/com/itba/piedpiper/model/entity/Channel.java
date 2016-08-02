@@ -2,7 +2,7 @@ package ar.com.itba.piedpiper.model.entity;
 
 public enum Channel {
 
-	IR1("IR1"), IR2("IR2"), IR3("IR3");
+	IR2("ir2"), IR3("ir3"), IR4("ir4");
 
 	private String value;
 

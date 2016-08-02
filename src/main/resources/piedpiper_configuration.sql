@@ -24,6 +24,8 @@ CREATE TABLE `saved_state` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date_time` datetime NOT NULL,
   `steps` int(11) NOT NULL,
+  `channel` varchar(3) NOT NULL,
+  `enhanced` bit(1) NOT NULL,
   UNIQUE INDEX `unique_state` (`date_time` ASC, `steps` ASC),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

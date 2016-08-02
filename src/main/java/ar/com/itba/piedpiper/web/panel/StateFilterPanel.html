@@ -1,9 +1,9 @@
 <wicket:panel>
-	<form class="form-inline margin-top-5 margin-right-5 pull-right" wicket:id="form">
+	<form class="form-inline pull-right" wicket:id="form">
 		<small>
 			<label>Channel:</label>
 		</small>
-		<div class="form-group">
+		<div class="form-group ">
 			<select class="form-control input-sm" wicket:id="channel"></select>
 		</div>
 		<small>
@@ -17,6 +17,13 @@
 		</small>
 		<div class="form-group">
 			<input type="text" size="2" wicket:id="steps"/>
+		</div>
+		<div class="checkbox">
+			<small>
+				<label>
+					<input type="checkbox" wicket:id="enhanced"/>Contrast Enhancer
+				</label>
+			</small>
 		</div>
 		<button type="submit" class="btn btn-primary btn-sm" wicket:id="search">Get</button>
 	</form>

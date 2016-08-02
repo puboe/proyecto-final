@@ -9,8 +9,7 @@ CREATE TABLE configuration (
   PRIMARY KEY (id)
 ) ;
 
-
-INSERT INTO configuration VALUES 
+INSERT INTO configuration(id, description, display_name, name, value, active) VALUES 
 (1,'Ammount of states to show by default','Startup States','startupStates','10', '1'),
 (2,'Web target main path','Web Target Main Path','mainWebTargetPath','http://clouds.it.itba.edu.ar/api/', '0'),
 (3,'Weather API username','Username','username','weather', '0'),

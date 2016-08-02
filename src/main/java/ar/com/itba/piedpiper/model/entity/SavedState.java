@@ -22,7 +22,7 @@ public class SavedState extends PersistentEntity<Integer> {
 	@Column(name = "id")
 	private Integer id;
 	
-	@Column(name = "date_time", columnDefinition="DATETIME")
+	@Column(name = "date_time")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime dateTime;
 	

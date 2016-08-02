@@ -5,7 +5,7 @@ CREATE TABLE configuration (
   display_name varchar(255) DEFAULT NULL,
   name varchar(255) DEFAULT NULL,
   value varchar(255) DEFAULT NULL,
-  active bit(1) DEFAULT b'1',
+  active boolean,
   PRIMARY KEY (id)
 ) ;
 
@@ -22,7 +22,7 @@ CREATE TABLE saved_state (
   date_time timestamp NOT NULL,
   steps int NOT NULL,
   channel varchar(3) NOT NULL,
-  enhanced bit(1) NOT NULL,
+  enhanced boolean NOT NULL,
   PRIMARY KEY (id)
 );
 

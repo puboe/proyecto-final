@@ -42,7 +42,7 @@ public class SavedStatesPage extends AbstractWebPage {
 				item.add(new Link<Void>("getState") {
 					@Override
 					public void onClick() {
-						
+						setResponsePage(new MainPage(((SavedState) item.getModelObject()).dateTime(), ((SavedState) item.getModelObject()).steps()));
 					}
 				});
 				item.add(new Link<Void>("removeState") {

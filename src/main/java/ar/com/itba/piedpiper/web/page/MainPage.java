@@ -66,11 +66,26 @@ public class MainPage extends AbstractWebPage {
 	private final String mapFilename = "map_image.png";
 	private List<InputStream> streams;
 	private NotificationPanel feedback;
+	private final String resourcePath = configurations.findByName("imagePath").value();
 
+	public MainPage() {
+		// Required by Navbar
+	}
+	
+	public MainPage(DateTime dateTime, int steps) {
+		WebTarget webTarget = setupApiConnection();
+		JSONArray dates = statesUpTo(dateTime, steps, webTarget);
+		datesLength = dates.length();
+		imagesForDatesToDisk(dates, webTarget, resourcePath);
+		zoneMapToDisk(webTarget, resourcePath);
+		dumpToDiskBySteps(dates, steps, webTarget, resourcePath, arrowsFilename);
+		dumpToDiskBySteps(dates, steps, webTarget, resourcePath, trailsFilename);
+		buildGif(resourcePath);
+	}
+	
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		final String resourcePath = configurations.findByName("imagePath").value();
 		createDir(resourcePath);
 		feedback = new NotificationPanel("feedback");
 		feedback.setOutputMarkupId(true);

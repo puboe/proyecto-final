@@ -1,5 +1,6 @@
 package ar.com.itba.piedpiper.web.page;
 
+import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -7,7 +8,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import ar.com.itba.piedpiper.web.NavbarBuilder;
 
 @SuppressWarnings("serial")
-public abstract class AbstractWebPage extends WebPage {
+public abstract class AbstractWebPage extends WebPage implements IAjaxIndicatorAware {
 
 	@SpringBean
 	private NavbarBuilder _navBarBuilder;
@@ -23,5 +24,10 @@ public abstract class AbstractWebPage extends WebPage {
 		super.onInitialize();
 		add(_navBarBuilder.apply("navbarPanel"));
 	}
-
+	
+	@Override
+	public String getAjaxIndicatorMarkupId() {
+		return "ajaxveil";
+	}
+	
 }

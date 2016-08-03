@@ -6,31 +6,38 @@
 				<div class="text-center" wicket:id="stateDate"></div>
 			</div>
 			<div class="row">
-				<div class="col-md-6 text-center">Animation</div>
-				<div class="col-md-6 text-center">Prediction</div>
+				<div class="col-md-3 col-md-offset-5 text-center" wicket:id="feedback"></div>
+				<div class="col-md-1">
+					<button wicket:id="saveState" type="button" class="btn btn-success">Save State</button>
+				</div>
+				<div class="col-md-1 ">
+					<button wicket:id="trailsToggle" type="button" class="btn btn-primary">Hide Trails</button>
+				</div>
+				<div class="col-md-1">
+					<button wicket:id="arrowsToggle" type="button" class="btn btn-primary">Hide Arrows</button>
+				</div>
 			</div>
-				<div style="position: relative;">
-					<img class="col-md-6" wicket:id="imageAnim"/>
-					<img class="col-md-6" style="position: absolute; top: 0; left: 0;" wicket:id="trails">
-					<img class="col-md-6" style="position: absolute; top: 0; left: 0;" wicket:id="arrows">
-					<img class="col-md-6" style="position: absolute; top: 0; left: 0;" wicket:id="animationMap">
-				</div>
-				<div style="position: relative;">
-					<img class="col-md-6" wicket:id="prediction">
-					<img class="col-md-6" style="position: absolute; top: 0; right: 0;" wicket:id="predictionMap">
-				</div>
-			<br>
+			<div class="row">
+				<div class="col-md-12 text-center">Animation</div>
+			</div>
+			<div class="row" style="position: relative;">
+				<img class="col-md-12" wicket:id="imageAnim"/>
+				<img class="col-md-12" style="position: absolute; top: 0; left: 0;" wicket:id="trails">
+				<img class="col-md-12" style="position: absolute; top: 0; left: 0;" wicket:id="arrows">
+				<img class="col-md-12" style="position: absolute; top: 0; left: 0;" wicket:id="animationMap">
+			</div>
 		</div>
-		<div class="row">
-			<div class="col-md-3 col-md-offset-6 text-center" wicket:id="feedback"></div>
-			<div class="col-md-1">
-				<button wicket:id="saveState" type="button" class="btn btn-success">Save State</button>
+		<div class="row well">
+			<div class="row">
+				<div class="col-md-4 text-center">Prediction</div>
+				<div class="col-md-4 text-center">Last State</div>
+				<div class="col-md-4 text-center">Difference</div>
 			</div>
-			<div class="col-md-1 ">
-				<button wicket:id="trailsToggle" type="button" class="btn btn-primary">Hide Trails</button>
-			</div>
-			<div class="col-md-1">
-				<button wicket:id="arrowsToggle" type="button" class="btn btn-primary">Hide Arrows</button>
+			<div class="row" style="position: relative;">
+				<img class="col-md-4" wicket:id="prediction">
+				<img class="col-md-4" style="position: absolute; top: 0; left: 0;" wicket:id="predictionMap">
+				<img class="col-md-4" wicket:id="lastState"/>
+				<img class="col-md-4" wicket:id="difference"/>
 			</div>
 		</div>
 	</div>

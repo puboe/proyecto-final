@@ -22,7 +22,6 @@ import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.DynamicImageResource;
@@ -64,6 +63,7 @@ public class MainPage extends AbstractWebPage {
 	private final String trailsFilename = "trails.png";
 	private final String arrowsFilename = "arrows.png";
 	private final String imageFilename = "image.png";
+	private final String differenceFilename = "diff_image.png";
 	private final String enhancedImageFilename = "image_enhanced.png";
 	private final String mapFilename = "map_image.png";
 	private final String predictionFilename = "prediction.png";
@@ -83,6 +83,8 @@ public class MainPage extends AbstractWebPage {
 		zoneMapToDisk(webTarget, resourcePath);
 		dumpToDiskBySteps(dates, steps, webTarget, resourcePath, arrowsFilename);
 		dumpToDiskBySteps(dates, steps, webTarget, resourcePath, trailsFilename);
+		predictionImageToDisk(dates.get(dates.length()-1).toString(), webTarget, resourcePath);
+		differenceImageToDisk(dates.get(dates.length()-1).toString(), webTarget, resourcePath);
 		buildGif(resourcePath);
 	}
 	
@@ -111,8 +113,15 @@ public class MainPage extends AbstractWebPage {
 		animation.setOutputMarkupId(true);
 		IModel<ImageResource> predictionModel = Model.of(new ImageResource(resourcePath, predictionFilename));
 		Image predictionMap = new Image("predictionMap", mapModel);
+		predictionMap.setOutputMarkupId(true);
 		Image prediction = new Image("prediction", predictionModel);
 		prediction.setOutputMarkupId(true);
+		IModel<ImageResource> lastStateModel = Model.of(new ImageResource(resourcePath, datesLength-1 + ".png"));
+		Image lastState = new Image("lastState", lastStateModel);
+		lastState.setOutputMarkupId(true);
+		IModel<ImageResource> differenceModel = Model.of(new ImageResource(resourcePath, differenceFilename));
+		Image difference = new Image("difference", differenceModel);
+		difference.setOutputMarkupId(true);
 		add(new AjaxLink<Void>("trailsToggle") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
@@ -147,7 +156,7 @@ public class MainPage extends AbstractWebPage {
 				});
 			}
 		});
-		add(stateDateInfo, prediction, predictionMap, animation, trails, animationMap, arrows);
+		add(stateDateInfo, prediction, predictionMap, animation, trails, animationMap, arrows, lastState, difference);
 		stateFilterModel = new StateFilterModel(configurations.findByName("startupStates").value());
 		add(new StateFilterPanel("filterPanel", stateFilterModel, this) {
 			@Override
@@ -165,12 +174,14 @@ public class MainPage extends AbstractWebPage {
 				zoneMapToDisk(webTarget, resourcePath);
 				dumpToDiskBySteps(dates, steps, webTarget, resourcePath, arrowsFilename);
 				dumpToDiskBySteps(dates, steps, webTarget, resourcePath, trailsFilename);
-				predictionImageToDisc(dates.get(dates.length()-1).toString(), webTarget, resourcePath);
+				predictionImageToDisk(dates.get(dates.length()-1).toString(), webTarget, resourcePath);
+				differenceImageToDisk(dates.get(dates.length()-1).toString(), webTarget, resourcePath);
 				buildGif(resourcePath);
 				stateDateInfo.setDefaultModel(
 					Model.of("Playing " + datesLength + " frames from " + dates.get(1) + " leading to "	+ dates.get(dates.length() - 1) + ".")
 				);
-				target.add(animation, stateDateInfo, trails, prediction, animationMap, arrows);
+				lastState.setDefaultModel(Model.of(new ImageResource(resourcePath, datesLength-1 + ".png")));
+				target.add(animation, stateDateInfo, trails, prediction, predictionMap, animationMap, arrows, lastState, difference);
 			}
 		});
 	}
@@ -182,7 +193,7 @@ public class MainPage extends AbstractWebPage {
 		return new JSONArray(response.readEntity(String.class));
 	}
 
-	private void predictionImageToDisc(String dateTime, WebTarget webTarget, String resourcePath) {
+	private void predictionImageToDisk(String dateTime, WebTarget webTarget, String resourcePath) {
 		String path = "argentina/" + dateTime + "/prediction/" + imageFilename;
 		System.out.println("Requesting: " + path);
 		WebTarget resourceWebTarget = webTarget.path(path);
@@ -192,6 +203,24 @@ public class MainPage extends AbstractWebPage {
 			byte[] SWFByteArray;
 			SWFByteArray = IOUtils.toByteArray((InputStream) response.getEntity());
 			FileOutputStream fos = new FileOutputStream(new File(resourcePath + predictionFilename));
+			fos.write(SWFByteArray);
+			fos.flush();
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void differenceImageToDisk(String dateTime, WebTarget webTarget, String resourcePath) {
+		String path = "argentina/" + dateTime + "/prediction/" + differenceFilename;
+		System.out.println("Requesting: " + path);
+		WebTarget resourceWebTarget = webTarget.path(path);
+		Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_OCTET_STREAM);
+		Response response = invocationBuilder.get();
+		try {
+			byte[] SWFByteArray;
+			SWFByteArray = IOUtils.toByteArray((InputStream) response.getEntity());
+			FileOutputStream fos = new FileOutputStream(new File(resourcePath + differenceFilename));
 			fos.write(SWFByteArray);
 			fos.flush();
 			fos.close();

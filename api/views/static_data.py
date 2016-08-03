@@ -44,4 +44,6 @@ def static_data_image_enhanced(zone_name, time, satellite, channel):
                                                                  satellite=satellite,
                                                                  channel=channel).first()
 
-    return render_image_array(data.image-background.image)
+    image = data.image - background.image
+    image[image < 0.0] = 0.0
+    return render_image_array(image)

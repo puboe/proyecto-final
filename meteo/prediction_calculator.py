@@ -60,12 +60,12 @@ def calculate_prediction_data(state, flux):
 
 with session_scope() as session:
     #state = session.query(MeteoState).order_by(MeteoState.time.desc()).first()
-    for state in session.query(MeteoState).order_by(MeteoState.time.desc()):
+    for state in session.query(MeteoState).filter_by(is_valid=True).order_by(MeteoState.time.desc()):
         end_time = state.time - datetime.timedelta(hours=2)
         start_time = end_time - datetime.timedelta(hours=6)
         print('start_time', start_time)
         print('end_time', end_time)
-        flux = MeteoFlux.from_interval(session, state.zone.name, start_time, end_time, 'gradient')
+        flux = MeteoFlux.from_interval(session, state.zone.name, start_time, end_time, 'value-back-composite')
         prediction = calculate_prediction_data(state, flux)
     #session.rollback()
     

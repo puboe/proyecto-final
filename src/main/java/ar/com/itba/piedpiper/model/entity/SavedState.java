@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 public class SavedState extends PersistentEntity<Integer> {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private Integer id;
 	

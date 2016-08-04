@@ -6,6 +6,7 @@ from werkzeug.routing import BaseConverter
 import numpy as np
 import io
 from PIL import Image
+import imageio
 
 class DateTimeConverter(BaseConverter):
     def to_python(self, value):
@@ -31,6 +32,10 @@ def render_image(image):
     output = io.BytesIO()
     image.save(output, format='PNG')
     return send_file(io.BytesIO(output.getvalue()), mimetype='image/png')
+
+def render_animation(images, interval=None):
+    image_bytes = imageio.mimsave(imageio.RETURN_BYTES, images, format='gif', fps=1.0/interval)
+    return send_file(io.BytesIO(image_bytes), mimetype='image/gif')
 
 def request_wants_json():
     best = request.accept_mimetypes \

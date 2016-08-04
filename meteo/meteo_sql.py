@@ -198,14 +198,7 @@ class MeteoFlux(object):
                      .filter(MeteoMotionData.suitable_state()) \
                      .order_by(MeteoState.time.asc()) \
                      .all()
-        state_times = [state.time for state in states]
-        motions = session.query(MeteoMotionData) \
-                  .filter_by(zone_name=zone_name, method=method) \
-                  .filter(MeteoMotionData.prev_time.in_(state_times)) \
-                  .filter(MeteoMotionData.next_time.in_(state_times)) \
-                  .order_by(MeteoMotionData.prev_time.asc()) \
-                  .all()
-        return cls(motions)
+        return cls.from_states(session, states, method)
 
     @classmethod
     def from_prev_states(cls, session, zone_name, end_time, steps, method):
@@ -216,7 +209,13 @@ class MeteoFlux(object):
                    .limit(steps) \
                    .all()
         states.reverse()
+        return cls.from_states(session, states, method)
+
+
+    @classmethod
+    def from_states(cls, session, states, method):
         state_times = [state.time for state in states]
+        zone_name = states[0].zone.name
         motions = session.query(MeteoMotionData) \
                   .filter_by(zone_name=zone_name, method=method) \
                   .filter(MeteoMotionData.prev_time.in_(state_times)) \

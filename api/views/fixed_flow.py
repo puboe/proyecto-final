@@ -28,7 +28,7 @@ def show_fixed_flow_trails(zone_name, end_time, steps):
     flux = MeteoFlux.from_prev_states(db.session, zone_name, end_time, steps, method)
     #trail = flux.trail(flux.generate_start(15.0, 15.0), transpose=False)
     trail = np.transpose(flux.polyfitted_trails(flux.smooth_times(60), flux.generate_start(10.0, 10.0), 2), (2, 0, 1))
-    trail = flux.trim_noisy_trails(trail)
+    trail = flux.trim_noisy_trails(trail, 0.3)
     trail = np.transpose(trail, (1, 0, 2))
 
     height, width = flux.shape

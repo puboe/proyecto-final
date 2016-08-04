@@ -1,41 +1,47 @@
 package ar.com.itba.piedpiper.web.page;
 
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.Cookie;
+
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
+import org.apache.wicket.markup.repeater.data.ListDataProvider;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebRequest;
+import org.apache.wicket.request.http.WebResponse;
+
+import com.google.common.collect.Sets;
 
 import ar.com.itba.piedpiper.model.entity.SavedState;
-import ar.com.itba.piedpiper.service.api.SavedStateService;
-import ar.com.itba.piedpiper.web.dataprovider.api.SpringPageDataProvider;
+import ar.com.itba.piedpiper.web.ApplicationSession;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
+import jersey.repackaged.com.google.common.collect.Lists;
 
 @SuppressWarnings("serial")
 public class SavedStatesPage extends AbstractWebPage {
-
-	@SpringBean
-	private SavedStateService savedStates;
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
 		long itemsPerPage = 20;
-		IDataProvider<SavedState> savedStateDataProvider = new SpringPageDataProvider<SavedState>(itemsPerPage) {
-			@Override
-			protected Page<SavedState> getPage(Pageable pageable) {
-				return savedStates.findAll(pageable);
+		List<Cookie> cookies = ((WebRequest)RequestCycle.get().getRequest()).getCookies();
+		Set<SavedState> savedStates = Sets.newHashSet(); 
+		for (Cookie cookie : cookies) {
+			try {
+				savedStates.add(new SavedState(cookie.getValue()));
+			} catch (Exception e) {
 			}
-
-			public void detach() {}
-		};
-		DataView<SavedState> savedStateView = new DataView<SavedState>("savedStateList", savedStateDataProvider) {
+		}
+		System.out.println();
+		DataView<SavedState> savedStateView = new DataView<SavedState>("savedStateList", new ListDataProvider<SavedState>(Lists.newArrayList(savedStates))) {
 			@Override
 			protected void populateItem(Item<SavedState> item) {
 				final SavedState savedState = (SavedState) item.getModelObject();
@@ -54,12 +60,12 @@ public class SavedStatesPage extends AbstractWebPage {
 						);
 					}
 				});
-				item.add(new Link<Void>("removeState") {
-					@Override
-					public void onClick() {
-						savedStates.delete(item.getModelObject());
-					}
-				}.add(new TooltipBehavior(Model.of("Remove"))));
+//				item.add(new Link<Void>("removeState") {
+//					@Override
+//					public void onClick() {
+//						ApplicationSession.get().removeState(item.getModelObject());
+//					}
+//				}.add(new TooltipBehavior(Model.of("Remove"))));
 			}
 		};
 		savedStateView.setItemsPerPage(itemsPerPage);

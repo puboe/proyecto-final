@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.Cookie;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -24,6 +26,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.time.Duration;
@@ -37,9 +40,9 @@ import com.madgag.gif.fmsware.AnimatedGifEncoder;
 import ar.com.itba.piedpiper.model.entity.Channel;
 import ar.com.itba.piedpiper.model.entity.SavedState;
 import ar.com.itba.piedpiper.service.api.ConfigurationService;
-import ar.com.itba.piedpiper.service.api.SavedStateService;
 import ar.com.itba.piedpiper.service.api.TransactionService;
 import ar.com.itba.piedpiper.service.api.TransactionService.TransactionalOperationWithoutReturn;
+import ar.com.itba.piedpiper.web.ApplicationSession;
 import ar.com.itba.piedpiper.web.panel.StateFilterPanel;
 import ar.com.itba.piedpiper.web.panel.StateFilterPanel.StateFilterModel;
 import ar.com.itba.piedpiper.web.util.ImageResource;
@@ -54,9 +57,6 @@ public class MainPage extends AbstractWebPage {
 	@SpringBean
 	private TransactionService transactions;
 	
-	@SpringBean
-	private SavedStateService savedStates;
-
 	private StateFilterModel stateFilterModel;
 	private int datesLength = 0;
 	// XXX: Move to config
@@ -91,6 +91,7 @@ public class MainPage extends AbstractWebPage {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		System.out.println(ApplicationSession.get());
 		createDir(resourcePath);
 		feedback = new NotificationPanel("feedback");
 		feedback.setOutputMarkupId(true);
@@ -145,12 +146,18 @@ public class MainPage extends AbstractWebPage {
 						Channel channel = stateFilterModel.channelModelObject();
 						boolean enhanced = stateFilterModel.enhancedModelObject();
 						SavedState savedState = new SavedState(dateTime, steps, channel, enhanced);
-							if(savedStates.findOne(savedState) == null) {
-								savedStates.save(savedState);
+//							if(ApplicationSession.get().saveState(savedState)) {
+							if(true) {
+								System.out.println();
+								Cookie cookie = new Cookie(RandomStringUtils.randomAlphabetic(10), savedState.toString());
+								((WebResponse) getRequestCycle().getResponse()).addCookie(cookie);
+								//test
+//								SavedState newstate = new SavedState(savedState.toString());
 								success("State saved!");
-							} else {
-								error("State is already saved.");
-							}
+							} 
+//							else {
+//								error("State is already saved.");
+//							}
 						target.add(feedback);
 					}
 				});

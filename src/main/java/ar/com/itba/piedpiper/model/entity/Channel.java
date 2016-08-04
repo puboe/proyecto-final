@@ -14,4 +14,16 @@ public enum Channel {
 		return value;
 	}
 
+	public static Channel fromString(String string) {
+		switch (string) {
+		case "IR2":
+			return Channel.IR2;
+		case "IR3":
+			return Channel.IR3;
+		case "IR4":
+			return Channel.IR4;
+		default:
+			return null;
+		}
+	}
 }

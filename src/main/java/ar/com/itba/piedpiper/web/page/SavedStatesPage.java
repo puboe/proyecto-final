@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.servlet.http.Cookie;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -12,12 +14,15 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.ListDataProvider;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
+import org.apache.wicket.request.http.WebResponse;
 
 import com.google.common.collect.Sets;
 
 import ar.com.itba.piedpiper.model.entity.SavedState;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 @SuppressWarnings("serial")
@@ -30,12 +35,10 @@ public class SavedStatesPage extends AbstractWebPage {
 		List<Cookie> cookies = ((WebRequest)RequestCycle.get().getRequest()).getCookies();
 		Set<SavedState> savedStates = Sets.newHashSet(); 
 		for (Cookie cookie : cookies) {
-			try {
-				savedStates.add(SavedState.deSerialize(cookie.getValue()));
-			} catch (Exception e) {
+			if(cookie.getValue().equals("1")) {
+				savedStates.add(new SavedState(cookie.getName()));
 			}
 		}
-		System.out.println();
 		DataView<SavedState> savedStateView = new DataView<SavedState>("savedStateList", new ListDataProvider<>(Lists.newArrayList(savedStates))) {
 			@Override
 			protected void populateItem(Item<SavedState> item) {
@@ -43,7 +46,7 @@ public class SavedStatesPage extends AbstractWebPage {
 				item.add(new Label("dateTime", savedState.dateTime()));
 				item.add(new Label("channel", savedState.channel().name()));
 				item.add(new Label("steps", savedState.steps()));
-				item.add(new Label("enhanced", savedState.enhanced()));
+				item.add(new Label("enhanced", savedState.enhanced() ? "Sí" : "No"));
 				item.add(new Link<Void>("getState") {
 					@Override
 					public void onClick() {
@@ -55,12 +58,16 @@ public class SavedStatesPage extends AbstractWebPage {
 						);
 					}
 				});
-//				item.add(new Link<Void>("removeState") {
+//				item.add(new AjaxLink<Void>("removeState") {
 //					@Override
-//					public void onClick() {
-//						ApplicationSession.get().removeState(item.getModelObject());
+//					public void onClick(AjaxRequestTarget target) {
+//						Cookie cookie = new Cookie(savedState.toString(), "0");
+//						cookie.setMaxAge(0);
+//						((WebResponse) getRequestCycle().getResponse()).addCookie(cookie);
+//						savedStates.remove(savedState);
+//						target.add(this);
 //					}
-//				}.add(new TooltipBehavior(Model.of("Remove"))));
+//				}.add(new TooltipBehavior(Model.of("Remover"))));
 			}
 		};
 		savedStateView.setItemsPerPage(itemsPerPage);

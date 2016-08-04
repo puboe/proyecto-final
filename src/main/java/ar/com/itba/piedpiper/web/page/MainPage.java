@@ -18,7 +18,6 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -29,6 +28,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.time.Duration;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -42,7 +42,6 @@ import ar.com.itba.piedpiper.model.entity.SavedState;
 import ar.com.itba.piedpiper.service.api.ConfigurationService;
 import ar.com.itba.piedpiper.service.api.TransactionService;
 import ar.com.itba.piedpiper.service.api.TransactionService.TransactionalOperationWithoutReturn;
-import ar.com.itba.piedpiper.web.ApplicationSession;
 import ar.com.itba.piedpiper.web.panel.StateFilterPanel;
 import ar.com.itba.piedpiper.web.panel.StateFilterPanel.StateFilterModel;
 import ar.com.itba.piedpiper.web.util.ImageResource;
@@ -83,15 +82,14 @@ public class MainPage extends AbstractWebPage {
 		zoneMapToDisk(webTarget, resourcePath);
 		dumpToDiskBySteps(dates, steps, webTarget, resourcePath, arrowsFilename);
 		dumpToDiskBySteps(dates, steps, webTarget, resourcePath, trailsFilename);
-		predictionImageToDisk(dates.get(dates.length()-1).toString(), webTarget, resourcePath);
-		differenceImageToDisk(dates.get(dates.length()-1).toString(), webTarget, resourcePath);
+		singlemageToDisk(dates.get(dates.length()-1).toString(), webTarget, resourcePath, imageFilename, predictionFilename);
+		singlemageToDisk(dates.get(dates.length()-1).toString(), webTarget, resourcePath, differenceFilename, differenceFilename);
 		buildGif(resourcePath);
 	}
 	
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		System.out.println(ApplicationSession.get());
 		createDir(resourcePath);
 		feedback = new NotificationPanel("feedback");
 		feedback.setOutputMarkupId(true);
@@ -149,11 +147,11 @@ public class MainPage extends AbstractWebPage {
 //							if(ApplicationSession.get().saveState(savedState)) {
 							if(true) {
 								System.out.println();
-								Cookie cookie = new Cookie(RandomStringUtils.randomAlphabetic(32), savedState.serialize());
+								Cookie cookie = new Cookie(savedState.toString(), "1");
 								((WebResponse) getRequestCycle().getResponse()).addCookie(cookie);
 								//test
 //								SavedState newstate = new SavedState(savedState.toString());
-								success("State saved!");
+								success("Estado guardado!");
 							} 
 //							else {
 //								error("State is already saved.");
@@ -172,20 +170,20 @@ public class MainPage extends AbstractWebPage {
 				resetDir(resourcePath);
 				DateTime dateTime = new DateTime(stateFilterModel.toModelObject());
 				int steps = new Integer(stateFilterModel.stepsModelObject());
+				Channel channel = stateFilterModel.channelModelObject();
+				boolean enhanced = stateFilterModel.enhancedModelObject();
 				WebTarget webTarget = setupApiConnection();
 				JSONArray dates = statesUpTo(dateTime, steps, webTarget);
 				datesLength = dates.length();
-				imagesForDatesToDisk(
-					dates, webTarget, resourcePath, stateFilterModel.channelModelObject(), stateFilterModel.enhancedModelObject()
-				);
+				imagesForDatesToDisk(dates, webTarget, resourcePath, channel, enhanced);
 				zoneMapToDisk(webTarget, resourcePath);
 				dumpToDiskBySteps(dates, steps, webTarget, resourcePath, arrowsFilename);
 				dumpToDiskBySteps(dates, steps, webTarget, resourcePath, trailsFilename);
-				predictionImageToDisk(dates.get(dates.length()-1).toString(), webTarget, resourcePath);
-				differenceImageToDisk(dates.get(dates.length()-1).toString(), webTarget, resourcePath);
+				singlemageToDisk(dates.get(dates.length()-1).toString(), webTarget, resourcePath, imageFilename, predictionFilename);
+				singlemageToDisk(dates.get(dates.length()-1).toString(), webTarget, resourcePath, differenceFilename, differenceFilename);
 				buildGif(resourcePath);
 				stateDateInfo.setDefaultModel(
-					Model.of("Playing " + datesLength + " frames from " + dates.get(1) + " leading to "	+ dates.get(dates.length() - 1) + ".")
+					Model.of("Mostrando " + datesLength + " cuadros desde " + dates.get(1) + " hasta to "	+ dates.get(dates.length() - 1) + "en el canal " + channel.name() + ".")
 				);
 				lastState.setDefaultModel(Model.of(new ImageResource(resourcePath, datesLength-1 + ".png")));
 				target.add(animation, stateDateInfo, trails, prediction, predictionMap, animationMap, arrows, lastState, difference);
@@ -200,8 +198,8 @@ public class MainPage extends AbstractWebPage {
 		return new JSONArray(response.readEntity(String.class));
 	}
 
-	private void predictionImageToDisk(String dateTime, WebTarget webTarget, String resourcePath) {
-		String path = "argentina/" + dateTime + "/prediction/" + imageFilename;
+	private void singlemageToDisk(String dateTime, WebTarget webTarget, String resourcePath, String resourceName, String fileName) {
+		String path = "argentina/" + dateTime + "/prediction/" + resourceName;
 		System.out.println("Requesting: " + path);
 		WebTarget resourceWebTarget = webTarget.path(path);
 		Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_OCTET_STREAM);
@@ -209,7 +207,7 @@ public class MainPage extends AbstractWebPage {
 		try {
 			byte[] SWFByteArray;
 			SWFByteArray = IOUtils.toByteArray((InputStream) response.getEntity());
-			FileOutputStream fos = new FileOutputStream(new File(resourcePath + predictionFilename));
+			FileOutputStream fos = new FileOutputStream(new File(resourcePath + fileName));
 			fos.write(SWFByteArray);
 			fos.flush();
 			fos.close();
@@ -217,25 +215,7 @@ public class MainPage extends AbstractWebPage {
 			e.printStackTrace();
 		}
 	}
-	
-	private void differenceImageToDisk(String dateTime, WebTarget webTarget, String resourcePath) {
-		String path = "argentina/" + dateTime + "/prediction/" + differenceFilename;
-		System.out.println("Requesting: " + path);
-		WebTarget resourceWebTarget = webTarget.path(path);
-		Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_OCTET_STREAM);
-		Response response = invocationBuilder.get();
-		try {
-			byte[] SWFByteArray;
-			SWFByteArray = IOUtils.toByteArray((InputStream) response.getEntity());
-			FileOutputStream fos = new FileOutputStream(new File(resourcePath + differenceFilename));
-			fos.write(SWFByteArray);
-			fos.flush();
-			fos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 	private void imagesForDatesToDisk(JSONArray dates, WebTarget webTarget, String resourcePath, Enum<?> channel, Boolean enhanced) {
 		for (int i = 0; i < dates.length(); i++) {
 			String date = (String) dates.get(i);

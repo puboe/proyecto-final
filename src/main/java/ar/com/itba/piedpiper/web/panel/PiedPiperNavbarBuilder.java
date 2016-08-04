@@ -20,12 +20,12 @@ public class PiedPiperNavbarBuilder implements NavbarBuilder {
 	@Override
 	public Navbar apply(String id) {
 		Navbar navbar = new Navbar(id);
-		navbar.setBrandName(Model.of("Welcome"));
+		navbar.setBrandName(Model.of("Bienvenido"));
 		navbar.fluid();
 		navbar
-			.addComponents(transform(Navbar.ComponentPosition.LEFT, new NavbarButton<Void>(MainPage.class, Model.of("Main")).setIconType(GlyphIconType.cloud)))
-			.addComponents(transform(Navbar.ComponentPosition.LEFT, new NavbarButton<Void>(SavedStatesPage.class, Model.of("Saved States")).setIconType(GlyphIconType.floppysaved)))
-			.addComponents(transform(Navbar.ComponentPosition.LEFT, new NavbarButton<Void>(EditConfigurationPage.class, Model.of("Configuration")).setIconType(GlyphIconType.cog)));
+			.addComponents(transform(Navbar.ComponentPosition.LEFT, new NavbarButton<Void>(MainPage.class, Model.of("Principal")).setIconType(GlyphIconType.cloud)))
+			.addComponents(transform(Navbar.ComponentPosition.LEFT, new NavbarButton<Void>(SavedStatesPage.class, Model.of("Estados guardados")).setIconType(GlyphIconType.floppysaved)))
+			.addComponents(transform(Navbar.ComponentPosition.LEFT, new NavbarButton<Void>(EditConfigurationPage.class, Model.of("Configuración")).setIconType(GlyphIconType.cog)));
 		return navbar;
 	}
 

@@ -5,9 +5,9 @@ import java.util.Date;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.yui.calendar.DateTimeField;
-import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -26,13 +26,19 @@ public abstract class StateFilterPanel extends Panel {
 		Form<Integer> form = new Form<>("form");
 		form
 			.add(new EnumDropDownChoice("channel", resourceComponent, Channel.values()) {
+				@Override
 				public boolean isNullValid() {
 					return false;
 				};
 			}.setDefaultModel(model.channelModel()))
 			.add(new DateTimeField("to", model.toModel()))
 			.add(new TextField<>("steps", model.stepsModel()))
-			.add(new CheckBox("enhanced", model.enhancedModel()))
+			.add(new AjaxCheckBox("enhanced", model.enhancedModel()) {
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					onSearch(target);
+				}
+			})
 			.add(new AjaxSubmitLink("search") {
 				@Override
 				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {

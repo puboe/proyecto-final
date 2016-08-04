@@ -1,45 +1,27 @@
 package ar.com.itba.piedpiper.model.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import java.io.Serializable;
 
-import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
-@Entity
-@Table(name = "saved_state", uniqueConstraints = @UniqueConstraint(columnNames = {"date_time", "steps"}))
-public class SavedState extends PersistentEntity<Integer> {
+@SuppressWarnings("serial")
+public class SavedState implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id;
-	
-	@Column(name = "date_time")
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime dateTime;
-	
-	@Column(name = "steps")
+
 	private int steps;
-	
-	@Column(name = "channel", length = 3)
-	@Enumerated(EnumType.STRING)
+
 	private Channel channel;
-	
-	@Column(name = "enhanced")
+
 	private boolean enhanced;
-	
+
 	public SavedState() {
-		//Required by hibernate
+		// Required by hibernate
 	}
-	
+
 	public SavedState(DateTime dateTime, int steps, Channel channel, boolean enhanced) {
 		this.dateTime = dateTime;
 		this.steps = steps;
@@ -47,25 +29,68 @@ public class SavedState extends PersistentEntity<Integer> {
 		this.enhanced = enhanced;
 	}
 	
-	@Override
-	public Integer getId() {
-		return id;
+	public SavedState(String savedState) {
+		String[] split = savedState.split(",");
+		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
+		dateTime = formatter.parseDateTime(split[0]);
+		steps = Integer.valueOf(split[1]);
+		channel = Channel.fromString(split[2]);
+		enhanced = Boolean.valueOf(split[3]);
 	}
-	
+
 	public DateTime dateTime() {
 		return dateTime;
 	}
-	
+
 	public int steps() {
 		return steps;
 	}
-	
+
 	public Channel channel() {
 		return channel;
 	}
-	
+
 	public boolean enhanced() {
 		return enhanced;
+	}
+
+	@Override
+	public String toString() {
+		return dateTime.toString() + "," + steps+ "," + channel + "," + enhanced;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((channel == null) ? 0 : channel.hashCode());
+		result = prime * result + ((dateTime == null) ? 0 : dateTime.hashCode());
+		result = prime * result + (enhanced ? 1231 : 1237);
+		result = prime * result + steps;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SavedState other = (SavedState) obj;
+		if (channel != other.channel)
+			return false;
+		if (dateTime == null) {
+			if (other.dateTime != null)
+				return false;
+		} else if (!dateTime.equals(other.dateTime))
+			return false;
+		if (enhanced != other.enhanced)
+			return false;
+		if (steps != other.steps)
+			return false;
+		return true;
 	}
 	
 }

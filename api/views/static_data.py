@@ -2,6 +2,7 @@ from flask import jsonify, send_file
 from api import blueprint, db
 from api.util import render_image_array
 from meteo.meteo_sql import MeteoStaticData, MeteoBackgroundData
+import numpy as np
 
 
 @blueprint.route('/<zone_name>/<datetime:time>/static/<satellite>/<channel>/')
@@ -46,4 +47,5 @@ def static_data_image_enhanced(zone_name, time, satellite, channel):
 
     image = data.image - background.image
     image[image < 0.0] = 0.0
+    image = image/np.max(image)
     return render_image_array(image)

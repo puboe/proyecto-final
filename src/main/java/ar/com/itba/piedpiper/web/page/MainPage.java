@@ -149,7 +149,7 @@ public class MainPage extends AbstractWebPage {
 //							if(ApplicationSession.get().saveState(savedState)) {
 							if(true) {
 								System.out.println();
-								Cookie cookie = new Cookie(RandomStringUtils.randomAlphabetic(10), savedState.toString());
+								Cookie cookie = new Cookie(RandomStringUtils.randomAlphabetic(32), savedState.serialize());
 								((WebResponse) getRequestCycle().getResponse()).addCookie(cookie);
 								//test
 //								SavedState newstate = new SavedState(savedState.toString());

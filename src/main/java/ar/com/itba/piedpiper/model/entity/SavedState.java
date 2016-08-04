@@ -1,9 +1,14 @@
 package ar.com.itba.piedpiper.model.entity;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Base64;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
@@ -28,7 +33,7 @@ public class SavedState implements Serializable {
 		this.channel = channel;
 		this.enhanced = enhanced;
 	}
-	
+
 	public SavedState(String savedState) {
 		String[] split = savedState.split(",");
 		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
@@ -56,7 +61,29 @@ public class SavedState implements Serializable {
 
 	@Override
 	public String toString() {
-		return dateTime.toString() + "," + steps+ "," + channel + "," + enhanced;
+		return dateTime.toString() + "," + steps + "," + channel + "," + enhanced;
+	}
+
+	public String serialize() {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos;
+		try {
+			oos = new ObjectOutputStream(baos);
+			oos.writeObject(this);
+			oos.close();
+		} catch (IOException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return Base64.getEncoder().encodeToString(baos.toByteArray());
+	}
+
+	public static SavedState deSerialize(String serializedObject) throws IOException, ClassNotFoundException {
+		byte[] data = Base64.getDecoder().decode(serializedObject);
+		ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
+		SavedState savedState = (SavedState) ois.readObject();
+		ois.close();
+		return savedState;
 	}
 
 	@Override
@@ -92,5 +119,5 @@ public class SavedState implements Serializable {
 			return false;
 		return true;
 	}
-	
+
 }

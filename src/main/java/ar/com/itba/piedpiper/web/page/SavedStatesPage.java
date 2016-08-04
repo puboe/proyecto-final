@@ -5,7 +5,6 @@ import java.util.Set;
 
 import javax.servlet.http.Cookie;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -13,16 +12,12 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.ListDataProvider;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
-import org.apache.wicket.request.http.WebResponse;
 
 import com.google.common.collect.Sets;
 
 import ar.com.itba.piedpiper.model.entity.SavedState;
-import ar.com.itba.piedpiper.web.ApplicationSession;
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 @SuppressWarnings("serial")
@@ -36,12 +31,12 @@ public class SavedStatesPage extends AbstractWebPage {
 		Set<SavedState> savedStates = Sets.newHashSet(); 
 		for (Cookie cookie : cookies) {
 			try {
-				savedStates.add(new SavedState(cookie.getValue()));
+				savedStates.add(SavedState.deSerialize(cookie.getValue()));
 			} catch (Exception e) {
 			}
 		}
 		System.out.println();
-		DataView<SavedState> savedStateView = new DataView<SavedState>("savedStateList", new ListDataProvider<SavedState>(Lists.newArrayList(savedStates))) {
+		DataView<SavedState> savedStateView = new DataView<SavedState>("savedStateList", new ListDataProvider<>(Lists.newArrayList(savedStates))) {
 			@Override
 			protected void populateItem(Item<SavedState> item) {
 				final SavedState savedState = (SavedState) item.getModelObject();

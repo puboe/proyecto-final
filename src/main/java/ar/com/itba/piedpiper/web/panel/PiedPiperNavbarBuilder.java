@@ -19,7 +19,7 @@ public class PiedPiperNavbarBuilder implements NavbarBuilder {
 	@Override
 	public Navbar apply(String id) {
 		Navbar navbar = new Navbar(id);
-		navbar.setBrandName(Model.of("Bienvenido"));
+		navbar.setBrandName(Model.of("Nub3s"));
 		navbar.fluid();
 		navbar
 			.addComponents(transform(Navbar.ComponentPosition.LEFT, new NavbarButton<Void>(MainPage.class, Model.of("Principal")).setIconType(GlyphIconType.cloud)))

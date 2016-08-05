@@ -58,28 +58,6 @@ public class SavedState implements Serializable {
 		return dateTime.toString().replaceAll(":", "A") + "B" + steps + "B" + channel + "B" + enhanced;
 	}
 
-//	public String serialize() {
-//		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//		ObjectOutputStream oos;
-//		try {
-//			oos = new ObjectOutputStream(baos);
-//			oos.writeObject(this);
-//			oos.close();
-//		} catch (IOException e) {
-//			// TODO: handle exception
-//			e.printStackTrace();
-//		}
-//		return Base64.getEncoder().withoutPadding().encodeToString(baos.toByteArray());
-//	}
-//
-//	public static SavedState deSerialize(String serializedObject) throws IOException, ClassNotFoundException {
-//		byte[] data = Base64.getDecoder().decode(serializedObject);
-//		ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
-//		SavedState savedState = (SavedState) ois.readObject();
-//		ois.close();
-//		return savedState;
-//	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;

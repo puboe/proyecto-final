@@ -5,9 +5,9 @@ import java.util.Date;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.yui.calendar.DateTimeField;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -21,9 +21,17 @@ import ar.com.itba.piedpiper.web.util.EnumDropDownChoice;
 @SuppressWarnings("serial")
 public abstract class StateFilterPanel extends Panel {
 
+	private AjaxSubmitLink submit;
+	
 	public StateFilterPanel(String id, StateFilterModel model, Component resourceComponent) {
 		super(id);
 		Form<Integer> form = new Form<>("form");
+		submit = new AjaxSubmitLink("search") {
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				onSearch(target);
+			}
+		};
 		form
 			.add(new EnumDropDownChoice("channel", resourceComponent, Channel.values()) {
 				@Override
@@ -33,22 +41,17 @@ public abstract class StateFilterPanel extends Panel {
 			}.setDefaultModel(model.channelModel()))
 			.add(new DateTimeField("to", model.toModel()))
 			.add(new TextField<>("steps", model.stepsModel()))
-			.add(new AjaxCheckBox("enhanced", model.enhancedModel()) {
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					onSearch(target);
-				}
+			.add(new CheckBox("enhanced", model.enhancedModel()) {
 			})
-			.add(new AjaxSubmitLink("search") {
-				@Override
-				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-					onSearch(target);
-				}
-		});
+			.add(submit);
 	add(form);
 	}
 	
 	public abstract void onSearch(AjaxRequestTarget target);
+	
+	public AjaxSubmitLink submit() {
+		return submit;
+	}
 	
 	public static final class StateFilterModel implements Serializable {
 		
@@ -56,7 +59,6 @@ public abstract class StateFilterPanel extends Panel {
 		private IModel<Date> toDateModel = Model.of(new LocalDate().toDate());
 		private IModel<String> stepsModel;
 		private IModel<Boolean> enhancedModel = Model.of(false);
-		
 		
 		public StateFilterModel(String steps) {
 			stepsModel = Model.of(steps);

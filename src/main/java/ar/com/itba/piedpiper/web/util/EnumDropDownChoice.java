@@ -28,4 +28,5 @@ public class EnumDropDownChoice extends DropDownChoice<Enum<?>> {
 	protected CharSequence getDefaultChoice(String selectedValue) {
 		return isNullValid() ? super.getDefaultChoice(selectedValue) : "";
 	}
+	
 }

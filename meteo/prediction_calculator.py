@@ -1,7 +1,6 @@
 from .connector import session_scope
 from .meteo_sql import *
 from . import image
-import pyopencl
 import sys
 
 import datetime
@@ -9,13 +8,14 @@ import numpy as np
 
 
 def calculate_prediction_data(state, flux):
+    print('calc st', state.time)
     print('flux st', flux.start_time)
     print('flux et', flux.end_time)
-    print('flux motions', flux.motions)
+    print('flux motions', len(flux.motions))
     end_time = flux.timedelta.seconds // 60
     extrapolation_time = (state.time - flux.start_time).seconds // 60
-    print('end_time', end_time)
-    print('extrapolation_time', extrapolation_time)
+    print('end_time mins', end_time)
+    print('extrapolation_time mins', extrapolation_time)
     trail = np.transpose(flux.polyfitted_trails([end_time, extrapolation_time] , flux.generate_start(15.0, 15.0), 2), (2, 0, 1))
 
     #trail = flux.trim_noisy_trails(trail, factor=4)
@@ -46,40 +46,28 @@ def calculate_prediction_data(state, flux):
 
     comp = next((data for data in state.datas if data.channel == 'ir4'))
 
-    print(np.sum(np.abs(prediction-comp.image)))
+    print('total error', np.sum(np.abs(prediction-comp.image)))
 
     prediction_data = MeteoPredictionData(state=state, image=prediction) if len(state.predictions) == 0 else state.predictions[0]
 
     prediction_data.image = prediction
 
-    print(base.time)
 
     return prediction_data
 
 
 
 with session_scope() as session:
-    #state = session.query(MeteoState).order_by(MeteoState.time.desc()).first()
-    for state in session.query(MeteoState).filter_by(is_valid=True).order_by(MeteoState.time.desc()):
+    query = session.query(MeteoState) \
+            .filter_by(is_valid=True) \
+            .filter(MeteoMotionData.suitable_state()) \
+            .filter(~MeteoState.predictions.any()) \
+            .order_by(MeteoState.time.desc())
+    print('predictionless count', query.count())
+    for state in query.all():
         end_time = state.time - datetime.timedelta(hours=2)
         start_time = end_time - datetime.timedelta(hours=6)
-        print('start_time', start_time)
-        print('end_time', end_time)
         flux = MeteoFlux.from_interval(session, state.zone.name, start_time, end_time, 'value-back-composite')
         prediction = calculate_prediction_data(state, flux)
-    #session.rollback()
-    
-
-
-
-#with session_scope() as session:
-        #query = session.query(MeteoState).filter(MeteoMotionData.suitable_state())
-        #print('State count', query.count())
-        #query = query.filter(~MeteoState.predictions.any())
-        #print('Predictionless count', query.count())
-        #query = query.order_by(MeteoState.time)
-        #predictionless = query.all()
-
-
-
-        
+        state.predictions.append(prediction)
+        session.commit()

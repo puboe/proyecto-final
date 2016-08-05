@@ -12,36 +12,17 @@
 		<wicket.version>7.4.0</wicket.version>
 		<jetty.version>9.3.11.v20160721</jetty.version>
 		<spring.version>4.3.2.RELEASE</spring.version>
-		<spring.data.version>1.10.2.RELEASE</spring.data.version>
-		<hibernate.version>5.1.0.Final</hibernate.version>
 		<wicket.bootstrap.version>0.10.7</wicket.bootstrap.version>
 		<apache.commons.version>3.4</apache.commons.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<wtp.version>none</wtp.version>
 	</properties>
 	<dependencies>
-		<!-- MySQL -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>mysql</groupId> -->
-<!-- 			<artifactId>mysql-connector-java</artifactId> -->
-<!-- 			<version>5.1.39</version> -->
-<!-- 		</dependency> -->
 		<!-- PostGreSQL -->
 		<dependency>
-    	<groupId>org.postgresql</groupId>
-    	<artifactId>postgresql</artifactId>
-    	<version>9.4.1209.jre7</version>
-		</dependency>
-		<!-- Hibernate -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
+	    	<groupId>org.postgresql</groupId>
+	    	<artifactId>postgresql</artifactId>
+	    	<version>9.4.1209.jre7</version>
 		</dependency>
 		<!-- Apache Commons -->
 		<dependency>
@@ -95,11 +76,6 @@
 		</dependency>
 		<!-- Web services -->
 		<dependency>
-		    <groupId>javax.ws.rs</groupId>
-		    <artifactId>javax.ws.rs-api</artifactId>
-		    <version>2.0.1</version>
-		</dependency>
-		<dependency>
 		    <groupId>org.glassfish.jersey.core</groupId>
 		    <artifactId>jersey-client</artifactId>
 		    <version>2.23.1</version>
@@ -126,53 +102,11 @@
 			<artifactId>spring-web</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-jpa</artifactId>
-			<version>${spring.data.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-api</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>jcl-over-slf4j</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aspects</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
 		<!-- Logging dependencies - LOG4J -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.12</version>
-		</dependency>
-		<!-- Junit Dependecy for testing -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
 		</dependency>
 		<!-- Jetty Dependecies for testing -->
 		<dependency>
@@ -238,13 +172,6 @@
 							<port>7001</port>
 							<maxIdleTime>3600000</maxIdleTime>
 						</connector>
-						<connector implementation="org.eclipse.jetty.server.ssl.SslSocketConnector">
-							<port>8443</port>
-							<maxIdleTime>3600000</maxIdleTime>
-							<keystore>${project.build.directory}/test-classes/keystore</keystore>
-							<password>wicket</password>
-							<keyPassword>wicket</keyPassword>
-						</connector>
 					</connectors>
 				</configuration>
 			</plugin>
@@ -259,5 +186,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

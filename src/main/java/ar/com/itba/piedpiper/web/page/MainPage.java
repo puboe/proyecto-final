@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
@@ -29,7 +30,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.resource.DynamicImageResource;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.time.Duration;
 import org.glassfish.jersey.client.ClientConfig;
 import org.joda.time.DateTime;
@@ -39,19 +39,16 @@ import com.madgag.gif.fmsware.AnimatedGifEncoder;
 
 import ar.com.itba.piedpiper.model.entity.Channel;
 import ar.com.itba.piedpiper.model.entity.SavedState;
-import ar.com.itba.piedpiper.service.api.ConfigurationService;
 import ar.com.itba.piedpiper.web.ApplicationSession;
 import ar.com.itba.piedpiper.web.panel.StateFilterPanel;
 import ar.com.itba.piedpiper.web.panel.StateFilterPanel.StateFilterModel;
+import ar.com.itba.piedpiper.web.res.ApplicationResources;
 import ar.com.itba.piedpiper.web.util.DiskImageResource;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 @SuppressWarnings("serial")
 public class MainPage extends AbstractWebPage {
 
-	@SpringBean
-	private ConfigurationService configurations;
-	
 	private StateFilterModel stateFilterModel;
 	// XXX: Move to config
 	private final String trailsFilename = "trails.png";
@@ -63,11 +60,13 @@ public class MainPage extends AbstractWebPage {
 	private final String mapFilename = "map_image.png";
 	private final String predictionFilename = "prediction.png";
 	private NotificationPanel feedback;
-	private final String resourcePath = configurations.findByName("imagePath").value();
+	private String resourcePath;
 	private int datesLength;
-
+	private Properties prop;
+	
 	public MainPage() {
 		ApplicationSession session = ApplicationSession.get(); 
+		loadProperties();
 		if(session.mainPageLoadCount() == 0) {
 			session.increaseMainPageLoadCount();
 			buildPage(new DateTime().minusDays(5), 10, Channel.IR2, false);
@@ -75,13 +74,13 @@ public class MainPage extends AbstractWebPage {
 	}
 	
 	public MainPage(DateTime dateTime, int steps, Channel channel, Boolean enhanced) {
+		loadProperties();
 		buildPage(dateTime, steps, channel, enhanced);
 	}
 	
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		this.setVersioned(false);
 		datesLength = ApplicationSession.get().datesArrayLength();
 		feedback = new NotificationPanel("feedback");
 		feedback.setOutputMarkupId(true);
@@ -144,7 +143,7 @@ public class MainPage extends AbstractWebPage {
 			}
 		});
 		add(stateDateInfo, prediction, predictionMap, animation, trails, animationMap, arrows, lastState, difference);
-		stateFilterModel = new StateFilterModel(configurations.findByName("startupStates").value());
+		stateFilterModel = new StateFilterModel(prop.getProperty("startupStates"));
 		add(new StateFilterPanel("filterPanel", stateFilterModel, this) {
 			@Override
 			public void onSearch(AjaxRequestTarget target) {
@@ -212,7 +211,7 @@ public class MainPage extends AbstractWebPage {
 			Invocation.Builder invocationBuilder = resourceWebTarget.request(MediaType.APPLICATION_OCTET_STREAM);
 			Response response = invocationBuilder.get();
 			session.addGifStream((InputStream) response.getEntity());
-			if(i == dates.length()-1){
+			if(i == dates.length()-1) {
 				try {
 					byte[] SWFByteArray;
 					SWFByteArray = IOUtils.toByteArray((InputStream) response.getEntity());
@@ -276,7 +275,7 @@ public class MainPage extends AbstractWebPage {
 	}
 	
 	private WebTarget setupApiConnection() {
-		String mainWebTargetPath = configurations.findByName("mainWebTargetPath").value();
+		String mainWebTargetPath = prop.getProperty("mainWebTargetPath");
 		ClientConfig clientConfig = new ClientConfig();
 		Client client = ClientBuilder.newClient(clientConfig);
 		return client.target(mainWebTargetPath);
@@ -310,4 +309,15 @@ public class MainPage extends AbstractWebPage {
 		return false;
 	}
 
+	private void loadProperties() {
+		prop = new Properties();
+		try {
+			prop.load(ApplicationResources.class.getResourceAsStream("config.properties"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		resourcePath = prop.getProperty("imagePath");
+	}
+	
 }

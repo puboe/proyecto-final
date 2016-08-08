@@ -1,0 +1,283 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language spanish
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Proyecto Final
+\end_layout
+
+\begin_layout Author
+Diaz Uboe, Pablo
+\begin_inset Newline newline
+\end_inset
+
+Elli, Federico
+\begin_inset Newline newline
+\end_inset
+
+Pomar, Federico
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introducción
+\end_layout
+
+\begin_layout Section
+Estado del arte
+\end_layout
+
+\begin_layout Standard
+En este capítulo se presentará el estado del arte, tanto teórico como práctico,
+ en lo que respecta al seguimiento automático de nubes.
+ Estudiaremos herramientas desarrolladas con un propósito similar.
+\end_layout
+
+\begin_layout Subsection
+Plataformas similares
+\end_layout
+
+\begin_layout Standard
+Las plataformas presentadas a continuación constituyen parte del estado
+ del arte en cuanto a la visualización del estado del clima.
+ Para cada alternativa se describen sus características, fortalezas y debilidade
+s.
+ Además se incluye un breve análisis de su funcionalidad y de su interfaz.
+\end_layout
+
+\begin_layout Subsubsection
+Servicio meteorológico nacional
+\end_layout
+
+\begin_layout Standard
+El servicio meteorológico nacional posee una plataforma en la que se pueden
+ visualizar imágenes satelitales infrarrojas captadas por el satélite geoestacio
+nario GOES­13.
+ Dichas imágenes se encuentran espaciadas por un intervalo de aproximadamente
+ una hora entre cada una.
+ La interfaz no se destaca por ser del todo amigable, aunque resulta bastante
+ intuitiva.
+ A la izquierda de la pantalla se pueden elegir distintas zonas y el tipo
+ de imágenes disponibles.
+ Sobre la imagen hay disponibles controles para seleccionar la cantidad
+ de imágenes que se quieren ver y para pasar entre ellas.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Captura de la página de visualización de imágenes infrarrojas del SMN [fecha
+ de consulta: 7 de Julio de 2016].
+ Disponible en: <>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Cabe destacar que, aunque se hace foco en las imágenes de Argentina, existe
+ la posibilidad de ver imágenes de todo el continente americano y la Antártida.
+\end_layout
+
+\begin_layout Standard
+Además, el sistema permite visualizar hasta 24 anteriores e incluso se puede
+ ver una pequeña animación de la secuencia de imágenes y configurar la velocidad
+ con la que pasan.
+\end_layout
+
+\begin_layout Standard
+Otro aspecto importante es que, además de las imágenes infrarrojas, se pueden
+ visualizar imágenes de topes nubosos con sus respectivas temperaturas y
+ de vapor de agua.
+\end_layout
+
+\begin_layout Standard
+Como una cualidad negativa, se puede ver que no se proporciona ningún tipo
+ de análisis sobre las imágenes infrarrojas ni ningún tipo de información
+ complementaria.
+\end_layout
+
+\begin_layout Standard
+Otra característica negativa de la interfaz es que cuando está seleccionada
+ la opción “Última imagen”, los controles para pasar entre imágenes no tienen
+ ninguna función lo que resulta bastante confuso, por lo que lo mejor quizás
+ sería no mostrarlos hasta que se seleccione alguna opción en la que tengan
+ sentido.
+\end_layout
+
+\begin_layout Subsubsection
+Nullschool Earth
+\end_layout
+
+\begin_layout Standard
+Esta plataforma brinda acceso a multitud de pronósticos, como por ejemplo
+ corrientes oceánicas, temperatura del océano, oleaje, vientos e incluso
+ información sobre partículas y químicos presentes en la atmósfera.
+\end_layout
+
+\begin_layout Standard
+La interfaz de usuario resulta muy vistosa, aunque en principio no es demasiado
+ intuitiva.
+ Las opciones de configuración se encuentran un poco escondidas, teniendo
+ que hacer click en el logo en la parte inferior izquierda para que aparezcan.
+ Las mismas son muy completas ya que se puede cambiar desde la altitud de
+ los vientos que se muestran hasta incluso distintas proyecciones del mapa
+ si así se deseara.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Captura del mapa de Nullschool Earth, sector Argentina.
+ [fecha de consulta: 7 de Julio de 2016].
+ Disponible en: <https://earth.nullschool.net/>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Marco Teórico
+\end_layout
+
+\begin_layout Section
+Implementación
+\end_layout
+
+\begin_layout Section
+Experimentos y resultados
+\end_layout
+
+\begin_layout Section
+Conclusiones
+\end_layout
+
+\begin_layout Section*
+Bibliografía
+\end_layout
+
+\begin_layout Section*
+Anexos
+\end_layout
+
+\end_body
+\end_document

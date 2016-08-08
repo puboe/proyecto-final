@@ -45,7 +45,7 @@ public class SavedStatesPage extends AbstractWebPage {
 			protected void populateItem(Item<SavedState> item) {
 				final SavedState savedState = (SavedState) item.getModelObject();
 				DateTime dateTime = savedState.dateTime();
-				item.add(new Label("dateTime", dateTime.toString("dd-MM-yyyy HH:mm:ss")));
+				item.add(new Label("dateTime", dateTime.toString("dd-MM-yyyy HH:mm")));
 				item.add(new Label("channel", savedState.channel().name()));
 				item.add(new Label("steps", savedState.steps()));
 				item.add(new Label("enhanced", savedState.enhanced() ? "Sí" : "No"));

@@ -74,10 +74,6 @@ public abstract class StateFilterPanel extends Panel {
 			channelModel = Model.of(channel);
 		}
 		
-		public StateFilterModel(String steps) {
-			stepsModel = Model.of(steps);
-		}
-		
 		public IModel<Enum<?>> channelModel() {
 			return channelModel;
 		}

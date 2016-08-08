@@ -50,6 +50,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 public class MainPage extends AbstractWebPage {
 
 	private StateFilterModel stateFilterModel;
+	private IModel<String> stateDateInfoModel;
 	// XXX: Move to config
 	private final String trailsFilename = "trails.png";
 	private final String arrowsFilename = "arrows.png";
@@ -61,16 +62,21 @@ public class MainPage extends AbstractWebPage {
 	private final String predictionFilename = "prediction.png";
 	private NotificationPanel feedback;
 	private String resourcePath;
-	private int datesLength;
 	private Properties prop;
+	private JSONArray dates;
 	
 	public MainPage() {
 		ApplicationSession session = ApplicationSession.get(); 
 		loadProperties();
 		if(session.mainPageLoadCount() == 0) {
 			session.increaseMainPageLoadCount();
-			buildPage(new DateTime().minusDays(1), 10, Channel.IR2, false);
-			session.stateFilterModel(stateFilterModel = new StateFilterModel(prop.getProperty("startupStates")));
+			DateTime defaultDateTime = new DateTime().minusDays(1);
+			int defaultSteps = Integer.valueOf(prop.getProperty("startupStates"));
+			Channel defaultChannel = Channel.IR2;
+			boolean defaultEnhanced = false;
+			dates = buildPage(defaultDateTime, Integer.valueOf(defaultSteps), defaultChannel, defaultEnhanced);
+			stateDateInfoModel = infoString(defaultSteps,  dates,  defaultChannel,  defaultEnhanced);
+			session.stateFilterModel(stateFilterModel = new StateFilterModel(defaultChannel, defaultDateTime.toDate(), defaultSteps, defaultEnhanced));
 		} else {
 			stateFilterModel = session.stateFilterModel();
 		}
@@ -78,19 +84,18 @@ public class MainPage extends AbstractWebPage {
 	
 	public MainPage(DateTime dateTime, int steps, Channel channel, Boolean enhanced, StateFilterModel filtermodel) {
 		loadProperties();
-		buildPage(dateTime, steps, channel, enhanced);
+		dates = buildPage(dateTime, steps, channel, enhanced);
+		stateDateInfoModel = infoString(steps,  dates,  channel,  enhanced);
 		ApplicationSession.get().stateFilterModel(stateFilterModel = new StateFilterModel(channel, dateTime.toDate(), steps, enhanced));
 	}
 	
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		datesLength = ApplicationSession.get().datesArrayLength();
 		feedback = new NotificationPanel("feedback");
 		feedback.setOutputMarkupId(true);
 		feedback.hideAfter(Duration.seconds(5));
 		add(feedback);
-		IModel<String> stateDateInfoModel = Model.of("");
 		Label stateDateInfo = new Label("stateDate", stateDateInfoModel);
 		stateDateInfo.setOutputMarkupId(true);
 		IModel<DynamicImageResource> mapModel = Model.of(new DiskImageResource(resourcePath, mapFilename));
@@ -135,6 +140,7 @@ public class MainPage extends AbstractWebPage {
 				int steps = new Integer(stateFilterModel.stepsModelObject());
 				Channel channel = stateFilterModel.channelModelObject();
 				boolean enhanced = stateFilterModel.enhancedModelObject();
+				System.out.println(dates);
 				SavedState savedState = new SavedState(dateTime, steps, channel, enhanced);
 				if(!cookieExists(savedState)) {
 					Cookie cookie = new Cookie(savedState.toString(), "1");
@@ -150,15 +156,12 @@ public class MainPage extends AbstractWebPage {
 		add(new StateFilterPanel("filterPanel", stateFilterModel, this) {
 			@Override
 			public void onSearch(AjaxRequestTarget target) {
-				// XXX: Get stuff through API here
 				DateTime dateTime = new DateTime(stateFilterModel.toModelObject());
 				int steps = new Integer(stateFilterModel.stepsModelObject());
 				Channel channel = stateFilterModel.channelModelObject();
 				boolean enhanced = stateFilterModel.enhancedModelObject();
-				JSONArray dates = buildPage(dateTime, steps, channel, enhanced);
-				stateDateInfo.setDefaultModel(
-					Model.of("Mostrando " + datesLength + " cuadros desde " + dates.get(1) + " hasta "	+ dates.get(dates.length() - 1) + " en el canal " + channel.name() + ".")
-				);
+				dates = buildPage(dateTime, steps, channel, enhanced);
+				stateDateInfo.setDefaultModel(stateDateInfoModel = infoString(steps,  dates,  channel,  enhanced));
 				target.add(animation, stateDateInfo, trails, prediction, predictionMap, animationMap, arrows, lastState, difference);
 			}
 		});
@@ -167,7 +170,6 @@ public class MainPage extends AbstractWebPage {
 	private JSONArray buildPage(DateTime dateTime, int steps, Channel channel, boolean enhanced) {
 		WebTarget webTarget = setupApiConnection();
 		JSONArray dates = statesUpTo(dateTime, steps, webTarget);
-		ApplicationSession.get().datesArrayLength(datesLength = dates.length());
 		imagesForDatesToDisk(dates, webTarget, resourcePath, channel, enhanced);
 		zoneMapToDisk(webTarget, resourcePath);
 		dumpToDiskBySteps(dates, steps, webTarget, resourcePath, arrowsFilename);
@@ -323,4 +325,18 @@ public class MainPage extends AbstractWebPage {
 		resourcePath = prop.getProperty("imagePath");
 	}
 	
+	private String[] parseDateTimeString(String dateTime) {
+		String[] dateAndTime = dateTime.split("T");
+		String[] date = dateAndTime[0].split("-");
+		dateAndTime[0] = new DateTime(Integer.valueOf(date[0]),Integer.valueOf(date[1]),Integer.valueOf(date[2]), 0, 0).toString("dd-MM-yyyy");
+		return dateAndTime;
+	}
+	
+	private Model<String> infoString(int steps, JSONArray dates, Channel channel, boolean enhanced) {
+		String[] fromDateAndTime = parseDateTimeString(dates.get(1).toString());
+		String[] toDateAndTime = parseDateTimeString(dates.get(dates.length() - 1).toString());
+		return Model.of("Mostrando " + steps + " cuadros desde " + fromDateAndTime[0] + " a las " +
+				fromDateAndTime[1] + " hasta " + toDateAndTime[0] + " a las " + toDateAndTime[1] + " en el canal " + channel.name() +
+				(enhanced ? " con contraste mejorado." : "."));
+	}
 }

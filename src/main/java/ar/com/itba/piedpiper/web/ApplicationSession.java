@@ -15,7 +15,6 @@ import ar.com.itba.piedpiper.web.panel.StateFilterPanel.StateFilterModel;
 public class ApplicationSession extends WebSession {
 
 	private int mainPageLoadCount = 0;
-	private int datesArrayLength = 0;
 	private List<InputStream> gifStreams = Lists.newArrayList();
 	private StateFilterModel stateFilterModel;
 	
@@ -33,14 +32,6 @@ public class ApplicationSession extends WebSession {
 	
 	public void increaseMainPageLoadCount() {
 		mainPageLoadCount++;
-	}
-	
-	public int datesArrayLength() {
-		return datesArrayLength;
-	}
-	
-	public void datesArrayLength(int datesArrayLength) {
-		this.datesArrayLength = datesArrayLength;
 	}
 	
 	public void addGifStream(InputStream stream) {

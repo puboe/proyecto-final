@@ -6,6 +6,7 @@ import java.util.Date;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DateTimeField;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
@@ -13,6 +14,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.joda.time.LocalDate;
 
 import ar.com.itba.piedpiper.model.entity.Channel;
@@ -45,6 +47,11 @@ public abstract class StateFilterPanel extends Panel {
 				protected boolean use12HourFormat() {
 					return false;
 				}
+				
+				@Override
+				protected DateTextField newDateTextField(String id, PropertyModel<Date> dateFieldModel) {
+					return DateTextField.forDatePattern(id, dateFieldModel, "dd-MM-yyyy");
+				};
 				
 			}.add(new TooltipBehavior(Model.of("Fecha y hora en 24hr"))))
 			.add(new TextField<>("steps", model.stepsModel()).add(new TooltipBehavior(Model.of("Cantidad de pasos hacia atras"))))

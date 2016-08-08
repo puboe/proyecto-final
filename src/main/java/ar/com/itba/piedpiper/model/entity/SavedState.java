@@ -3,31 +3,35 @@ package ar.com.itba.piedpiper.model.entity;
 import java.io.Serializable;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
 @SuppressWarnings("serial")
-public class SavedState implements Serializable {
+public class SavedState implements Serializable, Comparable<SavedState> {
 
 	private DateTime dateTime;
-
 	private int steps;
-
 	private Channel channel;
-
 	private boolean enhanced;
 
-	public SavedState() {
-		// Required by hibernate
-	}
-
-	public SavedState(DateTime dateTime, int steps, Channel channel, boolean enhanced) {
-		this.dateTime = dateTime;
+	private SavedState(int steps, Channel channel, boolean enhanced) {
 		this.steps = steps;
 		this.channel = channel;
 		this.enhanced = enhanced;
 	}
-
+	
+	public SavedState(DateTime dateTime, int steps, Channel channel, boolean enhanced) {
+		this(steps, channel, enhanced);
+		this.dateTime = dateTime;
+	}
+	
+	public SavedState(String lastDate, int steps, Channel channel, boolean enhanced) {
+		this(steps, channel, enhanced);
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss");
+		dateTime = formatter.parseDateTime(lastDate);
+	}
+	
 	public SavedState(String savedState) {
 		String[] split = savedState.split("B");
 		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
@@ -58,6 +62,11 @@ public class SavedState implements Serializable {
 		return dateTime.toString().replaceAll(":", "A") + "B" + steps + "B" + channel + "B" + enhanced;
 	}
 
+	@Override
+	public int compareTo(SavedState o) {
+		return o.dateTime().compareTo(this.dateTime());
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -1,5 +1,6 @@
 package ar.com.itba.piedpiper.web.page;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -37,11 +38,14 @@ public class SavedStatesPage extends AbstractWebPage {
 				savedStates.add(new SavedState(cookie.getName()));
 			}
 		}
-		DataView<SavedState> savedStateView = new DataView<SavedState>("savedStateList", new ListDataProvider<>(Lists.newArrayList(savedStates))) {
+		List<SavedState> list = Lists.newArrayList(savedStates);
+		Collections.sort(list);
+		DataView<SavedState> savedStateView = new DataView<SavedState>("savedStateList", new ListDataProvider<>(list)) {
 			@Override
 			protected void populateItem(Item<SavedState> item) {
 				final SavedState savedState = (SavedState) item.getModelObject();
-				item.add(new Label("dateTime", savedState.dateTime()));
+				DateTime dateTime = savedState.dateTime();
+				item.add(new Label("dateTime", dateTime.toString("dd-MM-yyyy HH:mm:ss")));
 				item.add(new Label("channel", savedState.channel().name()));
 				item.add(new Label("steps", savedState.steps()));
 				item.add(new Label("enhanced", savedState.enhanced() ? "Sí" : "No"));

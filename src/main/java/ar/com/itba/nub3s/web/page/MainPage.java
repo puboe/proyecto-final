@@ -1,4 +1,4 @@
-package ar.com.itba.piedpiper.web.page;
+package ar.com.itba.nub3s.web.page;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -37,14 +37,14 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import com.madgag.gif.fmsware.AnimatedGifEncoder;
 
-import ar.com.itba.piedpiper.model.entity.Channel;
-import ar.com.itba.piedpiper.model.entity.SavedState;
-import ar.com.itba.piedpiper.web.ApplicationSession;
-import ar.com.itba.piedpiper.web.panel.StateFilterPanel;
-import ar.com.itba.piedpiper.web.panel.StateFilterPanel.StateFilterModel;
-import ar.com.itba.piedpiper.web.res.ApplicationResources;
-import ar.com.itba.piedpiper.web.util.DateTimeUtils;
-import ar.com.itba.piedpiper.web.util.DiskImageResource;
+import ar.com.itba.nub3s.model.entity.Channel;
+import ar.com.itba.nub3s.model.entity.SavedState;
+import ar.com.itba.nub3s.web.ApplicationSession;
+import ar.com.itba.nub3s.web.panel.StateFilterPanel;
+import ar.com.itba.nub3s.web.panel.StateFilterPanel.StateFilterModel;
+import ar.com.itba.nub3s.web.res.ApplicationResources;
+import ar.com.itba.nub3s.web.util.DateTimeUtils;
+import ar.com.itba.nub3s.web.util.DiskImageResource;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 @SuppressWarnings("serial")

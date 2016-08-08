@@ -7,6 +7,6 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 	">
 	
-	<context:component-scan base-package="ar.com.itba.piedpiper" />
+	<context:component-scan base-package="ar.com.itba.nub3s" />
 	
 </beans>

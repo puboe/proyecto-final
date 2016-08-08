@@ -1,4 +1,4 @@
-package ar.com.itba.piedpiper.web.panel;
+package ar.com.itba.nub3s.web.panel;
 
 import org.apache.wicket.markup.html.panel.Panel;
 

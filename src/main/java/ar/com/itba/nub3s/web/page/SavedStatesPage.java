@@ -1,4 +1,4 @@
-package ar.com.itba.piedpiper.web.page;
+package ar.com.itba.nub3s.web.page;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,9 +19,9 @@ import org.joda.time.DateTime;
 
 import com.google.common.collect.Sets;
 
-import ar.com.itba.piedpiper.model.entity.Channel;
-import ar.com.itba.piedpiper.model.entity.SavedState;
-import ar.com.itba.piedpiper.web.panel.StateFilterPanel.StateFilterModel;
+import ar.com.itba.nub3s.model.entity.Channel;
+import ar.com.itba.nub3s.model.entity.SavedState;
+import ar.com.itba.nub3s.web.panel.StateFilterPanel.StateFilterModel;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 @SuppressWarnings("serial")

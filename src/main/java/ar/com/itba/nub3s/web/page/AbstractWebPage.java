@@ -1,11 +1,11 @@
-package ar.com.itba.piedpiper.web.page;
+package ar.com.itba.nub3s.web.page;
 
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import ar.com.itba.piedpiper.web.NavbarBuilder;
+import ar.com.itba.nub3s.web.NavbarBuilder;
 
 @SuppressWarnings("serial")
 public abstract class AbstractWebPage extends WebPage implements IAjaxIndicatorAware {

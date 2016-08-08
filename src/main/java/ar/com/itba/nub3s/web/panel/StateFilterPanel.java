@@ -1,4 +1,4 @@
-package ar.com.itba.piedpiper.web.panel;
+package ar.com.itba.nub3s.web.panel;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,8 +17,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.joda.time.LocalDate;
 
-import ar.com.itba.piedpiper.model.entity.Channel;
-import ar.com.itba.piedpiper.web.util.EnumDropDownChoice;
+import ar.com.itba.nub3s.model.entity.Channel;
+import ar.com.itba.nub3s.web.util.EnumDropDownChoice;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 
 @SuppressWarnings("serial")

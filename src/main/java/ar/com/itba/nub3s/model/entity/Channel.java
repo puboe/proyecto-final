@@ -1,4 +1,4 @@
-package ar.com.itba.piedpiper.model.entity;
+package ar.com.itba.nub3s.model.entity;
 
 public enum Channel {
 

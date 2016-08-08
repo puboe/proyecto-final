@@ -1,4 +1,4 @@
-package ar.com.itba.piedpiper.web.res;
+package ar.com.itba.nub3s.web.res;
 
 public final class ApplicationResources {
 

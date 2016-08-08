@@ -1,4 +1,4 @@
-package ar.com.itba.piedpiper.web;
+package ar.com.itba.nub3s.web;
 
 public interface NavbarBuilder extends ComponentBuilder {
 

@@ -1,4 +1,4 @@
-package ar.com.itba.piedpiper.web;
+package ar.com.itba.nub3s.web;
 
 import java.io.InputStream;
 import java.util.List;
@@ -9,8 +9,8 @@ import org.apache.wicket.request.Request;
 
 import com.google.common.collect.Lists;
 
-import ar.com.itba.piedpiper.model.entity.Channel;
-import ar.com.itba.piedpiper.web.panel.StateFilterPanel.StateFilterModel;
+import ar.com.itba.nub3s.model.entity.Channel;
+import ar.com.itba.nub3s.web.panel.StateFilterPanel.StateFilterModel;
 
 @SuppressWarnings("serial")
 public class ApplicationSession extends WebSession {

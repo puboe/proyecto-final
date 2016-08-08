@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ar.com.itba</groupId>
-	<artifactId>pied-piper</artifactId>
+	<artifactId>nub3s</artifactId>
 	<packaging>war</packaging>
 	<version>1.0</version>
-	<name>pied-piper</name>
+	<name>nub3s</name>
 	<description></description>
 	<properties>
 		<wicket.version>7.4.0</wicket.version>

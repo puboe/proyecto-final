@@ -1,4 +1,4 @@
-package ar.com.itba.piedpiper;
+package ar.com.itba.nub3s;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.WebPage;
@@ -9,14 +9,14 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
-import ar.com.itba.piedpiper.web.ApplicationSession;
-import ar.com.itba.piedpiper.web.page.MainPage;
+import ar.com.itba.nub3s.web.ApplicationSession;
+import ar.com.itba.nub3s.web.page.MainPage;
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 
 @Component
 @EnableScheduling
-public class PiedPiperApplication extends WebApplication {
+public class Nub3sApplication extends WebApplication {
 
 	@Override
 	public Class<? extends WebPage> getHomePage() {

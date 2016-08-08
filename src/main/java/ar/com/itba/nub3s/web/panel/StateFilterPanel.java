@@ -15,7 +15,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.joda.time.LocalDate;
 
 import ar.com.itba.nub3s.model.entity.Channel;
 import ar.com.itba.nub3s.web.util.EnumDropDownChoice;
@@ -69,20 +68,21 @@ public abstract class StateFilterPanel extends Panel {
 	
 	public static final class StateFilterModel implements Serializable {
 		
-		private IModel<Enum<?>> channelModel = Model.of(Channel.IR2);
-		private IModel<Date> toDateModel = Model.of(new LocalDate().toDate());
+		private IModel<Enum<?>> channelModel;
+		private IModel<Date> toDateModel;
 		private IModel<String> stepsModel;
-		private IModel<Boolean> enhancedModel = Model.of(false);
+		private IModel<Boolean> enhancedModel;
 		
 		public StateFilterModel(Channel channel, Date date, int steps, boolean enhanced) {
+			channelModel = Model.of(channel);
 			toDateModel = Model.of(date);
 			stepsModel = Model.of(String.valueOf(steps));
 			enhancedModel = Model.of(enhanced);
-			channelModel = Model.of(channel);
 		}
 		
 		public IModel<Enum<?>> channelModel() {
 			return channelModel;
+			
 		}
 		
 		public Channel channelModelObject() {

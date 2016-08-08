@@ -161,12 +161,13 @@ public class MainPage extends AbstractWebPage {
 		add(new StateFilterPanel("filterPanel", stateFilterModel, this) {
 			@Override
 			public void onSearch(AjaxRequestTarget target) {
+				ApplicationSession session = ApplicationSession.get();
 				DateTime dateTime = new DateTime(stateFilterModel.toModelObject());
 				int steps = new Integer(stateFilterModel.stepsModelObject());
 				Channel channel = stateFilterModel.channelModelObject();
 				boolean enhanced = stateFilterModel.enhancedModelObject();
-				JSONArray dates = buildPage(dateTime, steps, channel, enhanced);
-				ApplicationSession session = ApplicationSession.get();
+				session.stateFilterModel(stateFilterModel);
+				buildPage(dateTime, steps, channel, enhanced);
 				stateDateInfo.setDefaultModel(stateDateInfoModel = infoString(steps, session.firstDate(), session.lastDate(), channel, enhanced));
 				target.add(animation, stateDateInfo, trails, prediction, predictionMap, animationMap, arrows, lastState, difference);
 			}

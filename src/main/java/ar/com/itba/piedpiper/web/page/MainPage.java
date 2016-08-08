@@ -69,13 +69,17 @@ public class MainPage extends AbstractWebPage {
 		loadProperties();
 		if(session.mainPageLoadCount() == 0) {
 			session.increaseMainPageLoadCount();
-			buildPage(new DateTime().minusDays(5), 10, Channel.IR2, false);
+			buildPage(new DateTime().minusDays(1), 10, Channel.IR2, false);
+			session.stateFilterModel(stateFilterModel = new StateFilterModel(prop.getProperty("startupStates")));
+		} else {
+			stateFilterModel = session.stateFilterModel();
 		}
 	}
 	
-	public MainPage(DateTime dateTime, int steps, Channel channel, Boolean enhanced) {
+	public MainPage(DateTime dateTime, int steps, Channel channel, Boolean enhanced, StateFilterModel filtermodel) {
 		loadProperties();
 		buildPage(dateTime, steps, channel, enhanced);
+		ApplicationSession.get().stateFilterModel(stateFilterModel = new StateFilterModel(channel, dateTime.toDate(), steps, enhanced));
 	}
 	
 	@Override
@@ -90,27 +94,27 @@ public class MainPage extends AbstractWebPage {
 		Label stateDateInfo = new Label("stateDate", stateDateInfoModel);
 		stateDateInfo.setOutputMarkupId(true);
 		IModel<DynamicImageResource> mapModel = Model.of(new DiskImageResource(resourcePath, mapFilename));
-		Image animationMap = new NonCachingImage("animationMap", mapModel);
+		Image animationMap = new Image("animationMap", mapModel);
 		animationMap.setOutputMarkupId(true);
 		IModel<DynamicImageResource> arrowsModel = Model.of(new DiskImageResource(resourcePath, arrowsFilename));
-		Image arrows = new NonCachingImage("arrows", arrowsModel);
+		NonCachingImage arrows = new NonCachingImage("arrows", arrowsModel);
 		arrows.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		IModel<DynamicImageResource> trailModel = Model.of(new DiskImageResource(resourcePath, trailsFilename));
-		Image trails = new NonCachingImage("trails", trailModel);
+		NonCachingImage trails = new NonCachingImage("trails", trailModel);
 		trails.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		IModel<DiskImageResource> animationModel = Model.of(new DiskImageResource(resourcePath, "animation.gif"));
-		Image animation = new NonCachingImage("imageAnim", animationModel);
+		NonCachingImage animation = new NonCachingImage("imageAnim", animationModel);
 		animation.setOutputMarkupId(true);
 		IModel<DiskImageResource> predictionModel = Model.of(new DiskImageResource(resourcePath, predictionFilename));
-		Image predictionMap = new NonCachingImage("predictionMap", mapModel);
+		Image predictionMap = new Image("predictionMap", mapModel);
 		predictionMap.setOutputMarkupId(true);
-		Image prediction = new NonCachingImage("prediction", predictionModel);
+		NonCachingImage prediction = new NonCachingImage("prediction", predictionModel);
 		prediction.setOutputMarkupId(true);
 		IModel<DiskImageResource> lastStateModel = Model.of(new DiskImageResource(resourcePath, lastStateFilename));
-		Image lastState = new NonCachingImage("lastState", lastStateModel);
+		NonCachingImage lastState = new NonCachingImage("lastState", lastStateModel);
 		lastState.setOutputMarkupId(true);
 		IModel<DiskImageResource> differenceModel = Model.of(new DiskImageResource(resourcePath, differenceFilename));
-		Image difference = new NonCachingImage("difference", differenceModel);
+		NonCachingImage difference = new NonCachingImage("difference", differenceModel);
 		difference.setOutputMarkupId(true);
 		add(new AjaxLink<Void>("trailsToggle") {
 			@Override
@@ -143,7 +147,6 @@ public class MainPage extends AbstractWebPage {
 			}
 		});
 		add(stateDateInfo, prediction, predictionMap, animation, trails, animationMap, arrows, lastState, difference);
-		stateFilterModel = new StateFilterModel(prop.getProperty("startupStates"));
 		add(new StateFilterPanel("filterPanel", stateFilterModel, this) {
 			@Override
 			public void onSearch(AjaxRequestTarget target) {

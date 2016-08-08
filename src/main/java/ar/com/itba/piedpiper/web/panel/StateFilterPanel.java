@@ -17,6 +17,7 @@ import org.joda.time.LocalDate;
 
 import ar.com.itba.piedpiper.model.entity.Channel;
 import ar.com.itba.piedpiper.web.util.EnumDropDownChoice;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 
 @SuppressWarnings("serial")
 public abstract class StateFilterPanel extends Panel {
@@ -39,8 +40,14 @@ public abstract class StateFilterPanel extends Panel {
 					return false;
 				};
 			}.setDefaultModel(model.channelModel()))
-			.add(new DateTimeField("to", model.toModel()))
-			.add(new TextField<>("steps", model.stepsModel()))
+			.add(new DateTimeField("to", model.toModel()){
+				@Override
+				protected boolean use12HourFormat() {
+					return false;
+				}
+				
+			}.add(new TooltipBehavior(Model.of("Fecha y hora en 24hr"))))
+			.add(new TextField<>("steps", model.stepsModel()).add(new TooltipBehavior(Model.of("Cantidad de pasos hacia atras"))))
 			.add(new CheckBox("enhanced", model.enhancedModel()) {
 			})
 			.add(submit);
@@ -59,6 +66,13 @@ public abstract class StateFilterPanel extends Panel {
 		private IModel<Date> toDateModel = Model.of(new LocalDate().toDate());
 		private IModel<String> stepsModel;
 		private IModel<Boolean> enhancedModel = Model.of(false);
+		
+		public StateFilterModel(Channel channel, Date date, int steps, boolean enhanced) {
+			toDateModel = Model.of(date);
+			stepsModel = Model.of(String.valueOf(steps));
+			enhancedModel = Model.of(enhanced);
+			channelModel = Model.of(channel);
+		}
 		
 		public StateFilterModel(String steps) {
 			stepsModel = Model.of(steps);

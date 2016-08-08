@@ -9,12 +9,15 @@ import org.apache.wicket.request.Request;
 
 import com.google.common.collect.Lists;
 
+import ar.com.itba.piedpiper.web.panel.StateFilterPanel.StateFilterModel;
+
 @SuppressWarnings("serial")
 public class ApplicationSession extends WebSession {
 
 	private int mainPageLoadCount = 0;
 	private int datesArrayLength = 0;
 	private List<InputStream> gifStreams = Lists.newArrayList();
+	private StateFilterModel stateFilterModel;
 	
 	public static ApplicationSession get() {
 		return (ApplicationSession) Session.get();
@@ -46,6 +49,14 @@ public class ApplicationSession extends WebSession {
 	
 	public List<InputStream> getGifStream() {
 		return gifStreams;
+	}
+	
+	public StateFilterModel stateFilterModel() {
+		return stateFilterModel;
+	}
+	
+	public void stateFilterModel(StateFilterModel stateFilterModel) {
+		this.stateFilterModel = stateFilterModel;
 	}
 	
 }

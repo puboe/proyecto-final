@@ -14,10 +14,13 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.ListDataProvider;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
+import org.joda.time.DateTime;
 
 import com.google.common.collect.Sets;
 
+import ar.com.itba.piedpiper.model.entity.Channel;
 import ar.com.itba.piedpiper.model.entity.SavedState;
+import ar.com.itba.piedpiper.web.panel.StateFilterPanel.StateFilterModel;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 @SuppressWarnings("serial")
@@ -45,29 +48,20 @@ public class SavedStatesPage extends AbstractWebPage {
 				item.add(new Link<Void>("getState") {
 					@Override
 					public void onClick() {
+						DateTime dateTime = ((SavedState) item.getModelObject()).dateTime();
+						int steps = ((SavedState) item.getModelObject()).steps();
+						Channel channel = ((SavedState) item.getModelObject()).channel();
+						boolean enhanced = ((SavedState) item.getModelObject()).enhanced();
 						setResponsePage(
-							new MainPage(((SavedState) item.getModelObject()).dateTime(),
-								((SavedState) item.getModelObject()).steps(),
-								((SavedState) item.getModelObject()).channel(),
-								((SavedState) item.getModelObject()).enhanced())
+							new MainPage(dateTime,steps,channel,enhanced,
+								new StateFilterModel(channel, dateTime.toDate(), steps, enhanced))
 						);
 					}
 				});
-//				item.add(new AjaxLink<Void>("removeState") {
-//					@Override
-//					public void onClick(AjaxRequestTarget target) {
-//						Cookie cookie = new Cookie(savedState.toString(), "0");
-//						cookie.setMaxAge(0);
-//						((WebResponse) getRequestCycle().getResponse()).addCookie(cookie);
-//						savedStates.remove(savedState);
-//						target.add(this);
-//					}
-//				}.add(new TooltipBehavior(Model.of("Remover"))));
 			}
 		};
 		savedStateView.setItemsPerPage(itemsPerPage);
 		add(new PagingNavigator("navigator", savedStateView));
 		add(new WebMarkupContainer("container").add(savedStateView));
 	}
-
 }

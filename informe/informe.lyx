@@ -3,6 +3,9 @@
 \begin_document
 \begin_header
 \textclass article
+\begin_preamble
+\usepackage{url}
+\end_preamble
 \use_default_options true
 \maintain_unincluded_children false
 \language spanish
@@ -28,7 +31,7 @@
 \spacing single
 \use_hyperref false
 \papersize default
-\use_geometry false
+\use_geometry true
 \use_package amsmath 1
 \use_package amssymb 1
 \use_package cancel 1
@@ -52,6 +55,10 @@
 \shortcut idx
 \color #008000
 \end_index
+\leftmargin 3cm
+\topmargin 3cm
+\rightmargin 3cm
+\bottommargin 3cm
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
@@ -86,7 +93,7 @@ Pomar, Federico
 \end_layout
 
 \begin_layout Standard
-\begin_inset Newpage pagebreak
+\begin_inset Newpage newpage
 \end_inset
 
 
@@ -102,7 +109,7 @@ LatexCommand tableofcontents
 \end_layout
 
 \begin_layout Standard
-\begin_inset Newpage pagebreak
+\begin_inset Newpage newpage
 \end_inset
 
 
@@ -135,7 +142,14 @@ s.
 \end_layout
 
 \begin_layout Subsubsection
-Servicio meteorológico nacional
+Servicio Meteorológico Nacional 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "smn2016"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -157,7 +171,18 @@ nario GOES­13.
 placement H
 wide false
 sideways false
-status open
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/smn.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -165,7 +190,7 @@ status open
 \begin_layout Plain Layout
 Captura de la página de visualización de imágenes infrarrojas del SMN [fecha
  de consulta: 7 de Julio de 2016].
- Disponible en: <>
+ Disponible en: <http://www.smn.gov.ar/vmsr/principal.php>
 \end_layout
 
 \end_inset
@@ -210,7 +235,14 @@ Otra característica negativa de la interfaz es que cuando está seleccionada
 \end_layout
 
 \begin_layout Subsubsection
-Nullschool Earth
+Nullschool Earth 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nullschoolearth2016"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -234,7 +266,18 @@ La interfaz de usuario resulta muy vistosa, aunque en principio no es demasiado
 placement H
 wide false
 sideways false
-status open
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/nullschool.png
+	scale 25
+
+\end_inset
+
+
+\end_layout
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -250,6 +293,230 @@ Captura del mapa de Nullschool Earth, sector Argentina.
 
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+El sistema resalta por la vasta cantidad de información que provee, es muy
+ completa y diversa y se encuentra disponible para todo el planeta.
+\end_layout
+
+\begin_layout Standard
+Por otro lado, es destacable la forma de visualizar la información, ya que
+ las configuraciones son muy completas y satisfacen casi cualquier preferencia.
+\end_layout
+
+\begin_layout Standard
+Como aspecto mejorable, se puede mencionar que el uso de colores no es demasiado
+ claro.
+ Las escalas de colores confunden y no brindan suficiente información.
+ Las mismas no están numeradas lo que no ayuda a su fácil comprensión.
+\end_layout
+
+\begin_layout Subsubsection
+Windyty 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "windyty2016"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Al igual que la anterior esta plataforma brinda acceso a multitud de pronósticos
+ distintos, como por ejemplo, viento, temperatura, nubosidad, lluvias, humedad,
+ oleaje, temperatura del mar, nevadas y presión atmosférica.
+\end_layout
+
+\begin_layout Standard
+La interfaz es muy vistosa y simple.
+ Arriba a la izquierda muestra un pronóstico climático para los próximos
+ 3 días de la ubicación actual, arriba a la derecha muestra una escala de
+ colores, abajo a la derecha se observa el menú, el cual ofrece distintas
+ opciones para visualizar la información y finalmente abajo a lo ancho de
+ la pantalla aparece una línea de tiempo si se coloca el puntero encima,
+ la
+\end_layout
+
+\begin_layout Standard
+cual permite cambiar la fecha y hora.
+ En el mapa también se ven pequeños triángulos que representan estaciones
+ climáticas, las cuales si se les hace click se pueden ver las mediciones
+ de las condiciones más recientes que han registrado.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/windyty.png
+	scale 25
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Captura del mapa de Nullschool Earth, sector Argentina.
+ [fecha de consulta: 7 de Julio de 2016].
+ Disponible en: <https://earth.nullschool.net/>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Entre lo más destacable del sistema, está la cantidad de opciones disponibles
+ para visualizar la información y que la misma esté disponible para todo
+ el planeta.
+\end_layout
+
+\begin_layout Standard
+Por otro lado, es importante notar que se pueden elegir las unidades en
+ las que se muestra la información y que además, es posible cambiar el tipo
+ de mapa que hay en el fondo para que cuando se haga zoom se pueda ver con
+ imágenes de satélite o bien un mapa con las calles de las ciudades.
+\end_layout
+
+\begin_layout Standard
+Como aspecto mejorable, al igual que en la plataforma anterior, se puede
+ mencionar que el uso de colores no es demasiado claro.
+ Las escalas no usan colores apropiados para denotar una progresión de menor
+ a mayor.
+\end_layout
+
+\begin_layout Subsubsection
+Trabajos académicos
+\end_layout
+
+\begin_layout Subsubsection*
+Extracting Cloud Motion from Satellite Image Sequences 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "remusbradloanalfredletia2002"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Los autores sugieren derivar el movimiento de las nubes a partir de un algoritmo
+ de correlación.
+\begin_inset Newline newline
+\end_inset
+
+El proceso es el siguiente:
+\end_layout
+
+\begin_layout Enumerate
+Se aplica un umbral automático de múltiples niveles para separar las característ
+icas de las nubes del fondo.
+\end_layout
+
+\begin_layout Enumerate
+Se correlacionan ambas imágenes utilizando un algoritmo de pareo de bloques
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "arohbarjatya2004"
+
+\end_inset
+
+.
+ El mismo genera vectores de movimiento.
+\end_layout
+
+\begin_layout Enumerate
+Se mitiga el ruido vectorial por el pareo incorrecto utilizando un filtro
+ de la mediana.
+\end_layout
+
+\begin_layout Standard
+El trabajo es uno de una serie de investigaciones relacionadas al análisis
+ espacio­temporal de imágenes satelitales.
+\end_layout
+
+\begin_layout Subsubsection*
+The Feasibility of an Optical Flow Algorithm for Estimating Atmospheric
+ Motion 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "waynebreskyjaimedaniels2006"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+El trabajo analiza la factibilidad de medir movimientos atmosféricos utilizando
+ un algoritmo de flujo óptico tradicional, el de Lucas y Kanade, en contraposici
+ón con algoritmos de correlación más tradicionales como el que finalmente
+ fue utilizado.
+\end_layout
+
+\begin_layout Standard
+Los resultados sugieren que el método es una alternativa viable únicamente
+ si se dispone de una alta frecuencia de imágenes, que no es lo que ocurre
+ en el caso del presente trabajo.
+\end_layout
+
+\begin_layout Subsubsection
+Conclusiones
+\end_layout
+
+\begin_layout Standard
+El servicio meteorológico nacional 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "smn2016"
+
+\end_inset
+
+ no dispone de herramientas para la visualización del movimiento de las
+ nubes.
+ En contraposición, herramientas como Windyty 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "windyty2016"
+
+\end_inset
+
+ y Nullschool Earth 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nullschoolearth2016"
+
+\end_inset
+
+ parecen estar desarrolladas con fines más comerciales que científicos.
+ Una de las metas del presente trabajo es combinar lo mejor de ambos mundos.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
 \end_inset
 
 
@@ -271,8 +538,30 @@ Experimentos y resultados
 Conclusiones
 \end_layout
 
-\begin_layout Section*
-Bibliografía
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+btprint "btPrintAll"
+bibfiles "bibliography"
+options "bibtotoc,plain"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section*

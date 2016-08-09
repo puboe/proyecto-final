@@ -483,7 +483,7 @@ Los resultados sugieren que el método es una alternativa viable únicamente
  en el caso del presente trabajo.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Conclusiones
 \end_layout
 
@@ -526,12 +526,1124 @@ key "nullschoolearth2016"
 Marco Teórico
 \end_layout
 
+\begin_layout Standard
+En este capítulo se introducirán los temas y conceptos necesarios para la
+ correcta comprensión del tema y apreciación de las dificultades contenidas
+ en la resolución del problema.
+\end_layout
+
+\begin_layout Subsection
+Flujo óptico
+\end_layout
+
+\begin_layout Subsubsection
+Ecuación del flujo óptico
+\end_layout
+
+\begin_layout Subsubsection
+Algoritmo de Lucas y Kanade
+\end_layout
+
+\begin_layout Subsubsection
+Problema de la apertura
+\end_layout
+
+\begin_layout Subsubsection
+Algoritmo de pareo de bloques
+\end_layout
+
+\begin_layout Subsection
+Canales infrarrojos
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Implementación
 \end_layout
 
+\begin_layout Standard
+En este capítulo se abordarán distintos aspectos de implementación de la
+ plataforma.
+\end_layout
+
+\begin_layout Standard
+Se analizarán primero detalles técnicos sobre el algoritmo, mejoras realizadas
+ sobre el mismo y los datos más elaborados, como las trayectorias y la predicció
+n, que serán derivadas del mismo.
+\end_layout
+
+\begin_layout Standard
+En segundo lugar se hablará sobre los detalles de arquitectura, pasando
+ por las diversas componentes que la constituyen.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Algoritmo"
+
+\end_inset
+
+Algoritmo
+\end_layout
+
+\begin_layout Standard
+El algoritmo desarrollado es una variante del algoritmo de pareo de bloques,
+ descripto en la sección 3.1.4 sobre el cual se aplicaron variaciones para
+ mejorar los datos de entrada.
+ Para las mismas se aprovechó la disponibilidad de imágenes de distintos
+ sensores obtenidas a lo largo de los meses de Junio y Julio de 2016 a razón
+ de una imagen por hora, en promedio.
+\end_layout
+
+\begin_layout Subsubsection
+Variantes
+\end_layout
+
+\begin_layout Standard
+Por sobre la base del algoritmo pueden realizarse una serie de mejoras que
+ permiten que los resultados del mismo estén mejor ajustados al movimiento
+ real de las nubes:
+\end_layout
+
+\begin_layout Description
+Detección
+\begin_inset space ~
+\end_inset
+
+de
+\begin_inset space ~
+\end_inset
+
+bordes: Es posible realizar una detección de bordes previa al procesamiento.
+ Esto presenta una alternativa al cálculo convencional, permitiendo correlaciona
+r las características a partir de la información de los bordes y no de la
+ intensidad de la imagen.
+ Está inspirado en la idea de que la intensidad de una imagen no está relacionad
+a al detalle contenido en la misma, como en los casos en los que un área
+ grande es uniforme.
+\end_layout
+
+\begin_layout Description
+Remoción
+\begin_inset space ~
+\end_inset
+
+de
+\begin_inset space ~
+\end_inset
+
+fondo: ​A partir de la recolección de aproximadamente 3000 imágenes se extrajo
+ el fondo de la escena, es decir, aquellas características que están siempre
+ presentes y corresponden a la geografía subyacente y no a las formaciones
+ nubosas del momento.
+\end_layout
+
+\begin_layout Description
+Pareo
+\begin_inset space ~
+\end_inset
+
+ida
+\begin_inset space ~
+\end_inset
+
+y
+\begin_inset space ~
+\end_inset
+
+vuelta: Se basa en la propiedad de conmutatividad de la función de pareo.
+ Dado un movimiento 
+\begin_inset Formula $M_{1,2}(x,y)$
+\end_inset
+
+ desde una imagen 1 a una imagen 2, la teoría indica que idealmente debe
+ cumplirse 
+\begin_inset Formula $M(x,y)=M_{1,2}(x,y)=-M_{2,1}(x,y)$
+\end_inset
+
+.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "arohbarjatya2004"
+
+\end_inset
+
+ Esta propiedad es utilizada en algoritmos de compresión de vídeo.
+ La justificación es la siguiente:
+\begin_inset Newline newline
+\end_inset
+
+Puesto que a la salida del algoritmo sin la mejora, como se mencionó en
+ el capítulo anterior, es 
+\begin_inset Formula $\hat{M}(x,y)=\hat{M}_{1,2}(x,y)=M_{1,2}(x,y)+E_{1,2}(x,y)$
+\end_inset
+
+, si calculamos la vuelta obtenemos 
+\begin_inset Formula $\hat{M}_{2,1}(x,y)=M_{2,1}(x,y)+E_{2,1}(x,y)$
+\end_inset
+
+.
+ Suponiendo que 
+\begin_inset Formula $E_{1,2}$
+\end_inset
+
+ y 
+\begin_inset Formula $E_{2,1}$
+\end_inset
+
+ son variables aleatorias de distribución 
+\begin_inset Formula $N(0,\sigma)$
+\end_inset
+
+, definimos 
+\begin_inset Formula $E(x,y)=\frac{E_{1,2}(x,y)-E_{2,1}(x,y)}{2}$
+\end_inset
+
+ de modo que 
+\begin_inset Formula $E\backsim N(0,\frac{\sigma}{2})$
+\end_inset
+
+.
+ De este modo, tomando como estimador del movimiento a 
+\begin_inset Formula $\hat{M}^{*}(x,y)=\hat{M}_{1,2}(x,y)-\hat{M}_{2,1}(x,y)=M(x,y)+E(x,y)$
+\end_inset
+
+ tenemos que 
+\begin_inset Formula $\hat{M}^{*}\backsim N(M,\frac{\sigma}{2})$
+\end_inset
+
+ es mejor estimador del movimiento que cualquiera de los dos sentidos por
+ separado.
+ 
+\end_layout
+
+\begin_layout Description
+Combinación
+\begin_inset space ~
+\end_inset
+
+de
+\begin_inset space ~
+\end_inset
+
+resultados: Una vez calculados los movimientos a partir de cada uno de los
+ sensores, se realiza un promedio ponderado de los sensores en función de
+ su fiabilidad.
+ Por ejemplo, para combinar sensores IR2 e IR4:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\hat{M}(x,y)=\frac{\hat{M}_{IR2}(x,y)*w_{IR2}+\hat{M}_{IR4}(x,y)*w_{IR4}}{w_{IR2}+w_{IR4}}
+\]
+
+\end_inset
+
+Donde 
+\begin_inset Formula $w_{IRN}$
+\end_inset
+
+es el peso que se le desea dar al sensor IRN y 
+\begin_inset Formula $\hat{M}_{IRN}(x,y)$
+\end_inset
+
+ es el vector resultado de correlacionar imágenes consecutivas del sensor
+ IRN.
+ El resultado tiene menos ruido puesto que al ocurrir un error de pareo
+ en uno de los sensores, es compensado por el otro.
+ Al ser un promedio de estimadores, su resultado tiene una dispersión menor
+ que cualquiera de ellos por separado, como ya fue demostrado en el ítem
+ anterior.
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Cálculo-de-trayectorias"
+
+\end_inset
+
+Cálculo de trayectorias
+\end_layout
+
+\begin_layout Standard
+Una vez calculados los desplazamientos por cada par de estados meteorológicos
+ consecutivos, es posible, dado un punto 
+\begin_inset Formula $p_{0}=(x_{0},y_{0})$
+\end_inset
+
+, estimar la trayectoria 
+\begin_inset Formula $T=\left\langle p_{0},p_{1},...,p_{n}\right\rangle $
+\end_inset
+
+ de una partícula virtual que viaja a través del área en estudio.
+ Puesto que en principio solo se dispone de 
+\begin_inset Formula $p_{0}$
+\end_inset
+
+, deben estimarse las posiciones de los puntos siguientes utilizando los
+ movimientos 
+\begin_inset Formula $\hat{M}_{j,k}$
+\end_inset
+
+ calculados por el algoritmo de pareo de bloques 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "arohbarjatya2004"
+
+\end_inset
+
+ explicado en el capítulo anterior.
+ A partir de esta información se estiman los puntos de la siguiente manera:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{p}_{k}=\begin{cases}
+p_{0} & k=0\\
+p_{k-1}+\hat{M}_{k-1,k}(p_{k-1}) & k\neq0
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Puesto que la información hasta este punto es discreta, para poder modelar
+ el movimiento de la partícula en un continuo y además poder realizar una
+ extrapolación para la predicción - que se verá en la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Predicción"
+
+\end_inset
+
+ - resulta conveniente utilizar una aproximación polinómica de grado 
+\begin_inset Formula $m$
+\end_inset
+
+ para poder obtener así una función continua de la posición en el tiempo.
+\end_layout
+
+\begin_layout Standard
+Se define:
+\begin_inset Formula 
+\begin{equation}
+p(t)=\left\langle x(t),y(t)\right\rangle \label{eq:p_cont_poly}
+\end{equation}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+x(t)=a_{0}+a_{1}t+\ldots+a_{m}t^{m}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+y(t)=b_{0}+b_{1}t+\ldots+b_{m}t^{m}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+y se calculan los coeficientes de los polinomios utilizando la técnicas
+ de mínimos cuadrados.
+ Se resuelve el sistema de ecuaciones:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left[\begin{array}{cccc}
+1 & t_{0} & \cdots & t_{0}^{m}\\
+1 & t_{1} & \cdots & t_{1}^{m}\\
+\vdots & \vdots & \ddots & \vdots\\
+1 & t_{n} & \cdots & t_{n}^{m}
+\end{array}\right]\left[\begin{array}{cc}
+a_{0} & b_{0}\\
+a_{1} & b_{1}\\
+\vdots & \vdots\\
+a_{m} & b_{m}
+\end{array}\right]=\left[\begin{array}{cc}
+x_{0} & y_{0}\\
+x_{1} & y_{1}\\
+\vdots & \vdots\\
+x_{n} & y_{n}
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Los resultados son finalmente dibujados con una biblioteca gráfica para
+ luego poder ser exhibidos en la aplicación web.
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Predicción"
+
+\end_inset
+
+Predicción
+\end_layout
+
+\begin_layout Standard
+Como ya se mencionó en la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Cálculo-de-trayectorias"
+
+\end_inset
+
+, las curvas de desplazamiento de las partículas a lo largo del tiempo pueden
+ ser utilizada para realizar una predicción mediante una extrapolación de
+ las mismas.
+ Además, se puede utilizar la imagen del último estado meteorológico para
+ construir un posible escenario futuro, desplazando bloques a partir de
+ ellas.
+\end_layout
+
+\begin_layout Standard
+El proceso de cálculo es el siguiente:
+\end_layout
+
+\begin_layout Itemize
+Se escoge:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Una imagen en un tiempo 
+\begin_inset Formula $t_{p}$
+\end_inset
+
+ a predecir
+\end_layout
+
+\begin_layout Itemize
+Un intervalo de tiempo 
+\begin_inset Formula $[t_{i},t_{f}]$
+\end_inset
+
+ que determinará un conjunto de imágenes en tiempos 
+\begin_inset Formula $t_{i}\leq t_{0}<t_{1}<\ldots<t_{n}\leq t_{f}<t_{p}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Un conjunto de puntos 
+\begin_inset Formula $\left\{ p_{1},\ldots,p_{k}\right\} $
+\end_inset
+
+ distribuidos homogéneamente sobre la zona abarcada por el sensor.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Se calculan las trayectorias del conjunto de puntos, tal como fue descripto
+ en la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Cálculo-de-trayectorias"
+
+\end_inset
+
+.
+ Obteniéndose así un conjunto de pares de polinomios como los de la expresión
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:p_cont_poly"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Se evalúan dichos polinomios en 
+\begin_inset Formula $t_{p}$
+\end_inset
+
+, obteniéndose así los puntos finales en el tiempo a predecir.
+\end_layout
+
+\begin_layout Itemize
+Se desplaza un área de 
+\begin_inset Formula $m\times m$
+\end_inset
+
+ píxeles con centro 
+\begin_inset Formula $p(t_{f})$
+\end_inset
+
+ hacia 
+\begin_inset Formula $p(t_{p})$
+\end_inset
+
+ por cada trayectoria.
+\end_layout
+
+\begin_layout Itemize
+Se promedia cada área con cada una de las que se le superpongan para así
+ lograr la luminosidad final de cada zona a predecir.
+\end_layout
+
+\begin_layout Subsubsection
+Lenguaje de programación y bibliotecas
+\end_layout
+
+\begin_layout Standard
+La implementación fue realizada en el lenguaje de programación Python 3
+\begin_inset CommandInset citation
+LatexCommand cite
+key "python2016"
+
+\end_inset
+
+ utilizando las bibliotecas Numeric Python (NumPy)
+\begin_inset CommandInset citation
+LatexCommand cite
+key "numpy2016"
+
+\end_inset
+
+ y Python Open Computing Language (PyOpenCL)
+\begin_inset CommandInset citation
+LatexCommand cite
+key "pyopencl2016"
+
+\end_inset
+
+.
+ Las consideraciones para esto fueron las siguientes:
+\end_layout
+
+\begin_layout Description
+Python
+\begin_inset space ~
+\end_inset
+
+3
+\begin_inset space ~
+\end_inset
+
++
+\begin_inset space ~
+\end_inset
+
+Numpy
+\begin_inset CommandInset citation
+LatexCommand cite
+key "python2016,numpy2016"
+
+\end_inset
+
+: ​Esta elección es una de las más convenientes para computación científica
+ debido a su alto nivel, facilidad de implementación, herramientas desarrolladas
+ por sobre las mismas, disponibilidad de documentación.
+ La eficiencia no se ve afectada por ser de alto nivel puesto que las operacione
+s matriciales están implementadas en C 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "briankernighandennisritchie1978"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+PyOpenCL
+\begin_inset CommandInset citation
+LatexCommand cite
+key "pyopencl2016,opencl2016"
+
+\end_inset
+
+: ​Esta biblioteca resultó muy útil puesto que permite paralelizar operaciones
+ sobre arreglos bidimensionales, es decir, imágenes.
+ El algoritmo de pareo de bloques está implementado como un kernel.
+ Esto permite que los miles de bloques de cada imagen sean calculados en
+ paralelo, opcionalmente en una GPU, que dispone de una gran cantidad de
+ procesadores para este propósito.
+\end_layout
+
+\begin_layout Subsection
+Arquitectura
+\end_layout
+
+\begin_layout Standard
+El diagrama de la arquitectura implementada es el de la figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:arquitectura"
+
+\end_inset
+
+.
+ A continuación se entrará en detalle sobre las características y funciones
+ de cada componente de la misma.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/arquitectura.png
+	scale 25
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:arquitectura"
+
+\end_inset
+
+Arquitectura de la aplicación
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Base de datos
+\end_layout
+
+\begin_layout Standard
+Se utiliza una base de datos relacional para almacenar información tanto
+ sobre los estados meteorológicos obtenidos como de algunos resultados parciales
+ como el cálculo del movimiento para así poder obtener representaciones
+ rápidamente.
+\end_layout
+
+\begin_layout Standard
+El motor escogido es PostgreSQL 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "postgresql2016"
+
+\end_inset
+
+ y es utilizado a través de SQLAlchemy 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "sqlalchemy2016"
+
+\end_inset
+
+ como ORM.
+\end_layout
+
+\begin_layout Standard
+El esquema de la base de datos está representado en el diagrama de entidad-relac
+ión de la figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:db_erdiag"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/EsquemaBD.png
+	scale 25
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:db_erdiag"
+
+\end_inset
+
+Diagrama de entidad-relación del esquema de la base de datos.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Obtención-de-imágenes"
+
+\end_inset
+
+Obtención de imágenes
+\end_layout
+
+\begin_layout Standard
+La obtención de imágenes se realiza mediante un servicio simple hecho en
+ Python que descarga periódicamente imágenes satelitales del servidor de
+ GOES-NASA 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "goesnasa2016"
+
+\end_inset
+
+ por medio de FTP y/o HTTP.
+ En particular, el satélite que se utiliza es el GOES­13 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "goeseast2016"
+
+\end_inset
+
+ por ser el que provee las imágenes de Argentina.
+ El mismo disponibiliza una nueva imagen cada aproximadamente 30 minutos.
+ El servicio chequea en ese intervalo de tiempo si hay disponible alguna
+ nueva imagen, en cuyo caso la descarga y la guarda en una base de datos
+ para ser luego consumida por el resto de los servicios.
+\end_layout
+
+\begin_layout Subsubsection
+Servicios de cálculo: Movimiento y predicciones
+\end_layout
+
+\begin_layout Standard
+Estos servicios realizan polling sobre la base de datos con un intervalo
+ de aproximadamente un minuto, configurable, lo que no es demasiado dados
+ los tiempos de aparición de nuevas imágenes, mencionados en 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Obtención-de-imágenes"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+Movimiento: Calcula los movimientos estimados a partir de un par de imágenes.
+ Normalmente una previamente existente y una nueva.
+ Consiste en la implementación del algoritmo especificada en la sección
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Algoritmo"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+Predicciones: Calcula predicciones a partir de nuevos datos.
+ Se detalla más al respecto en la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Predicción"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+API
+\end_layout
+
+\begin_layout Standard
+Se desarrolló una interfaz REST/JSON 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rest2016,json2016"
+
+\end_inset
+
+ para disponibilizar los distintos resultados a cualquier tipo de servicio
+ que requiera consumirlos.
+ En la misma se provee:
+\end_layout
+
+\begin_layout Itemize
+Todas las imágenes recolectadas en distintos tipos de sensor, en formato
+ PNG 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "pngrfc2016"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Animaciones realizadas a partir de la concatenación de estas imágenes, en
+ formato GIF 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gifrfc2016"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Mapas de las regiones analizadas.
+\end_layout
+
+\begin_layout Itemize
+Capas de movimiento estimado a partir de un intervalo de tiempo deseado,
+ en formato PNG 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "pngrfc2016"
+
+\end_inset
+
+ con transparencia.
+\end_layout
+
+\begin_layout Itemize
+Animaciones del recorrido de puntos estimado a partir del cálculo del movimiento
+, en formato GIF 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gifrfc2016"
+
+\end_inset
+
+, superpuestas al tipo de sensor que le fuere indicado.
+\end_layout
+
+\begin_layout Subsubsection
+Aplicación web
+\end_layout
+
+\begin_layout Standard
+La forma provista para visualizar la información calculada por el backend
+ es por medio de una aplicación web hecha en Java 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "java2016"
+
+\end_inset
+
+, en particular usando el framework Wicket 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "wicket2016"
+
+\end_inset
+
+ junto con Spring MVC 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "spring2016"
+
+\end_inset
+
+.
+ La aplicación se comunica con el backend, consumiendo la API REST 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rest2016"
+
+\end_inset
+
+ que este expone, utilizando para ello otro framework: Java Jersey 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "javajersey2016"
+
+\end_inset
+
+.
+ La misma es accesible públicamente en http://clouds.it.itba.edu.ar/ y está
+ desplegada en un servidor del ITBA utilizando Apache Tomcat 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "tomcat2016"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+Descripción
+\end_layout
+
+\begin_layout Standard
+La aplicación consta de tres pantallas a las cuales se puede acceder utilizando
+ el menú superior.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/web1.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:web-main"
+
+\end_inset
+
+Aplicación web - Página principal.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+En la pantalla ‘Principal’ (Figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:web-main"
+
+\end_inset
+
+) se pueden visualizar tres paneles: uno utilizado para filtrar el contenido
+ de los paneles inferiores, otro donde se tiene una animación sobre la que
+ se dibujan flechas azules y rojas -indicando la dirección y sentido de
+ los vientos-, y por último se muestra el último estado de la selección,
+ su predicción y la diferencia entre ambos, a fin de poder comparar qué
+ tanto se ha acertado en la predicción.
+\end_layout
+
+\begin_layout Standard
+A su vez el panel central muestra una descripción del significado de las
+ distintas flechas junto con dos botones que permiten ocultarlas en caso
+ de que se desee visualizar mejor la animación.
+ Un tercer botón permite guardar la selección que se está observando en
+ el momento actual, archivando el estado que está seleccionado en el momento
+ para poder recuperarlo luego.
+ Este estado se guarda en una cookie del explorador y puede ser recuperado
+ accediendo a la pantalla de Estados guardados.
+ En la cookie se guarda lo necesario para poder recuperar el estado guardado,
+ es decir, la fecha y hora, el canal, la cantidad de estados y si se eligió
+ mejorar el contraste o no.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/Web2.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:web-saved-states"
+
+\end_inset
+
+Aplicación web - Estados guardados.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+En la pantalla de ‘Estados guardados’ (Figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:web-saved-states"
+
+\end_inset
+
+) se lista la información de los estados que fueron guardados desde la pantalla
+ Principal.
+ Se puede observar la fecha y hora, el canal, la cantidad de pasos, si se
+ eligió mejorar el contraste o no y por último un botón que permite recuperarlo.
+ Al presionar este botón, volvemos a la pantalla principal, donde podremos
+ ver el estado que ha sido guardado.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/Web3.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:web-credits"
+
+\end_inset
+
+Aplicación web - Información sobre los integrantes.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+La última pantalla de la aplicación (Figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:web-credits"
+
+\end_inset
+
+) contiene información de contacto del equipo de desarrollo junto con un
+ botón para descargar una copia de este informe en formato PDF.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Experimentos y resultados
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section

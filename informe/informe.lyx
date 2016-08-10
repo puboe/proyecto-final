@@ -616,7 +616,7 @@ key "waynebreskyjaimedaniels2006"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -878,12 +878,256 @@ Finalmente, puede resolverse el sistema sobredeterminado con algún método
  como el de mínimos cuadrados.
 \end_layout
 
+\begin_layout Standard
+Solamente del enunciado del algoritmo se desprenden dos problemas:
+\end_layout
+
+\begin_layout Standard
+Debido a la localidad del sistema de ecuaciones en diferencias, la frecuencia
+ de las imágenes debe ser elevada.
+ Es porque no se dispone de esta frecuencia de imágenes satelitales que
+ este método fue descartado.
+ Adicionalmente puede verse que solamente el entorno del punto es utilizado
+ como dato para estimar la dirección de movimiento lo que da origen al problema
+ de la apertura, que se analizará más adelante.
+\end_layout
+
 \begin_layout Subsection
 Problema de la apertura
 \end_layout
 
+\begin_layout Standard
+Al poseer únicamente información sobre un punto y su entorno, es imposible
+ inferir el movimiento global del objeto.
+ El problema es universalmente conocido y puede ejemplificarse de manera
+ muy simple: tan sólo basta colocar un cartón con un pequeño agujero sobre
+ una diagonal, deplazarlo perpendicularmente a la misma e intentar percibir
+ la dirección de movimiento de la apertura (Figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:aperture"
+
+\end_inset
+
+).
+ Se notará que hacerlo sin referencias del entorno no es posible.
+\end_layout
+
+\begin_layout Standard
+De la misma manera, un algoritmo que solamente considera información local,
+ píxel a píxel, o bloque a bloque, no puede ofrecer como resultado información
+ sobre el desplazamiento global del objeto que se está analizando.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/apertura.png
+	lyxscale 25
+	scale 25
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:aperture"
+
+\end_inset
+
+Problema de la apertura.
+ Únicamente a partir del movimiento de la diagonal a través del agujero
+ realizado en el cartón es imposible determinar el movimiento del cartón
+ respecto al fondo.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lucas y Kanade 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lucas1981iterative"
+
+\end_inset
+
+ sugieren aumentar la cantidad de píxeles utilizada en la regresión lineal.
+ Para el caso del algoritmo de pareo de bloques equivale a agrandar el tamaño
+ del bloque.
+ De todas maneras, las nubes conforman un cuerpo no rígido, que puede sufrir
+ expansiones o contracciones.
+ En estos casos resulta interesante analizar el movimiento local, puesto
+ que, en la realidad los procesos meteorológicos no son homogéneos y están
+ plagados de variaciones locales.
+\end_layout
+
 \begin_layout Subsection
-Algoritmo de pareo de bloques
+Algoritmo de pareo de bloques 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "arohbarjatya2004"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Dado un conjunto de píxeles 
+\begin_inset Formula $B_{1}=\left\{ (x,y)/x\epsilon\left[x_{1}-\Delta x,x_{1}+\Delta x\right]\wedge y\epsilon\left[y_{1}-\Delta y,y_{1}+\Delta y\right]\right\} $
+\end_inset
+
+ , de centro 
+\begin_inset Formula $p_{1}=\left(x_{1},y_{1}\right)$
+\end_inset
+
+, que se denominará bloque, se busca encontrar 
+\begin_inset Formula $B_{2}$
+\end_inset
+
+ , dentro del siguiente cuadro, con centro en 
+\begin_inset Formula $p_{2}=(x_{2},y_{2})$
+\end_inset
+
+ tal que 
+\begin_inset Formula $E(B_{1},B_{2})$
+\end_inset
+
+ sea mínima.
+ Siendo 
+\begin_inset Formula $E(B_{1},B_{2})$
+\end_inset
+
+ una medida del error entre los píxeles de ambos bloques.
+ Para garantizar la ocurrencia de un mínimo, se consideran posibilidades
+ únicamente dentro de una ventana de búsqueda, de tamaño parametrizable,
+ que representa el entorno del punto.
+ (Figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:motion"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+Definimos entonces:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{M}(x_{1},y_{1})=(x_{2}\text{­}x_{1},y_{2}\text{­}y_{1})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+El estimador del desplazamiento, dato del cual se puede derivar, por ejemplo,
+ la velocidad de desplazamiento en dicho punto, 
+\begin_inset Formula $\vec{v}=\frac{\hat{M}}{\triangle t}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/motion.png
+	lyxscale 25
+	scale 25
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:motion"
+
+\end_inset
+
+1) 
+\begin_inset Formula $B_{1}$
+\end_inset
+
+ centrado en una característica de la imagen 1.
+ 2) Se comparan bloques 
+\begin_inset Formula $B_{2}$
+\end_inset
+
+ dentro de la ventana hasta encontrar el de mínimo error, dentro de la imagen
+ 2.
+ 3) Queda determinado el vector 
+\begin_inset Formula $M(x_{1},y_{1})$
+\end_inset
+
+ de movimiento.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+La medida del error E(x, y) utilizada fue el error cuadrático de la diferencia
+ píxel a píxel dentro del bloque:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+E(B_{1},B_{2})=\sum_{i,j}\left(I_{1}(x_{1}+i,y_{1}+j)\text{­}I_{2}(x_{2}+i,y_{2}+j)\right)^{2},\, i\epsilon\left[-\triangle x,\triangle x\right],\, j\epsilon\left[-\triangle y,\triangle y\right]
+\]
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -1597,15 +1841,23 @@ key "sqlalchemy2016"
 \end_layout
 
 \begin_layout Standard
-El esquema de la base de datos está representado en el diagrama de entidad-relac
-ión de la figura 
+El esquema de la base de datos está representado en el diagrama UML de la
+ figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:db_uml"
+
+\end_inset
+
+.
+ Se incluye adicionalmente un diagrama de entidad-relación (Figura 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:db_erdiag"
 
 \end_inset
 
-.
+) para una mejor comprensión del esquema.
 \end_layout
 
 \begin_layout Standard
@@ -1614,6 +1866,48 @@ placement H
 wide false
 sideways false
 status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/db_uml.png
+	lyxscale 75
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:db_uml"
+
+\end_inset
+
+Diagrama UML del esquema de la base de datos.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
 
 \begin_layout Plain Layout
 \align center

@@ -93,7 +93,7 @@ public class MainPage extends AbstractWebPage {
 		loadProperties();
 		buildPage(dateTime, steps, channel, enhanced);
 		stateDateInfoModel = infoString(steps, session.firstDate(), session.lastDate(), channel, enhanced);
-		ApplicationSession.get().stateFilterModel(stateFilterModel = new StateFilterModel(channel, dateTime.toDate(), steps, enhanced));
+		ApplicationSession.get().stateFilterModel(stateFilterModel = filtermodel);
 	}
 	
 	@Override

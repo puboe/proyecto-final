@@ -1,7 +1,6 @@
 package ar.com.itba.nub3s.web.page;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.DownloadLink;
@@ -33,7 +32,9 @@ public class AboutPage extends AbstractWebPage {
 				+ " Para obtener los mejores resultados recomendamos seleccionar entre 5 y 15 pasos, de manera tal que no falte, ni se sobrecargue"
 				+ " de información.<br/><br/>Para más detalles sobre el proyecto, puede descargar el informe completo haciendo clink en el botón inferior,"
 				+ " en dónde, en el capítulo 4, sección 1.2 (4.1.2), se explica con detalle el proceso que se realiza.")).setEscapeModelStrings(false));
-		File file = new File("informe.pdf");
+		ClassLoader classLoader = getClass().getClassLoader();
+		File file = new File(classLoader.getResource("informe.pdf").getFile());
 		add(new DownloadLink("pdfDownloadLink", file, "informe.pdf"));
 	}
 }
+

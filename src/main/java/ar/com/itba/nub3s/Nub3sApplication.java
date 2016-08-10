@@ -10,7 +10,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
 import ar.com.itba.nub3s.web.ApplicationSession;
+import ar.com.itba.nub3s.web.page.AboutPage;
 import ar.com.itba.nub3s.web.page.MainPage;
+import ar.com.itba.nub3s.web.page.SavedStatesPage;
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 
@@ -28,6 +30,9 @@ public class Nub3sApplication extends WebApplication {
 		super.init();
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 		Bootstrap.install(this, new BootstrapSettings());
+		mountPage("/main", MainPage.class);
+		mountPage("/saved", SavedStatesPage.class);
+		mountPage("/about", AboutPage.class);
 	}
 	
 	@Override

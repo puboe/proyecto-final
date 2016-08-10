@@ -22,6 +22,7 @@ import com.google.common.collect.Sets;
 import ar.com.itba.nub3s.model.entity.Channel;
 import ar.com.itba.nub3s.model.entity.SavedState;
 import ar.com.itba.nub3s.web.panel.StateFilterPanel.StateFilterModel;
+import ar.com.itba.nub3s.web.util.Models;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 @SuppressWarnings("serial")
@@ -46,7 +47,7 @@ public class SavedStatesPage extends AbstractWebPage {
 				final SavedState savedState = (SavedState) item.getModelObject();
 				DateTime dateTime = savedState.dateTime();
 				item.add(new Label("dateTime", dateTime.toString("dd-MM-yyyy HH:mm")));
-				item.add(new Label("channel", savedState.channel().name()));
+				item.add(new Label("channel", Models.translate(savedState.channel(), this)));
 				item.add(new Label("steps", savedState.steps()));
 				item.add(new Label("enhanced", savedState.enhanced() ? "Sí" : "No"));
 				item.add(new Link<Void>("getState") {

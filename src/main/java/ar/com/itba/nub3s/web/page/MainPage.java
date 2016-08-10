@@ -157,7 +157,13 @@ public class MainPage extends AbstractWebPage {
 				target.add(feedback);
 			}
 		});
-		add(stateDateInfo, prediction, predictionMap, animation, trails, animationMap, arrows, lastState, difference);
+		add(stateDateInfo, prediction, predictionMap, animation, trails, animationMap, arrows, lastState, difference,
+				new Label("brief",Model.of("Aquí puede visualizar una animación generada por los estados que se obtuvieron como "
+						+ "resultado de su búsqueda.<br/><br/>Las flechas azules indican la dirección y el sentido en la que se"
+						+ " mueven las nubes.<br/><br/>Las flechas rojas se muestran donde hay mayor desplazamiento.<br/><br/>"
+						+ "Puede ocultar ambas flechas utilizando los botones en la	parte superior derecha de la animación."
+						+ "<br/><br/>Recomendamos seleccionar entre 5 y 15 estados para obtener resultados donde no falte, "
+						+ "ni se sobrecargue de información.")).setEscapeModelStrings(false));
 		add(new StateFilterPanel("filterPanel", stateFilterModel, this) {
 			@Override
 			public void onSearch(AjaxRequestTarget target) {

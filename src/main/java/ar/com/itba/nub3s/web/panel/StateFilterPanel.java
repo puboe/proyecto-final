@@ -35,12 +35,7 @@ public abstract class StateFilterPanel extends Panel {
 			}
 		};
 		form
-			.add(new EnumDropDownChoice("channel", resourceComponent, Channel.values()) {
-				@Override
-				public boolean isNullValid() {
-					return false;
-				};
-			}.setDefaultModel(model.channelModel()))
+			.add(new EnumDropDownChoice("channel", resourceComponent, Channel.values(), false).setDefaultModel(model.channelModel()))
 			.add(new DateTimeField("to", model.toModel()){
 				@Override
 				protected boolean use12HourFormat() {

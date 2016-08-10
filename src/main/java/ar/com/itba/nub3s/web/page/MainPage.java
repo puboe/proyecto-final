@@ -45,6 +45,7 @@ import ar.com.itba.nub3s.web.panel.StateFilterPanel.StateFilterModel;
 import ar.com.itba.nub3s.web.res.ApplicationResources;
 import ar.com.itba.nub3s.web.util.DateTimeUtils;
 import ar.com.itba.nub3s.web.util.DiskImageResource;
+import ar.com.itba.nub3s.web.util.Models;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 @SuppressWarnings("serial")
@@ -345,7 +346,8 @@ public class MainPage extends AbstractWebPage {
 		String[] fromDateAndTime = DateTimeUtils.parseDateTimeString(firstDate);
 		String[] toDateAndTime = DateTimeUtils.parseDateTimeString(lastDate);
 		return Model.of("Mostrando " + steps + " cuadros desde el " + fromDateAndTime[0] + " a las " +
-			fromDateAndTime[1] + " hasta el " + toDateAndTime[0] + " a las " + toDateAndTime[1] + " en el canal " + channel.name() +
+			fromDateAndTime[1] + " hasta el " + toDateAndTime[0] + " a las " + toDateAndTime[1] + 
+			" en el canal " + Models.translate(channel, this).getObject() +
 			(enhanced ? " con contraste mejorado." : "."));
 	}
 }

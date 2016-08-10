@@ -2,7 +2,7 @@
 \lyxformat 474
 \begin_document
 \begin_header
-\textclass article
+\textclass extbook
 \begin_preamble
 \usepackage{url}
 \end_preamble
@@ -29,7 +29,16 @@
 \index_command default
 \paperfontsize default
 \spacing single
-\use_hyperref false
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
 \papersize default
 \use_geometry true
 \use_package amsmath 1
@@ -93,13 +102,6 @@ Pomar, Federico
 \end_layout
 
 \begin_layout Standard
-\begin_inset Newpage newpage
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 \begin_inset CommandInset toc
 LatexCommand tableofcontents
 
@@ -108,18 +110,11 @@ LatexCommand tableofcontents
 
 \end_layout
 
-\begin_layout Standard
-\begin_inset Newpage newpage
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
+\begin_layout Chapter
 Introducción
 \end_layout
 
-\begin_layout Section
+\begin_layout Chapter
 Estado del arte
 \end_layout
 
@@ -129,7 +124,7 @@ En este capítulo se presentará el estado del arte, tanto teórico como prácti
  Estudiaremos herramientas desarrolladas con un propósito similar.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 Plataformas similares
 \end_layout
 
@@ -141,7 +136,7 @@ s.
  Además se incluye un breve análisis de su funcionalidad y de su interfaz.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Servicio Meteorológico Nacional 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -158,7 +153,14 @@ El servicio meteorológico nacional posee una plataforma en la que se pueden
 nario GOES­13.
  Dichas imágenes se encuentran espaciadas por un intervalo de aproximadamente
  una hora entre cada una.
- La interfaz no se destaca por ser del todo amigable, aunque resulta bastante
+ Como puede verse en la figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:smn"
+
+\end_inset
+
+, la interfaz no se destaca por ser del todo amigable, aunque resulta bastante
  intuitiva.
  A la izquierda de la pantalla se pueden elegir distintas zonas y el tipo
  de imágenes disponibles.
@@ -188,6 +190,12 @@ status collapsed
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:smn"
+
+\end_inset
+
 Captura de la página de visualización de imágenes infrarrojas del SMN [fecha
  de consulta: 7 de Julio de 2016].
  Disponible en: <http://www.smn.gov.ar/vmsr/principal.php>
@@ -234,7 +242,7 @@ Otra característica negativa de la interfaz es que cuando está seleccionada
  sentido.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Nullschool Earth 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -254,8 +262,16 @@ Esta plataforma brinda acceso a multitud de pronósticos, como por ejemplo
 \begin_layout Standard
 La interfaz de usuario resulta muy vistosa, aunque en principio no es demasiado
  intuitiva.
- Las opciones de configuración se encuentran un poco escondidas, teniendo
- que hacer click en el logo en la parte inferior izquierda para que aparezcan.
+ En la figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:nullschool"
+
+\end_inset
+
+ se ve que las opciones de configuración se encuentran un poco escondidas,
+ teniendo que hacer click en el logo en la parte inferior izquierda para
+ que aparezcan.
  Las mismas son muy completas ya que se puede cambiar desde la altitud de
  los vientos que se muestran hasta incluso distintas proyecciones del mapa
  si así se deseara.
@@ -283,6 +299,12 @@ status collapsed
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:nullschool"
+
+\end_inset
+
 Captura del mapa de Nullschool Earth, sector Argentina.
  [fecha de consulta: 7 de Julio de 2016].
  Disponible en: <https://earth.nullschool.net/>
@@ -315,7 +337,7 @@ Como aspecto mejorable, se puede mencionar que el uso de colores no es demasiado
  Las mismas no están numeradas lo que no ayuda a su fácil comprensión.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Windyty 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -333,7 +355,14 @@ Al igual que la anterior esta plataforma brinda acceso a multitud de pronóstico
 \end_layout
 
 \begin_layout Standard
-La interfaz es muy vistosa y simple.
+La interfaz es muy vistosa y simple (Figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:windyty"
+
+\end_inset
+
+).
  Arriba a la izquierda muestra un pronóstico climático para los próximos
  3 días de la ubicación actual, arriba a la derecha muestra una escala de
  colores, abajo a la derecha se observa el menú, el cual ofrece distintas
@@ -371,6 +400,12 @@ status collapsed
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:windyty"
+
+\end_inset
+
 Captura del mapa de Nullschool Earth, sector Argentina.
  [fecha de consulta: 7 de Julio de 2016].
  Disponible en: <https://earth.nullschool.net/>
@@ -406,7 +441,7 @@ Como aspecto mejorable, al igual que en la plataforma anterior, se puede
  a mayor.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Trabajos académicos
 \end_layout
 
@@ -478,12 +513,11 @@ El trabajo analiza la factibilidad de medir movimientos atmosféricos utilizando
 \end_layout
 
 \begin_layout Standard
-Los resultados sugieren que el método es una alternativa viable únicamente
- si se dispone de una alta frecuencia de imágenes, que no es lo que ocurre
- en el caso del presente trabajo.
+Los resultados sugieren que el método no es una alternativa viable puesto
+ que no se dispone de una alta frecuencia de imágenes.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 Conclusiones
 \end_layout
 
@@ -515,14 +549,7 @@ key "nullschoolearth2016"
  Una de las metas del presente trabajo es combinar lo mejor de ambos mundos.
 \end_layout
 
-\begin_layout Standard
-\begin_inset Newpage newpage
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
+\begin_layout Chapter
 Marco Teórico
 \end_layout
 
@@ -532,38 +559,412 @@ En este capítulo se introducirán los temas y conceptos necesarios para la
  en la resolución del problema.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 Flujo óptico
 \end_layout
 
-\begin_layout Subsubsection
-Ecuación del flujo óptico
-\end_layout
+\begin_layout Standard
+El flujo óptico es el patrón de movimiento de los objetos a través del campo
+ visual del observador.
+ Se introduce por primera vez en el campo de la psicología para describir
+ la percepción del movimiento en la corteza visual 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gibson1950perception"
 
-\begin_layout Subsubsection
-Algoritmo de Lucas y Kanade
-\end_layout
+\end_inset
 
-\begin_layout Subsubsection
-Problema de la apertura
-\end_layout
+.
+ Puede describirse matemáticamente como un campo vectorial sobre un espacio
+ de dos dimensiones (Figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:optical_flow"
 
-\begin_layout Subsubsection
-Algoritmo de pareo de bloques
-\end_layout
+\end_inset
 
-\begin_layout Subsection
-Canales infrarrojos
+).
 \end_layout
 
 \begin_layout Standard
-\begin_inset Newpage newpage
+Existen dos técnicas fundamentales para la estimación del flujo óptico a
+ partir de una secuencia de imágenes: la regresión del vector velocidad
+ a partir de la ecuación del flujo óptico, utilizando, por ejemplo, el algoritmo
+ de Lucas y Kanade 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lucas1981iterative"
+
+\end_inset
+
+; así como la correlación de características 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "waynebreskyjaimedaniels2006"
+
+\end_inset
+
+.
+ Para el propósito de este trabajo se utilizará el campo vectorial del para
+ estimar la rapidez y dirección de las masas de aire bajo la suposición
+ de que el movimiento de las características nubosas es representativo de
+ estos parámetros.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/Opticfloweg.png
+	lyxscale 25
+	scale 80
+
 \end_inset
 
 
 \end_layout
 
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:optical_flow"
+
+\end_inset
+
+Descripción gráfica del flujo óptico:
+\begin_inset Newline newline
+\end_inset
+
+1) Un sujeto posicionado en el interior de una esfera.
+\begin_inset Newline newline
+\end_inset
+
+2) La esfera rota sobre su eje de profundidad, desde el punto de vista del
+ sujeto.
+\begin_inset Newline newline
+\end_inset
+
+3) Campo vectorial que indica el desplazamiento en un diferencial de tiempo
+ de cada uno de los puntos de la esfera, proyectados en el campo visual
+ del observador.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Ecuación-del-flujo"
+
+\end_inset
+
+Ecuación del flujo óptico 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "beauchemin1995computation"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+La ecuación del flujo óptico o ecuación de constancia de brillo se basa
+ en la hipótesis de la conservación de la intensidad luminosa emitida o
+ reflejada por un objeto en movimiento 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "beauchemin1995computation"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+I(x,y,t)\thickapprox I(x+\varDelta x,y+\varDelta y,t+\varDelta t)\label{eq:optical_flow}
+\end{equation}
+
+\end_inset
+
+Donde 
+\begin_inset Formula $I(x,y,t)$
+\end_inset
+
+ es la intensidad luminosa en cada punto de la imagen a lo largo del espacio,
+ y el tiempo, puesto que se está hablando de movimiento.
+ Se introduce esta ecuación puesto que es condición necesaria para el método
+ de Lucas y Kanade 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lucas1981iterative"
+
+\end_inset
+
+, y también lo será para el funcionamiento de la técnica que se utilizará
+ en este trabajo.
+ Sin embargo, se encontrarán condiciones meteorológicas que lo violan, por
+ ejemplo, precipitaciones rápidas o formaciones de nubes repentinas.
+ Estos detalles se analizarán más adelante.
+\end_layout
+
+\begin_layout Subsection
+Algoritmo de Lucas y Kanade 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lucas1981iterative"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Uno de los algoritmos más mencionados en la bibliografía para la determinación
+ del flujo óptico es el de Lucas y Kanade 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lucas1981iterative"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+A partir de la ecuación 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:optical_flow"
+
+\end_inset
+
+ presentada en la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Ecuación-del-flujo"
+
+\end_inset
+
+ se puede derivar la siguiente expresión:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vec{v}\cdot\nabla I^{T}=-\frac{\partial I}{\partial t}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Donde 
+\begin_inset Formula $I(x,y,t)$
+\end_inset
+
+ es la intensidad de la imagen en función del tiempo, 
+\begin_inset Formula $\nabla I=\left(\frac{\partial I}{\partial x},\frac{\partial I}{\partial y}\right)$
+\end_inset
+
+ es el gradiente de 
+\begin_inset Formula $I$
+\end_inset
+
+ y
+\begin_inset Formula $\vec{v}$
+\end_inset
+
+ es la velocidad de desplazamiento de un punto de la imagen.
+ Discretizando la ecuación se tiene:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vec{v}\cdot\left(I_{x},I_{y}\right)^{T}=-I_{t}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Donde 
+\begin_inset Formula $I_{x}$
+\end_inset
+
+, 
+\begin_inset Formula $I_{y}$
+\end_inset
+
+ e 
+\begin_inset Formula $I_{t}$
+\end_inset
+
+, son diferencias discretas de la imagen.
+ Si adicionalmente se quiere calcular 
+\begin_inset Formula $\vec{v}$
+\end_inset
+
+ a considerando datos del entorno del punto, se puede hacer mediante la
+ resolución del sistema:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left[\begin{array}{cc}
+I_{x}(q_{1}) & I_{y}(q_{2})\\
+I_{x}(q_{2}) & I_{y}(q_{2})\\
+\vdots & \vdots\\
+I_{x}(q_{n}) & I_{y}(q_{n})
+\end{array}\right]\left[\begin{array}{c}
+v_{x}\\
+v_{y}
+\end{array}\right]=\left[\begin{array}{c}
+-I_{t}(q_{1})\\
+-I_{t}(q_{2})\\
+\vdots\\
+-I_{t}(q_{n})
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Donde 
+\begin_inset Formula $q_{1},q_{2},\ldots,q_{n}$
+\end_inset
+
+con 
+\begin_inset Formula $q_{\cdot}=(x_{\cdot},y_{\cdot})$
+\end_inset
+
+ pertenecen al entorno del punto donde se desea calcular el vector 
+\begin_inset Formula $\vec{v}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Finalmente, puede resolverse el sistema sobredeterminado con algún método
+ como el de mínimos cuadrados.
+\end_layout
+
+\begin_layout Subsection
+Problema de la apertura
+\end_layout
+
+\begin_layout Subsection
+Algoritmo de pareo de bloques
+\end_layout
+
 \begin_layout Section
+Canales infrarrojos
+\end_layout
+
+\begin_layout Standard
+El satélite sensa energía electromagnética de cinco diferentes longitudes
+ de onda.
+ Las más utilizadas en pronósticos del clima son la infrarroja y la visible.
+\end_layout
+
+\begin_layout Standard
+En el caso de los canales infrarrojo, el satélite sensa energía como calor.
+ La superficie de la Tierra, junto con las nubes y la atmósfera absorben
+ alrededor de la mitad de la energía solar entrante.
+ Parte de esta energía absorbida es luego re­emitida como calor.
+ Este calor es captado por los diferentes canales infrarrojos del satélite.
+\end_layout
+
+\begin_layout Standard
+Los canales utilizados en este trabajo son los siguientes:
+\end_layout
+
+\begin_layout Description
+IR2
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $(3.9\mu m)$
+\end_inset
+
+: Infrarrojo de longitud de onda corta, la mayoría de la energía sensada
+ es emitida por la superficie de la Tierra y las nubes debido a su temperatura.
+ Durante el día ocurren reflejos de una parte de la radiación solar causando
+ efectos no deseados en la imagen.
+\end_layout
+
+\begin_layout Description
+IR3
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $(6.7\mu m)$
+\end_inset
+
+: En este canal, la energía emitida por la superficie de la tierra es prácticame
+nte nula.
+ Casi la totalidad es emitida por las capas medias de la atmósfera, con
+ excepción de las porciones nubladas de la imagen donde la energía proviene
+ de los topes de las nubes.
+ Este canal también es llamado de vapor de agua ya que éste es el principal
+ constituyente de las capas de las que proviene la mayoría de la radiación
+ en esta longitud de onda, por lo tanto la temperatura de las mismas (y
+ por consiguiente la cantidad radiación que emiten) depende de la cantidad
+ de vapor de agua presente.
+\end_layout
+
+\begin_layout Description
+IR4
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $(10.5\mu m)$
+\end_inset
+
+: Infrarrojo de longitud de onda larga, la mayoría de la energía es emitida
+ por la superficie de la tierra o bien los topes nubosos.
+ La emisión de radiación por parte de la atmósfera en este espectro es mínima.
+\end_layout
+
+\begin_layout Standard
+Una de las principales ventajas de los canales infrarrojos por sobre el
+ visible es que pueden captar energía durante la noche, por lo que estas
+ imágenes están disponibles durante las 24 horas del día.
+\end_layout
+
+\begin_layout Chapter
 Implementación
 \end_layout
 
@@ -583,7 +984,7 @@ En segundo lugar se hablará sobre los detalles de arquitectura, pasando
  por las diversas componentes que la constituyen.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:Algoritmo"
@@ -602,7 +1003,7 @@ El algoritmo desarrollado es una variante del algoritmo de pareo de bloques,
  de una imagen por hora, en promedio.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Variantes
 \end_layout
 
@@ -639,10 +1040,14 @@ de
 \begin_inset space ~
 \end_inset
 
-fondo: ​A partir de la recolección de aproximadamente 3000 imágenes se extrajo
- el fondo de la escena, es decir, aquellas características que están siempre
- presentes y corresponden a la geografía subyacente y no a las formaciones
- nubosas del momento.
+fondo: ​A partir de la recolección de una cantidad grande de imágenes puede
+ extraerse el fondo de la escena.
+ Esta nueva imagen, que es calculada utilizando una herramienta provista,
+ sirve para independizar del cálculo aquellas características que están
+ siempre presentes y corresponden a la geografía subyacente y no a las formacion
+es nubosas del momento.
+ Para realizar los experimentos se utilizó un fondo creado a partir de 2900
+ imágenes para cada sensor.
 \end_layout
 
 \begin_layout Description
@@ -736,36 +1141,44 @@ de
 resultados: Una vez calculados los movimientos a partir de cada uno de los
  sensores, se realiza un promedio ponderado de los sensores en función de
  su fiabilidad.
- Por ejemplo, para combinar sensores IR2 e IR4:
+ Por ejemplo, para combinar sensores IR2, IR3 e IR4:
 \begin_inset Newline newline
 \end_inset
 
 
 \begin_inset Formula 
 \[
-\hat{M}(x,y)=\frac{\hat{M}_{IR2}(x,y)*w_{IR2}+\hat{M}_{IR4}(x,y)*w_{IR4}}{w_{IR2}+w_{IR4}}
+\hat{M}(x,y)=\frac{\hat{M}_{IR2}(x,y)*w_{IR2}+\hat{M}_{IR3}(x,y)*w_{IR3}+\hat{M}_{IR4}(x,y)*w_{IR4}}{w_{IR2}+w_{IR4}+w_{IR3}}
 \]
 
 \end_inset
 
 Donde 
-\begin_inset Formula $w_{IRN}$
+\begin_inset Formula $w_{IR\cdot}$
 \end_inset
 
-es el peso que se le desea dar al sensor IRN y 
+es el peso que se le desea dar al sensor 
+\begin_inset Formula $IR\cdot$
+\end_inset
+
+ y 
 \begin_inset Formula $\hat{M}_{IRN}(x,y)$
 \end_inset
 
  es el vector resultado de correlacionar imágenes consecutivas del sensor
- IRN.
+ 
+\begin_inset Formula $IR\cdot$
+\end_inset
+
+.
  El resultado tiene menos ruido puesto que al ocurrir un error de pareo
  en uno de los sensores, es compensado por el otro.
  Al ser un promedio de estimadores, su resultado tiene una dispersión menor
- que cualquiera de ellos por separado, como ya fue demostrado en el ítem
+ que cualquiera de ellos por separado, como ya fue justificado en el ítem
  anterior.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:Cálculo-de-trayectorias"
@@ -786,7 +1199,7 @@ Una vez calculados los desplazamientos por cada par de estados meteorológicos
 \end_inset
 
  de una partícula virtual que viaja a través del área en estudio.
- Puesto que en principio solo se dispone de 
+ Puesto que en principio sólo se dispone de 
 \begin_inset Formula $p_{0}$
 \end_inset
 
@@ -902,7 +1315,7 @@ Los resultados son finalmente dibujados con una biblioteca gráfica para
  luego poder ser exhibidos en la aplicación web.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:Predicción"
@@ -1016,7 +1429,7 @@ Se promedia cada área con cada una de las que se le superpongan para así
  lograr la luminosidad final de cada zona a predecir.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Lenguaje de programación y bibliotecas
 \end_layout
 
@@ -1096,7 +1509,7 @@ key "pyopencl2016,opencl2016"
  procesadores para este propósito.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 Arquitectura
 \end_layout
 
@@ -1154,7 +1567,7 @@ Arquitectura de la aplicación
 
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Base de datos
 \end_layout
 
@@ -1236,7 +1649,7 @@ Diagrama de entidad-relación del esquema de la base de datos.
 
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:Obtención-de-imágenes"
@@ -1257,21 +1670,15 @@ key "goesnasa2016"
 \end_inset
 
  por medio de FTP y/o HTTP.
- En particular, el satélite que se utiliza es el GOES­13 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "goeseast2016"
-
-\end_inset
-
- por ser el que provee las imágenes de Argentina.
+ En particular, el satélite que se utiliza es el GOES­13 por ser el que
+ provee las imágenes de Argentina.
  El mismo disponibiliza una nueva imagen cada aproximadamente 30 minutos.
  El servicio chequea en ese intervalo de tiempo si hay disponible alguna
  nueva imagen, en cuyo caso la descarga y la guarda en una base de datos
  para ser luego consumida por el resto de los servicios.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Servicios de cálculo: Movimiento y predicciones
 \end_layout
 
@@ -1314,7 +1721,7 @@ reference "sub:Predicción"
 .
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 API
 \end_layout
 
@@ -1383,7 +1790,7 @@ key "gifrfc2016"
 , superpuestas al tipo de sensor que le fuere indicado.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Aplicación web
 \end_layout
 
@@ -1452,13 +1859,13 @@ La aplicación consta de tres pantallas a las cuales se puede acceder utilizando
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
 	filename img/web1.png
-	scale 40
+	scale 45
 
 \end_inset
 
@@ -1529,7 +1936,7 @@ status collapsed
 \align center
 \begin_inset Graphics
 	filename img/Web2.png
-	scale 40
+	scale 45
 
 \end_inset
 
@@ -1586,7 +1993,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename img/Web3.png
-	scale 40
+	scale 45
 
 \end_inset
 
@@ -1628,33 +2035,12 @@ reference "fig:web-credits"
  botón para descargar una copia de este informe en formato PDF.
 \end_layout
 
-\begin_layout Standard
-\begin_inset Newpage newpage
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
+\begin_layout Chapter
 Experimentos y resultados
 \end_layout
 
-\begin_layout Standard
-\begin_inset Newpage newpage
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
+\begin_layout Chapter
 Conclusiones
-\end_layout
-
-\begin_layout Standard
-\begin_inset Newpage newpage
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -1669,15 +2055,8 @@ options "bibtotoc,plain"
 
 \end_layout
 
-\begin_layout Standard
-\begin_inset Newpage newpage
-\end_inset
-
-
-\end_layout
-
 \begin_layout Section*
-Anexos
+Anexo
 \end_layout
 
 \end_body

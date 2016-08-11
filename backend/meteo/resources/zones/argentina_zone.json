@@ -1,0 +1,12 @@
+{
+  "name": "argentina",
+  "map_image": "meteo/resources/maps/argentina_coasts_countries.png",
+  "config": {
+    "crop_rect": [180, 160, 500, 300],
+    "search_area": [15, 15],
+    "window": [33, 33],
+    "downsample": [10, 10],
+    "sources": ["goeseast/ir2", "goeseast/ir3", "goeseast/ir4", "goeseast/ir5", "goeseast/ir6"],
+    "start_date": "2016-05-29T15:00:00.000000"
+  }
+}

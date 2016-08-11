@@ -1,0 +1,87 @@
+{% extends "state.html" %}
+
+{% block head %}
+{{ super() }}
+<script src="{{ url_for('blueprint.static', filename='weather-map.js') }}"></script>
+<script>
+window.flow_states = {{ flow_states_info|tojson }};
+</script>
+{% endblock head %}
+
+{% block content %}
+
+<ul class="nav nav-tabs">
+  <li role="presentation"><a href="{{url_for('blueprint.show_state', zone_name=state.zone.name, time=state.time)}}">Information</a></li>
+  <li role="presentation" class="active"><a href="{{url_for('blueprint.state_flow', zone_name=state.zone.name, time=state.time)}}">Flow</a></li>
+</ul>
+
+<div class="weather-maps">
+
+<div class="panel panel-default weather-map-panel">
+  <div class="panel-heading weather-map-panel-heading">Animation</div>
+  <div class="panel-body weather-flow-map" id="weather-flow-map"
+       data-width="{{state.zone.config['crop_rect'][2]}}px" 
+       data-height="{{state.zone.config['crop_rect'][3]}}px" >
+  </div>
+</div>
+
+</div>
+
+<script>
+$(function () {
+  var zoom = function () {
+      svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+      console.log("translate: " + d3.event.translate + ", scale: " + d3.event.scale);
+  };
+  var element = d3.select("div#weather-flow-map");
+  var svg = element.style("width", element.attr("data-width"))
+                   .style("height", element.attr("data-height"))
+                   .append("svg")
+                   .attr("width", "100%")
+                   .attr("height", "100%")
+                   .style("display", "block")
+                   .append("g")
+                   .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+                   .append("g");
+
+
+  window.flow_states.forEach(function (state) {
+    state.group = svg.append("g")
+                     .attr("visibility", "hidden");
+    state.group.append("image")
+               .attr("width", "100%")
+               .attr("height", "100%")
+               .attr("xlink:href", state.image_url);
+    state.marks.forEach(function (mark) {
+      state.group.append("circle")
+                 .attr("cx", mark[0])
+                 .attr("cy", mark[1])
+                 .attr("r", 2);
+    });
+  });
+
+  svg.append("image")
+     .attr("width", "100%")
+     .attr("height", "100%")
+     .attr("xlink:href", "/argentina/map_image.png");
+
+  showing_image_index = 0;
+  window.flow_states[showing_image_index].group.attr("visibility", "visible");
+  
+  var step_function = function () {
+    window.flow_states[showing_image_index++].group.attr("visibility", "hidden");
+    if (showing_image_index >= window.flow_states.length)
+      showing_image_index = 0;
+    window.flow_states[showing_image_index].group.attr("visibility", "visible");
+    d3.timer(step_function, 300);
+    return true;
+  }
+
+  d3.timer(step_function, 300);
+  
+
+});
+
+</script>
+
+{% endblock content %}

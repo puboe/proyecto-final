@@ -19,7 +19,7 @@ class DevelopmentLocalConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://piedpiper:piedpiper@localhost/piedpiper'
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://clouds:clouds@localhost/clouds'
 
 
 def load_class(class_path):

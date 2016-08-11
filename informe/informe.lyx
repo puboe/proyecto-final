@@ -688,7 +688,7 @@ key "waynebreskyjaimedaniels2006"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -728,6 +728,17 @@ Descripción gráfica del flujo óptico:
 3) Campo vectorial que indica el desplazamiento en un diferencial de tiempo
  de cada uno de los puntos de la esfera, proyectados en el campo visual
  del observador.
+\begin_inset Newline newline
+\end_inset
+
+Imagen tomada de 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "huston2008visuomotor"
+
+\end_inset
+
+.
 \end_layout
 
 \end_inset

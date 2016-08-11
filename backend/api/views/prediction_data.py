@@ -40,4 +40,6 @@ def prediction_data_image_difference(zone_name, time):
     difference = np.abs(prediction_data.image - state_data.image)
     difference = difference/np.max(difference)
 
-    return render_image_array(difference)
+    difference_rgb = np.dstack((difference, np.zeros_like(difference), 1.0 - difference))
+
+    return render_image_array(difference_rgb)

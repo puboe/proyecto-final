@@ -114,6 +114,62 @@ LatexCommand tableofcontents
 Introducción
 \end_layout
 
+\begin_layout Standard
+1.
+ Introducción Desde la antigüedad, la meteorología ha fascinado al ser humano.
+ El poder predecir el clima ha sido uno de los retos más grandes de la humanidad
+ a través de la historia.
+ El primer registro escrito data de alrededor del año 340 a.C.
+ y se trata del libro 
+\begin_inset Quotes eld
+\end_inset
+
+Meteorologica
+\begin_inset Quotes erd
+\end_inset
+
+, escrito por Aristóteles, en el que presenta observaciones y especulaciones
+ acerca del origen de los fenómenos atmosféricos y celestes.
+ Sin embargo, el uso de satélites para el estudio de los fenómenos climáticos
+ es más reciente, ya que el primer satélite meteorológico fue lanzado en
+ la década del sesenta.
+\end_layout
+
+\begin_layout Standard
+Hoy en día, los modelos de predicción sobre imágenes satelitales son la
+ base para muchos procesos de meteorología.
+ Es indiscutible la importancia que éstas imágenes han tomado en los últimos
+ años, desde la predicción del estado del clima diario hasta la de posibles
+ catástrofes naturales, que permiten salvar miles de vidas en todo el mundo,
+ son algunos de los usos que se le dan a dichas imágenes día a día.
+\end_layout
+
+\begin_layout Standard
+En este proyecto se busca detectar de manera automática el movimiento de
+ las nubes, a partir de imágenes satelitales, y con un modelo simple prever
+ la posición y tamaño de las mismas para las siguientes horas.
+\end_layout
+
+\begin_layout Standard
+Otro objetivo, es probar la eficacia de algoritmos que son utilizados en
+ el campo del tratamiento de imágenes, especialmente para la detección de
+ movimiento en vídeo, en el campo de la meteorología.
+\end_layout
+
+\begin_layout Standard
+Por otro lado, es importante proveer una plataforma flexible sobre la cual
+ puedan basarse otros proyectos para realizar nuevas ampliaciones en base
+ a los datos provistos por este trabajo.
+\end_layout
+
+\begin_layout Standard
+El objeto de estudio tratado en este proyecto está limitado a una sola región
+ que comprende la mayoría del territorio argentino y chileno y una pequeña
+ porción del territorio de Brasil.
+ Una posible extensión del proyecto, propuesta más adelante, comprende la
+ ampliación de esta región.
+\end_layout
+
 \begin_layout Chapter
 Estado del arte
 \end_layout
@@ -137,20 +193,19 @@ s.
 \end_layout
 
 \begin_layout Subsection
-Servicio Meteorológico Nacional 
+Servicio Meteorológico Nacional
+\end_layout
+
+\begin_layout Standard
+El servicio meteorológico nacional 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "smn2016"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-El servicio meteorológico nacional posee una plataforma en la que se pueden
- visualizar imágenes satelitales infrarrojas captadas por el satélite geoestacio
-nario GOES­13.
+ posee una plataforma en la que se pueden visualizar imágenes satelitales
+ infrarrojas captadas por el satélite geoestacionario GOES­13.
  Dichas imágenes se encuentran espaciadas por un intervalo de aproximadamente
  una hora entre cada una.
  Como puede verse en la figura 
@@ -244,19 +299,19 @@ Otra característica negativa de la interfaz es que cuando está seleccionada
 
 \begin_layout Subsection
 Nullschool Earth 
+\end_layout
+
+\begin_layout Standard
+Esta plataforma 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "nullschoolearth2016"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-Esta plataforma brinda acceso a multitud de pronósticos, como por ejemplo
- corrientes oceánicas, temperatura del océano, oleaje, vientos e incluso
- información sobre partículas y químicos presentes en la atmósfera.
+ brinda acceso a multitud de pronósticos, como por ejemplo corrientes oceánicas,
+ temperatura del océano, oleaje, vientos e incluso información sobre partículas
+ y químicos presentes en la atmósfera.
 \end_layout
 
 \begin_layout Standard
@@ -282,7 +337,7 @@ reference "fig:nullschool"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -305,7 +360,14 @@ name "fig:nullschool"
 
 \end_inset
 
-Captura del mapa de Nullschool Earth, sector Argentina.
+Captura del mapa de Nullschool Earth 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nullschoolearth2016"
+
+\end_inset
+
+, sector Argentina.
  [fecha de consulta: 7 de Julio de 2016].
  Disponible en: <https://earth.nullschool.net/>
 \end_layout
@@ -339,19 +401,19 @@ Como aspecto mejorable, se puede mencionar que el uso de colores no es demasiado
 
 \begin_layout Subsection
 Windyty 
+\end_layout
+
+\begin_layout Standard
+Al igual que la anterior esta plataforma 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "windyty2016"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-Al igual que la anterior esta plataforma brinda acceso a multitud de pronósticos
- distintos, como por ejemplo, viento, temperatura, nubosidad, lluvias, humedad,
- oleaje, temperatura del mar, nevadas y presión atmosférica.
+ brinda acceso a multitud de pronósticos distintos, como por ejemplo, viento,
+ temperatura, nubosidad, lluvias, humedad, oleaje, temperatura del mar,
+ nevadas y presión atmosférica.
 \end_layout
 
 \begin_layout Standard
@@ -383,7 +445,7 @@ cual permite cambiar la fecha y hora.
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -406,9 +468,9 @@ name "fig:windyty"
 
 \end_inset
 
-Captura del mapa de Nullschool Earth, sector Argentina.
+Captura del mapa de Windyty, sector Argentina.
  [fecha de consulta: 7 de Julio de 2016].
- Disponible en: <https://earth.nullschool.net/>
+ Disponible en: <https://www.windyty.com/?-34.603,-58.382,6>
 \end_layout
 
 \end_inset
@@ -445,20 +507,25 @@ Como aspecto mejorable, al igual que en la plataforma anterior, se puede
 Trabajos académicos
 \end_layout
 
-\begin_layout Subsubsection*
-Extracting Cloud Motion from Satellite Image Sequences 
+\begin_layout Standard
+El primer trabajo considerado fue 
+\begin_inset Quotes eld
+\end_inset
+
+Extracting Cloud Motion from Satellite Image Sequences
+\begin_inset Quotes erd
+\end_inset
+
+ 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "remusbradloanalfredletia2002"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-Los autores sugieren derivar el movimiento de las nubes a partir de un algoritmo
- de correlación.
+.
+ En éste, los autores sugieren derivar el movimiento de las nubes a partir
+ de un algoritmo de correlación.
 \begin_inset Newline newline
 \end_inset
 
@@ -493,20 +560,25 @@ El trabajo es uno de una serie de investigaciones relacionadas al análisis
  espacio­temporal de imágenes satelitales.
 \end_layout
 
-\begin_layout Subsubsection*
+\begin_layout Standard
+Otro trabajo que resulta de interés es 
+\begin_inset Quotes eld
+\end_inset
+
 The Feasibility of an Optical Flow Algorithm for Estimating Atmospheric
- Motion 
+ Motion
+\begin_inset Quotes erd
+\end_inset
+
+ 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "waynebreskyjaimedaniels2006"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-El trabajo analiza la factibilidad de medir movimientos atmosféricos utilizando
+.
+ Éste analiza la factibilidad de medir movimientos atmosféricos utilizando
  un algoritmo de flujo óptico tradicional, el de Lucas y Kanade, en contraposici
 ón con algoritmos de correlación más tradicionales como el que finalmente
  fue utilizado.
@@ -676,26 +748,18 @@ name "sub:Ecuación-del-flujo"
 \end_inset
 
 Ecuación del flujo óptico 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "beauchemin1995computation"
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
-La ecuación del flujo óptico o ecuación de constancia de brillo se basa
- en la hipótesis de la conservación de la intensidad luminosa emitida o
- reflejada por un objeto en movimiento 
+La ecuación del flujo óptico o ecuación de constancia de brillo 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "beauchemin1995computation"
 
 \end_inset
 
-:
+ se basa en la hipótesis de la conservación de la intensidad luminosa emitida
+ o reflejada por un objeto en movimiento:
 \end_layout
 
 \begin_layout Standard
@@ -728,14 +792,7 @@ key "lucas1981iterative"
 \end_layout
 
 \begin_layout Subsection
-Algoritmo de Lucas y Kanade 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "lucas1981iterative"
-
-\end_inset
-
-
+Algoritmo de Lucas y Kanade
 \end_layout
 
 \begin_layout Standard
@@ -983,18 +1040,20 @@ key "lucas1981iterative"
 \end_layout
 
 \begin_layout Subsection
-Algoritmo de pareo de bloques 
+Algoritmo de pareo de bloques
+\end_layout
+
+\begin_layout Standard
+A continuación se explica la variante del algoritmo de pareo de bloques
+ 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "arohbarjatya2004"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-Dado un conjunto de píxeles 
+ utilizado en la implementación de este trabajo.
+ Dado un conjunto de píxeles 
 \begin_inset Formula $B_{1}=\left\{ (x,y)/x\epsilon\left[x_{1}-\Delta x,x_{1}+\Delta x\right]\wedge y\epsilon\left[y_{1}-\Delta y,y_{1}+\Delta y\right]\right\} $
 \end_inset
 
@@ -1248,7 +1307,7 @@ El algoritmo desarrollado es una variante del algoritmo de pareo de bloques,
 \end_layout
 
 \begin_layout Subsection
-Variantes
+Técnicas adicionales
 \end_layout
 
 \begin_layout Standard
@@ -1290,6 +1349,31 @@ fondo: ​A partir de la recolección de una cantidad grande de imágenes puede
  sirve para independizar del cálculo aquellas características que están
  siempre presentes y corresponden a la geografía subyacente y no a las formacion
 es nubosas del momento.
+ La extracción consiste en tomar el valor mínimo de intensidad de cada píxel:
+\begin_inset Formula 
+\[
+I_{F}(x,y)=min\left\{ I_{t}(x,y)/t\epsilon\varGamma\right\} 
+\]
+
+\end_inset
+
+Siendo 
+\begin_inset Formula $I_{F}$
+\end_inset
+
+ el mapa de intensidad de la imagen de fondo final, 
+\begin_inset Formula $I_{t}$
+\end_inset
+
+ el mapa para un tiempo 
+\begin_inset Formula $t$
+\end_inset
+
+ y 
+\begin_inset Formula $\varGamma$
+\end_inset
+
+ el conjunto de tiempos de las imágenes a analizar.
  Para realizar los experimentos se utilizó un fondo creado a partir de 2900
  imágenes para cada sensor.
 \end_layout
@@ -1671,6 +1755,65 @@ Se desplaza un área de
 \begin_layout Itemize
 Se promedia cada área con cada una de las que se le superpongan para así
  lograr la luminosidad final de cada zona a predecir.
+\end_layout
+
+\begin_layout Standard
+Para tener una mejor apreciación de la precisión de la predicción, se decidió
+ hacer disponible también una imagen que corresponde a la diferencia entre
+ la predicción y la imagen real obtenida del satélite.
+ La misma se calcula de la siguiente manera:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+I_{D}^{*}(x,y)=\left|I_{P}(x,y)-I_{R}(x,y)\right|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+I_{D}(x,y)=\frac{I_{D}^{*}(x,y)-min\{I_{D}^{*}(x,y)/(x,y)\,\epsilon\, Dom_{I_{D}^{*}}\}}{max\{I_{D}^{*}(x,y)/(x,y)\,\epsilon\, Dom_{I_{D}^{*}}\}}
+\]
+
+\end_inset
+
+Donde 
+\begin_inset Formula $I_{D}$
+\end_inset
+
+ es la intensidad final de la diferencia normalizada, 
+\begin_inset Formula $I_{D}^{*}$
+\end_inset
+
+ lo es sin normalizar, 
+\begin_inset Formula $I_{P}$
+\end_inset
+
+ es la intensidad de la predicción e 
+\begin_inset Formula $I_{R}$
+\end_inset
+
+ es la intensidad de la imagen real.
+ 
+\end_layout
+
+\begin_layout Standard
+Para los experimentos se tomó un tiempo de extrapolación 
+\begin_inset Formula $t_{p}-t_{f}$
+\end_inset
+
+ de dos horas, y un intervalo de tiempo 
+\begin_inset Formula $t_{f}-t_{i}$
+\end_inset
+
+ de seis.
+ 
 \end_layout
 
 \begin_layout Subsection
@@ -2281,7 +2424,7 @@ reference "fig:web-saved-states"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -2330,11 +2473,343 @@ reference "fig:web-credits"
 \end_layout
 
 \begin_layout Chapter
-Experimentos y resultados
+Resultados
+\end_layout
+
+\begin_layout Standard
+La estimación del movimiento se ve afectada en las siguientes situaciones:
+\end_layout
+
+\begin_layout Description
+Eventos
+\begin_inset space ~
+\end_inset
+
+meteorológicos
+\begin_inset space ~
+\end_inset
+
+muy
+\begin_inset space ~
+\end_inset
+
+rápidos: Cuando aparecen sistemas de tormentas fuertes, con vientos rápidos
+ donde ocurre fragmentación o agrupación repentina de nubes se pierde fidelidad
+ en los resultados puesto que la frecuencia temporal es demasiado baja.
+ Esto da lugar a que algunas de la correlaciones no reflejen el desplazamiento
+ teórico esperado (Figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:resultado_rapido"
+
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/Resultados/rapido1_28-7-16_15-30.png
+	lyxscale 30
+	width 8cm
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/Resultados/rapido2_28-7-16_15-30.png
+	lyxscale 30
+	width 8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:resultado_rapido"
+
+\end_inset
+
+Por la rápida formación de la nube que se encuentra abajo a la izquierda,
+ la dirección de algunas flechas no refleja la dirección real del movimiento.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Evaporación
+\begin_inset space ~
+\end_inset
+
+y
+\begin_inset space ~
+\end_inset
+
+precipitación: Tanto el método de Lucas y Kanade 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lucas1981iterative"
+
+\end_inset
+
+ como la correlación de características 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "arohbarjatya2004"
+
+\end_inset
+
+ suponen que se conserva la luminosidad.
+ Esto puede no ocurrir en el caso de una evaporación o precipitación de
+ agua en la atmósfera.
+ En estas situaciones es común que se perciba movimiento donde no lo hay.
+ Por ejemplo, es posible que al disminuir el tamaño de una nube, aparezca
+ falso movimiento en los bordes, en el sentido de la disminución (Figura
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:resultado_evap"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/Resultados/evap1_6-8-16_14-30.png
+	lyxscale 30
+	width 8cm
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/Resultados/evap2_6-8-16_14-30.png
+	lyxscale 30
+	width 8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:resultado_evap"
+
+\end_inset
+
+La disminución del tamaño de la nube de abajo a la izquierda es interpretada
+ como movimiento.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Ciclo
+\begin_inset space ~
+\end_inset
+
+día-noche: Si bien se remueve el fondo de las imágenes, en algunos canales,
+ como IR2, sigue existiendo una variación de luminosidad homogénea debida
+ al ciclo día-noche.
+ La misma puede afectar la capacidad de detección puesto que varía el contraste
+ en los bordes de las nubes (Figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:resultado_dia_noche"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/Resultados/ciclo dia-noche.png
+	lyxscale 30
+	width 8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:resultado_dia_noche"
+
+\end_inset
+
+Por la rápida formación de la nube que se encuentra abajo a la izquierda,
+ la dirección de algunas flechas no refleja la dirección real del movimiento.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Bordes
+\begin_inset space ~
+\end_inset
+
+de
+\begin_inset space ~
+\end_inset
+
+la
+\begin_inset space ~
+\end_inset
+
+imagen: Como es de esperar, por falta de información resulta imposible la
+ detección del movimiento en los bordes de la imagen.
+ Esto puede afectar a la hora de ajustar las trayectorias cerca de los extremos.
+ (Figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:resultado_bordes"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/Resultados/bordes.png
+	lyxscale 30
+	width 8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:resultado_bordes"
+
+\end_inset
+
+No existe información de movimiento en los bordes de la imagen.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Chapter
 Conclusiones
+\end_layout
+
+\begin_layout Standard
+En este capítulo se presentarán las conclusiones arribadas durante la realizació
+n de este trabajo.
+\end_layout
+
+\begin_layout Section
+Conclusiones generales
+\end_layout
+
+\begin_layout Section
+Posibles ampliaciones
+\end_layout
+
+\begin_layout Standard
+Entre las posibles ampliaciones de este trabajo podemos mencionar dos que
+ resultan de interés:
+\end_layout
+
+\begin_layout Itemize
+Expandir la región geográfica abarcada por este proyecto a otras regiones
+ del planeta e incluso a todo el mundo, para tener una visión más completa
+ de cómo interactúan los sistemas de distintas regiones entre sí.
+\end_layout
+
+\begin_layout Itemize
+Modelar el sistema de nubes como una red, para ver si su comportamiento
+ es similar al de algún sistema conocido.
 \end_layout
 
 \begin_layout Standard

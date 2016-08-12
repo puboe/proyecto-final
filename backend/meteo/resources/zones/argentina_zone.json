@@ -2,10 +2,40 @@
   "name": "argentina",
   "map_image": "meteo/resources/maps/argentina_coasts_countries.png",
   "config": {
+    "default_motion_method": "value-back-composite2",
+    "motion_methods": {
+      "gradient": {
+        "enabled": false,
+        "search_area": [15, 15],
+        "window": [33, 33],
+        "downsample": [10, 10],
+        "channels": ["ir4"],
+        "weights": [1.0],
+        "remove_background": false,
+        "edge_detection": true
+      },
+      "value-back-composite": {
+        "enabled": false,
+        "search_area": [15, 15],
+        "window": [33, 33],
+        "downsample": [10, 10],
+        "channels": ["ir2", "ir4"],
+        "weights": [0.5, 0.5],
+        "remove_background": true,
+        "edge_detection": false
+      },
+      "value-back-composite2": {
+        "enabled": true,
+        "search_area": [15, 15],
+        "window": [33, 33],
+        "downsample": [10, 10],
+        "channels": ["ir2", "ir3", "ir4"],
+        "weights": [0.1, 0.5, 0.4],
+        "remove_background": true,
+        "edge_detection": false
+      }
+    },
     "crop_rect": [180, 160, 500, 300],
-    "search_area": [15, 15],
-    "window": [33, 33],
-    "downsample": [10, 10],
     "sources": ["goeseast/ir2", "goeseast/ir3", "goeseast/ir4", "goeseast/ir5", "goeseast/ir6"],
     "start_date": "2016-05-29T15:00:00.000000"
   }

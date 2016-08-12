@@ -124,26 +124,29 @@ class MeteoMotionData(Base):
 
 
     def calculate_motion(self, processor):
-        if 'composite' in self.method:
-            motion_x_ir4, motion_y_ir4 = self._calculate_motion(processor, 'ir4')
-            motion_x_ir2, motion_y_ir2 = self._calculate_motion(processor, 'ir2')
-            self.motion_x = motion_x_ir4/2.0 + motion_x_ir2/2.0
-            self.motion_y = motion_y_ir4/2.0 + motion_y_ir2/2.0
-        else:
-            self.motion_x, self.motion_y = self._calculate_motion(processor, 'ir4')
+            channels = self.method_config['channels']
+            weights = self.method_config['weights']
+            motions = list(zip(*[self._calculate_motion_channel(processor, channel)
+                        for channel in channels]))
+            motions_x, motions_y = motions
+            self.motion_x = sum([motion_x*weight
+                                    for motion_x, weight in zip(motions_x, weights)])
 
-    def _calculate_motion(self, processor, channel):
+            self.motion_y = sum([motion_y*weight
+                                    for motion_y, weight in zip(motions_y, weights)])
+
+    def _calculate_motion_channel(self, processor, channel):
         prev_image = next(filter(lambda d: d.channel == channel, self.prev_state.datas)).image
         next_image = next(filter(lambda d: d.channel == channel, self.next_state.datas)).image
-        if 'back' in self.method:
+        if self.method_config['remove_background']:
             background = next(filter(lambda d: d.channel == channel, self.prev_state.zone.background_datas)).image
             prev_image = prev_image - background
             next_image = next_image - background
-        if 'gradient' in self.method:
+        if self.method_config['edge_detection']:
             prev_image = processor.gradient(prev_image)
             next_image = processor.gradient(next_image)
-        search_area = self.prev_state.zone.config['search_area']
-        window = self.prev_state.zone.config['window']
+        search_area = self.method_config['search_area']
+        window = self.method_config['window']
         motion_x, motion_y = processor.bma(prev_image, next_image,
                                                      search_area, window)
         return motion_x, motion_y
@@ -179,12 +182,18 @@ class MeteoMotionData(Base):
         return np.array(self.motion_x_ds.shape) * self.downsample
 
     @property
+    def method_config(self):
+        return self.prev_state.zone.config['motion_methods'].get(self.method, None)
+
+    @property
     def downsample(self):
-        return self.prev_state.zone.config['downsample']
+        return self.method_config['downsample']
 
     @classmethod
     def suitable_state(cls):
-        return MeteoState.datas.any(is_valid=True, channel='ir4')
+        return and_(MeteoState.datas.any(is_valid=True, channel='ir4'),
+                    MeteoState.datas.any(is_valid=True, channel='ir3'),
+                    MeteoState.datas.any(is_valid=True, channel='ir2'))
 
 
 
@@ -218,6 +227,7 @@ class MeteoFlux(object):
         zone_name = states[0].zone.name
         motions = session.query(MeteoMotionData) \
                   .filter_by(zone_name=zone_name, method=method) \
+                  .filter_by(is_valid=True) \
                   .filter(MeteoMotionData.prev_time.in_(state_times)) \
                   .filter(MeteoMotionData.next_time.in_(state_times)) \
                   .order_by(MeteoMotionData.prev_time.asc()) \

@@ -79,7 +79,8 @@ def state_flow(zone_name, time):
                             .limit(10) \
                             .all()
     flow_states.reverse()
-    method = app.config['DEFAULT_MOTION_METHOD']
+    zone = db.session.query(MeteoZone).filter_by(name=zone_name).first()
+    method = zone.config['default_motion_method']
     motions = [db.session.query(MeteoMotionData) \
                          .filter_by(prev_state=prev_state,
                                     next_state=next_state,

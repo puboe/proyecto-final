@@ -3,7 +3,6 @@ import os
 
 class Config(object):
     APPLICATION_ROOT = '/api'
-    DEFAULT_MOTION_METHOD = 'value-back-composite'
 
 class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://piedpiper:piedpiper@gserver/piedpiper'

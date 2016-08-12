@@ -686,6 +686,17 @@ Marco Teórico
 En este capítulo se introducirán los temas y conceptos necesarios para la
  correcta comprensión del tema y apreciación de las dificultades contenidas
  en la resolución del problema.
+ Se comienza describiendo el algoritmo DBSCAN 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ester1996density"
+
+\end_inset
+
+ ya que fue una de las primeras alternativas analizadas, luego se amplía
+ el concepto de flujo óptico introducido en el capítulo anterior.
+ Se cierra el capítulo con una descripción de los distintos canales infrarrojos
+ utilizados en el trabajo, ventajas y desventajas de los mismos.
 \end_layout
 
 \begin_layout Section
@@ -1508,6 +1519,17 @@ Una de las principales ventajas de los canales infrarrojos por sobre el
 
 \begin_layout Section
 Conclusiones
+\end_layout
+
+\begin_layout Standard
+La detección automática de movimiento de nubes en imágenes satelitales resulta
+ un problema complejo.
+ Además, la meteorología es una ciencia que abarca fenómenos de gran escala,
+ relacionados entre si alrededor del mundo y con muchísimas variables, lo
+ que dificulta en gran medida su correcta comprensión.
+ En este apartado se trató de explicar algunos conceptos necesarios para
+ la correcta apreciación de las decisiones de implementación tomadas, las
+ cuales se detallan en el próximo capítulo.
 \end_layout
 
 \begin_layout Chapter

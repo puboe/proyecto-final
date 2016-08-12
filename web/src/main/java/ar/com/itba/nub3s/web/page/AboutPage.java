@@ -12,10 +12,10 @@ public class AboutPage extends AbstractWebPage {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(new Label("tutor1", Model.of("Ignacio Alvarez-Hamelin - ihameli@itba.edu.ar ")));
-		add(new Label("creator1", Model.of("Díaz Uboe, Pablo - pdiazubo@itba.edu.ar ")));
-		add(new Label("creator2", Model.of("Elli, Federico - felli@itba.edu.ar ")));
-		add(new Label("creator3", Model.of("Pomar, Federico - fpomar@itba.edu.ar ")));
+		add(new Label("tutor1", Model.of("Dr. Ing. José Ignacio Alvarez-Hamelin")));
+		add(new Label("creator1", Model.of("Díaz Uboe, Pablo")));
+		add(new Label("creator2", Model.of("Elli, Federico")));
+		add(new Label("creator3", Model.of("Pomar, Federico")));
 		add(new Label("brief", Model.of("Para poder dibujar las flechas, se utiliza una variación del algoritmo de pareo de bloques,"
 				+ " del cual se obtiene una secuencia de puntos en el plano. Se dibujan las flechas utilizando estos puntos, una flecha azul"
 				+ " por cada bloque apareado, y una flecha roja con menor frecuencia. De esta manera las flechas azules marcan una trayectoria,"

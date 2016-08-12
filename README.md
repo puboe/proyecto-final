@@ -21,4 +21,4 @@ Para la instalación de la web-app se debe:
    - `cp web/target/nub3s-1.0.war tomcat/webapps/nub3s.war`
 9. Iniciar Tomcat ejecutando:
    - `tomcat/startup.sh`
-10. Verificar el funcionamiento entrando a clouds.it.itba.edu.ar
+10. Verificar el funcionamiento entrando a [clouds.it.itba.edu.ar](http://clouds.it.itba.edu.ar)

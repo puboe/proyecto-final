@@ -9,9 +9,11 @@ import numpy as np
 
 def calculate_prediction_data(state, flux):
     print('calc st', state.time)
+    print('flux motions', len(flux.motions))
+    if len(flux.motions) < 4:
+        return None
     print('flux st', flux.start_time)
     print('flux et', flux.end_time)
-    print('flux motions', len(flux.motions))
     end_time = flux.timedelta.seconds // 60
     extrapolation_time = (state.time - flux.start_time).seconds // 60
     print('end_time mins', end_time)
@@ -67,7 +69,8 @@ with session_scope() as session:
     for state in query.all():
         end_time = state.time - datetime.timedelta(hours=2)
         start_time = end_time - datetime.timedelta(hours=6)
-        flux = MeteoFlux.from_interval(session, state.zone.name, start_time, end_time, 'value-back-composite')
+        flux = MeteoFlux.from_interval(session, state.zone.name, start_time, end_time, state.zone.config['default_motion_method'])
         prediction = calculate_prediction_data(state, flux)
-        state.predictions.append(prediction)
+        if prediction is not None:
+            state.predictions.append(prediction)
         session.commit()

@@ -1,6 +1,6 @@
 from flask import jsonify
 from api import db, blueprint, app
-from meteo.meteo_sql import MeteoState, MeteoMotionData, MeteoFlux
+from meteo.meteo_sql import MeteoState, MeteoMotionData, MeteoFlux, MeteoZone
 from PIL import Image, ImageDraw
 from api.util import render_image
 import numpy as np
@@ -24,7 +24,8 @@ def show_fixed_flow(zone_name, end_time, steps):
                  defaults=dict(steps=DEFAULT_STEPS))
 @blueprint.route('/<zone_name>/<datetime:end_time>/flow/<int:steps>/trails.png')
 def show_fixed_flow_trails(zone_name, end_time, steps):
-    method = app.config['DEFAULT_MOTION_METHOD']
+    zone = db.session.query(MeteoZone).filter_by(name=zone_name).first()
+    method = zone.config['default_motion_method']
     flux = MeteoFlux.from_prev_states(db.session, zone_name, end_time, steps, method)
     #trail = flux.trail(flux.generate_start(15.0, 15.0), transpose=False)
     trail = np.transpose(flux.polyfitted_trails(flux.smooth_times(60), flux.generate_start(10.0, 10.0), 2), (2, 0, 1))
@@ -64,7 +65,8 @@ def show_fixed_flow_trails(zone_name, end_time, steps):
                  defaults=dict(steps=DEFAULT_STEPS))
 @blueprint.route('/<zone_name>/<datetime:end_time>/flow/<int:steps>/arrows.png')
 def show_fixed_flow_arrows(zone_name, end_time, steps):
-    method = app.config['DEFAULT_MOTION_METHOD']
+    zone = db.session.query(MeteoZone).filter_by(name=zone_name).first()
+    method = zone.config['default_motion_method']
     flux = MeteoFlux.from_prev_states(db.session, zone_name, end_time, steps, method)
     #trail = flux.trail(flux.generate_start(15.0, 15.0), transpose=False)
     minutes = flux.timedelta.seconds // 60

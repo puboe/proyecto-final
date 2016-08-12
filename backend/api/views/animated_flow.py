@@ -43,7 +43,7 @@ def show_animated_trails(zone_name, end_time, steps, satellite, channel):
                       .all()
     datas.reverse()
     states = [data.state for data in datas]
-    flux = MeteoFlux.from_states(db.session, states, 'value-back-composite')
+    flux = MeteoFlux.from_states(db.session, states, states[0].zone.config['default_motion_method'])
     trail = flux.trail(flux.generate_start(10.0, 10.0))
     trail = flux.trim_noisy_trails(trail)
 

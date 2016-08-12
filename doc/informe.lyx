@@ -599,6 +599,11 @@ El trabajo es uno de una serie de investigaciones relacionadas al análisis
 \end_layout
 
 \begin_layout Standard
+Los buenos resultados obtenidos por los autores indican que es una opción
+ factible y motivaron la utilización de algoritmos similares en este proyecto.
+\end_layout
+
+\begin_layout Standard
 Otro trabajo que resulta de interés es 
 \begin_inset Quotes eld
 \end_inset
@@ -617,14 +622,24 @@ key "waynebreskyjaimedaniels2006"
 
 .
  Éste analiza la factibilidad de medir movimientos atmosféricos utilizando
- un algoritmo de flujo óptico tradicional, el de Lucas y Kanade, en contraposici
-ón con algoritmos de correlación más tradicionales como el que finalmente
- fue utilizado.
+ un algoritmo de flujo óptico tradicional, el de Lucas y Kanade 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lucas1981iterative"
+
+\end_inset
+
+, en contraposición con algoritmos de correlación más tradicionales como
+ el que finalmente fue utilizado.
 \end_layout
 
 \begin_layout Standard
-Los resultados sugieren que el método no es una alternativa viable puesto
- que no se dispone de una alta frecuencia de imágenes.
+Los autores concluyen en que este método es una alternativa factible a los
+ algoritmos de correlación, los resultados presentados son buenos si y solo
+ si se dispone de imágenes satelitales cuya frecuencia temporal es alta
+ (entre 5 y 10 minutos entre cada una), sin embargo no es una alternativa
+ viable en este caso puesto que en la región geográfica estudiada en este
+ proyecyo dicha frecuencia no se encuentra disponible.
 \end_layout
 
 \begin_layout Section
@@ -657,6 +672,10 @@ key "nullschoolearth2016"
 
  parecen estar desarrolladas con fines más comerciales que científicos.
  Una de las metas del presente trabajo es combinar lo mejor de ambos mundos.
+ Por otro lado, los resultados positivos de las pruebas en el campo de la
+ meteorología de algoritmos de detección de movimiento utilizados en tratamiento
+ de imágenes motivaron a que este fuera el camino a seguir en el desarrollo
+ de este proyecto.
 \end_layout
 
 \begin_layout Chapter
@@ -1156,10 +1175,11 @@ Solamente del enunciado del algoritmo se desprenden dos problemas:
 
 \begin_layout Standard
 Debido a la localidad del sistema de ecuaciones en diferencias, la frecuencia
- de las imágenes debe ser elevada.
+ temporal de las imágenes debe ser elevada, es decir, el intervalo de tiempo
+ entre cada una debe ser reducido.
  Es porque no se dispone de esta frecuencia de imágenes satelitales que
  este método fue descartado.
- Adicionalmente puede verse que solamente el entorno del punto es utilizado
+ Adicionalmente, puede verse que solamente el entorno del punto es utilizado
  como dato para estimar la dirección de movimiento lo que da origen al problema
  de la apertura, el cual se tratará en la siguiente sección.
 \end_layout

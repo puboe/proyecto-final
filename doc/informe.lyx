@@ -1,7 +1,9 @@
-#LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 474
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
 \begin_document
 \begin_header
+\save_transient_properties true
+\origin unavailable
 \textclass extbook
 \begin_preamble
 \usepackage{url}
@@ -12,16 +14,16 @@
 \language_package default
 \inputencoding auto
 \fontencoding global
-\font_roman default
-\font_sans default
-\font_typewriter default
-\font_math auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
-\font_sf_scale 100
-\font_tt_scale 100
+\font_sf_scale 100 100
+\font_tt_scale 100 100
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -177,7 +179,10 @@ Estado del arte
 \begin_layout Standard
 En este capítulo se presentará el estado del arte, tanto teórico como práctico,
  en lo que respecta al seguimiento automático de nubes.
- Estudiaremos herramientas desarrolladas con un propósito similar.
+ Se estudiarán herramientas desarrolladas con un propósito similar e investigaci
+ones relacionadas con la temática.
+ Finalmente, se concluye con una breve reflexión sobre lo mencionado en
+ este apartado.
 \end_layout
 
 \begin_layout Section
@@ -253,7 +258,18 @@ name "fig:smn"
 
 Captura de la página de visualización de imágenes infrarrojas del SMN [fecha
  de consulta: 7 de Julio de 2016].
- Disponible en: <http://www.smn.gov.ar/vmsr/principal.php>
+ Disponible en: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.smn.gov.ar/vmsr/principal.php
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -337,7 +353,7 @@ reference "fig:nullschool"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -369,7 +385,18 @@ key "nullschoolearth2016"
 
 , sector Argentina.
  [fecha de consulta: 7 de Julio de 2016].
- Disponible en: <https://earth.nullschool.net/>
+ Disponible en: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://earth.nullschool.net/
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -445,7 +472,7 @@ cual permite cambiar la fecha y hora.
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -470,7 +497,18 @@ name "fig:windyty"
 
 Captura del mapa de Windyty, sector Argentina.
  [fecha de consulta: 7 de Julio de 2016].
- Disponible en: <https://www.windyty.com/?-34.603,-58.382,6>
+ Disponible en: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://www.windyty.com/?-34.603,-58.382,6
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -503,7 +541,7 @@ Como aspecto mejorable, al igual que en la plataforma anterior, se puede
  a mayor.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 Trabajos académicos
 \end_layout
 
@@ -632,6 +670,196 @@ En este capítulo se introducirán los temas y conceptos necesarios para la
 \end_layout
 
 \begin_layout Section
+DBSCAN
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Density-based spatial clustering of applications with noise
+\emph default
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ester1996density"
+
+\end_inset
+
+ es un algoritmo de clustering de datos basado en la densidad.
+ 
+\end_layout
+
+\begin_layout Standard
+Dado un conjunto de puntos en un espacio, éstos son clasificados en puntos
+ de núcleo, alcanzables y outliers de la siguiente manera:
+\end_layout
+
+\begin_layout Itemize
+Un punto 
+\emph on
+
+\begin_inset Formula $p$
+\end_inset
+
+
+\emph default
+ es de núcleo si al menos 
+\emph on
+
+\begin_inset Formula $k$
+\end_inset
+
+
+\emph default
+ puntos se encuentran a una distancia menor a 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ de él (incluyendolo).
+ Éstos se denominan 
+\emph on
+directamente alcanzables
+\emph default
+ desde 
+\emph on
+
+\begin_inset Formula $p$
+\end_inset
+
+.
+
+\emph default
+ Por definición, ningún punto es 
+\emph on
+directamente alcanzable
+\emph default
+ desde uno que no es núcleo.
+\end_layout
+
+\begin_layout Itemize
+Un punto 
+\emph on
+
+\begin_inset Formula $q$
+\end_inset
+
+ 
+\emph default
+es alcanzable desde 
+\emph on
+
+\begin_inset Formula $p$
+\end_inset
+
+ 
+\emph default
+si existe un camino 
+\begin_inset Formula $p_{1}$
+\end_inset
+
+, ..., 
+\begin_inset Formula $p_{n}$
+\end_inset
+
+ con 
+\begin_inset Formula $p_{1}$
+\end_inset
+
+ = 
+\emph on
+
+\begin_inset Formula $p$
+\end_inset
+
+
+\emph default
+ y 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang english
+
+\begin_inset Formula $p_{n}$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang spanish
+ = 
+\begin_inset Formula $q$
+\end_inset
+
+, donde cada 
+\begin_inset Formula $p_{i+1}$
+\end_inset
+
+ es directamente alcanzable desde 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+ (todos los puntos en el camino deben ser de núcleo a excepción de 
+\begin_inset Formula $q$
+\end_inset
+
+ que puede no serlo)
+\emph on
+.
+\end_layout
+
+\begin_layout Itemize
+Todos los puntos no alcanzables desde algún otro son outliers.
+\end_layout
+
+\begin_layout Standard
+Entonces, si 
+\begin_inset Formula $p$
+\end_inset
+
+ es un punto de núcleo, forma un cluster junto con todos los alcanzables
+ desde él.
+ Cada cluster tiene al menos un punto de núcleo; puede tener algunos que
+ no lo sean, pero forman parte del borde ya que no pueden ser usados para
+ alcanzar a otros.
+\end_layout
+
+\begin_layout Standard
+DBSCAN requiere dos parámetros: 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ es la distancia máxima a la que un punto puede ser considerado vecino de
+ otro y 
+\begin_inset Formula $k$
+\end_inset
+
+ es la cantidad mínima de puntos vecinos requeridos para formar una región
+ densa.
+ El algoritmo empieza con un punto arbitrario que no haya sido visitado.
+ Se busca su vecindad y si contiene suficientes vecinos se crea un cluster,
+ sino el punto se marca como ruido y se continúa con el próximo no visitado.
+ Sin embargo, éste puede llegar a pertenecer a una vecindad de otro punto
+ que si resulte suficientemente grande y por lo tanto ser parte de un cluster.
+\end_layout
+
+\begin_layout Section
 Flujo óptico
 \end_layout
 
@@ -688,7 +916,7 @@ key "waynebreskyjaimedaniels2006"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -712,26 +940,12 @@ name "fig:optical_flow"
 
 \end_inset
 
-Descripción gráfica del flujo óptico:
-\begin_inset Newline newline
-\end_inset
-
-1) Un sujeto posicionado en el interior de una esfera.
-\begin_inset Newline newline
-\end_inset
-
-2) La esfera rota sobre su eje de profundidad, desde el punto de vista del
- sujeto.
-\begin_inset Newline newline
-\end_inset
-
-3) Campo vectorial que indica el desplazamiento en un diferencial de tiempo
- de cada uno de los puntos de la esfera, proyectados en el campo visual
- del observador.
-\begin_inset Newline newline
-\end_inset
-
-Imagen tomada de 
+Descripción gráfica del flujo óptico: (a) Un sujeto posicionado en el interior
+ de una esfera; (b) La esfera rota sobre su eje de profundidad, desde el
+ punto de vista del sujeto; (c) Campo vectorial que indica el desplazamiento
+ en un diferencial de tiempo de cada uno de los puntos de la esfera, proyectados
+ en el campo visual del observador.
+ Imagen tomada de 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "huston2008visuomotor"
@@ -754,7 +968,7 @@ key "huston2008visuomotor"
 \begin_layout Subsection
 \begin_inset CommandInset label
 LatexCommand label
-name "sub:Ecuación-del-flujo"
+name "subsec:Ecuación-del-flujo"
 
 \end_inset
 
@@ -776,17 +990,22 @@ key "beauchemin1995computation"
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-I(x,y,t)\thickapprox I(x+\varDelta x,y+\varDelta y,t+\varDelta t)\label{eq:optical_flow}
+I(x,y,t)\thickapprox I(x+\varDelta x,\,y+\varDelta y,\,t+\varDelta t)\label{eq:optical_flow}
 \end{equation}
 
 \end_inset
 
-Donde 
+donde 
 \begin_inset Formula $I(x,y,t)$
 \end_inset
 
- es la intensidad luminosa en cada punto de la imagen a lo largo del espacio,
- y el tiempo, puesto que se está hablando de movimiento.
+ es la intensidad luminosa en cada punto de la imagen a lo largo del espacio
+ y el tiempo, puesto que se está hablando de movimiento, y los incrementos
+ se denotan con 
+\begin_inset Formula $\varDelta$
+\end_inset
+
+.
  Se introduce esta ecuación puesto que es condición necesaria para el método
  de Lucas y Kanade 
 \begin_inset CommandInset citation
@@ -816,10 +1035,7 @@ key "lucas1981iterative"
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Standard
-A partir de la ecuación 
+ A partir de la ecuación 
 \begin_inset CommandInset ref
 LatexCommand eqref
 reference "eq:optical_flow"
@@ -829,7 +1045,7 @@ reference "eq:optical_flow"
  presentada en la sección 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sub:Ecuación-del-flujo"
+reference "subsec:Ecuación-del-flujo"
 
 \end_inset
 
@@ -844,11 +1060,7 @@ reference "sub:Ecuación-del-flujo"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-Donde 
+donde 
 \begin_inset Formula $I(x,y,t)$
 \end_inset
 
@@ -860,7 +1072,7 @@ Donde
 \begin_inset Formula $I$
 \end_inset
 
- y
+ y 
 \begin_inset Formula $\vec{v}$
 \end_inset
 
@@ -876,11 +1088,7 @@ Donde
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-Donde 
+donde 
 \begin_inset Formula $I_{x}$
 \end_inset
 
@@ -922,11 +1130,7 @@ v_{y}
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-Donde 
+donde 
 \begin_inset Formula $q_{1},q_{2},\ldots,q_{n}$
 \end_inset
 
@@ -957,7 +1161,7 @@ Debido a la localidad del sistema de ecuaciones en diferencias, la frecuencia
  este método fue descartado.
  Adicionalmente puede verse que solamente el entorno del punto es utilizado
  como dato para estimar la dirección de movimiento lo que da origen al problema
- de la apertura, que se analizará más adelante.
+ de la apertura, el cual se tratará en la siguiente sección.
 \end_layout
 
 \begin_layout Subsection
@@ -1041,8 +1245,8 @@ key "lucas1981iterative"
 \end_inset
 
  sugieren aumentar la cantidad de píxeles utilizada en la regresión lineal.
- Para el caso del algoritmo de pareo de bloques equivale a agrandar el tamaño
- del bloque.
+ Para el caso del algoritmo de pareo de bloques, que se presentará en la
+ siguiente sección, equivale a agrandar el tamaño del bloque.
  De todas maneras, las nubes conforman un cuerpo no rígido, que puede sufrir
  expansiones o contracciones.
  En estos casos resulta interesante analizar el movimiento local, puesto
@@ -1068,11 +1272,15 @@ key "arohbarjatya2004"
 \begin_inset Formula $B_{1}=\left\{ (x,y)/x\epsilon\left[x_{1}-\Delta x,x_{1}+\Delta x\right]\wedge y\epsilon\left[y_{1}-\Delta y,y_{1}+\Delta y\right]\right\} $
 \end_inset
 
- , de centro 
+, de centro 
 \begin_inset Formula $p_{1}=\left(x_{1},y_{1}\right)$
 \end_inset
 
-, que se denominará bloque, se busca encontrar 
+, que se denominará bloque 
+\begin_inset Formula $B_{1}$
+\end_inset
+
+, se busca encontrar 
 \begin_inset Formula $B_{2}$
 \end_inset
 
@@ -1192,7 +1400,7 @@ La medida del error E(x, y) utilizada fue el error cuadrático de la diferencia
 \begin_layout Standard
 \begin_inset Formula 
 \[
-E(B_{1},B_{2})=\sum_{i,j}\left(I_{1}(x_{1}+i,y_{1}+j)\text{­}I_{2}(x_{2}+i,y_{2}+j)\right)^{2},\, i\epsilon\left[-\triangle x,\triangle x\right],\, j\epsilon\left[-\triangle y,\triangle y\right]
+E(B_{1},B_{2})=\sum_{i,j}\left(I_{1}(x_{1}+i,y_{1}+j)\text{­}I_{2}(x_{2}+i,y_{2}+j)\right)^{2},\,i\epsilon\left[-\triangle x,\triangle x\right],\,j\epsilon\left[-\triangle y,\triangle y\right]
 \]
 
 \end_inset
@@ -1278,6 +1486,10 @@ Una de las principales ventajas de los canales infrarrojos por sobre el
  imágenes están disponibles durante las 24 horas del día.
 \end_layout
 
+\begin_layout Section
+Conclusiones
+\end_layout
+
 \begin_layout Chapter
 Implementación
 \end_layout
@@ -1301,7 +1513,7 @@ En segundo lugar se hablará sobre los detalles de arquitectura, pasando
 \begin_layout Section
 \begin_inset CommandInset label
 LatexCommand label
-name "sub:Algoritmo"
+name "subsec:Algoritmo"
 
 \end_inset
 
@@ -1412,13 +1624,14 @@ vuelta: Se basa en la propiedad de conmutatividad de la función de pareo.
 \begin_inset Formula $M(x,y)=M_{1,2}(x,y)=-M_{2,1}(x,y)$
 \end_inset
 
-.
+
 \begin_inset CommandInset citation
 LatexCommand cite
 key "arohbarjatya2004"
 
 \end_inset
 
+.
  Esta propiedad es utilizada en algoritmos de compresión de vídeo.
  La justificación es la siguiente:
 \begin_inset Newline newline
@@ -1520,7 +1733,7 @@ es el peso que se le desea dar al sensor
 \begin_layout Subsection
 \begin_inset CommandInset label
 LatexCommand label
-name "sub:Cálculo-de-trayectorias"
+name "subsec:Cálculo-de-trayectorias"
 
 \end_inset
 
@@ -1578,7 +1791,7 @@ Puesto que la información hasta este punto es discreta, para poder modelar
  extrapolación para la predicción - que se verá en la sección 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sub:Predicción"
+reference "subsec:Predicción"
 
 \end_inset
 
@@ -1614,10 +1827,6 @@ y(t)=b_{0}+b_{1}t+\ldots+b_{m}t^{m}
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
 y se calculan los coeficientes de los polinomios utilizando la técnicas
  de mínimos cuadrados.
  Se resuelve el sistema de ecuaciones:
@@ -1657,7 +1866,7 @@ Los resultados son finalmente dibujados con una biblioteca gráfica para
 \begin_layout Subsection
 \begin_inset CommandInset label
 LatexCommand label
-name "sub:Predicción"
+name "subsec:Predicción"
 
 \end_inset
 
@@ -1668,7 +1877,7 @@ Predicción
 Como ya se mencionó en la sección 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sub:Cálculo-de-trayectorias"
+reference "subsec:Cálculo-de-trayectorias"
 
 \end_inset
 
@@ -1686,6 +1895,10 @@ El proceso de cálculo es el siguiente:
 
 \begin_layout Itemize
 Se escoge:
+\begin_inset Separator latexpar
+\end_inset
+
+
 \end_layout
 
 \begin_deeper
@@ -1723,7 +1936,7 @@ Se calculan las trayectorias del conjunto de puntos, tal como fue descripto
  en la sección 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sub:Cálculo-de-trayectorias"
+reference "subsec:Cálculo-de-trayectorias"
 
 \end_inset
 
@@ -1789,7 +2002,7 @@ I_{D}^{*}(x,y)=\left|I_{P}(x,y)-I_{R}(x,y)\right|
 \begin_layout Standard
 \begin_inset Formula 
 \[
-I_{D}(x,y)=\frac{I_{D}^{*}(x,y)-min\{I_{D}^{*}(x,y)/(x,y)\,\epsilon\, Dom_{I_{D}^{*}}\}}{max\{I_{D}^{*}(x,y)/(x,y)\,\epsilon\, Dom_{I_{D}^{*}}\}}
+I_{D}(x,y)=\frac{I_{D}^{*}(x,y)-min\{I_{D}^{*}(x,y)/(x,y)\,\epsilon\,Dom_{I_{D}^{*}}\}}{max\{I_{D}^{*}(x,y)/(x,y)\,\epsilon\,Dom_{I_{D}^{*}}\}}
 \]
 
 \end_inset
@@ -2100,7 +2313,7 @@ Diagrama de entidad-relación del esquema de la base de datos.
 \begin_layout Subsection
 \begin_inset CommandInset label
 LatexCommand label
-name "sub:Obtención-de-imágenes"
+name "subsec:Obtención-de-imágenes"
 
 \end_inset
 
@@ -2136,7 +2349,7 @@ Estos servicios realizan polling sobre la base de datos con un intervalo
  los tiempos de aparición de nuevas imágenes, mencionados en 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sub:Obtención-de-imágenes"
+reference "subsec:Obtención-de-imágenes"
 
 \end_inset
 
@@ -2150,7 +2363,7 @@ Movimiento: Calcula los movimientos estimados a partir de un par de imágenes.
  
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sub:Algoritmo"
+reference "subsec:Algoritmo"
 
 \end_inset
 
@@ -2162,7 +2375,7 @@ Predicciones: Calcula predicciones a partir de nuevos datos.
  Se detalla más al respecto en la sección 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sub:Predicción"
+reference "subsec:Predicción"
 
 \end_inset
 

@@ -111,19 +111,29 @@ class MeteoZoneUpdater(object):
             session.add(MeteoStaticData(**data))
 
 
-with session_scope() as session:
-    updaters = [MeteoZoneUpdater(session, zone)
-                    for zone in session.query(MeteoZone).all()]
-    print('Updating zones:', [updater.zone.name for updater in updaters])
-    for updater in updaters:
-        print('Updating', updater.zone.name)
-        states = updater.update_states()
-        states.sort(key=lambda s: s.time)
-        print('\tScrapping data')
-        print('\tFound states: ')
-        for state in states:
-            print ('\t', state.time.isoformat())
-        print('\tDownloading new images')
-        updater.update_datas()
-        print('Done')
+def update():
+    with session_scope() as session:
+        updaters = [MeteoZoneUpdater(session, zone)
+                        for zone in session.query(MeteoZone).all()]
+        print('Updating zones:', [updater.zone.name for updater in updaters])
+        for updater in updaters:
+            print('Updating', updater.zone.name)
+            states = updater.update_states()
+            states.sort(key=lambda s: s.time)
+            print('\tScrapping data')
+            print('\tFound states: ')
+            for state in states:
+                print ('\t', state.time.isoformat())
+            print('\tDownloading new images')
+            updater.update_datas()
+            print('Done')
+
+
+def main():
+    update()
+
+
+if __name__ == '__main__':
+    main()
+
 

@@ -40,24 +40,29 @@ def get_next_motion(session):
                     return motion
     return None
 
-# Calculate one motion
-processor = image.CLImageProcessor(pyopencl)
 
-motion_calculated = True
-while motion_calculated:
-    motion_calculated = False
-    with session_scope() as session:
-        print('Missing calculation', session.query(MeteoMotionData).filter_by(is_valid=False).count())
+def calculate_all():
+    processor = image.CLImageProcessor(pyopencl)
 
-        motion = get_next_motion(session)
-        if motion is not None:
-            print(motion.prev_state.zone.name)
-            print(motion.prev_state.time)
-            print(motion.next_state.time)
-            print(motion.prev_state.zone.config)
-            motion.calculate_motion_ds(processor)
-            motion_calculated = True
-    
+    motion_calculated = True
+    while motion_calculated:
+        motion_calculated = False
+        with session_scope() as session:
+            print('Missing calculation', session.query(MeteoMotionData).filter_by(is_valid=False).count())
+
+            motion = get_next_motion(session)
+            if motion is not None:
+                print(motion.prev_state.zone.name)
+                print(motion.prev_state.time)
+                print(motion.next_state.time)
+                print(motion.prev_state.zone.config)
+                motion.calculate_motion_ds(processor)
+                motion_calculated = True
+def main():
+    calculate_all()
+
+if __name__ == '__main__':
+    main()
 
 
 

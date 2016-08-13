@@ -6,6 +6,7 @@
 \origin unavailable
 \textclass extbook
 \begin_preamble
+\usepackage{mathabx}
 \usepackage{url}
 \end_preamble
 \use_default_options true
@@ -693,10 +694,13 @@ key "ester1996density"
 
 \end_inset
 
- ya que fue una de las primeras alternativas analizadas, luego se amplía
- el concepto de flujo óptico introducido en el capítulo anterior.
- Se cierra el capítulo con una descripción de los distintos canales infrarrojos
- utilizados en el trabajo, ventajas y desventajas de los mismos.
+ ya que fue una de las primeras alternativas analizadas.
+ Se continuará explicando algunos conceptos necesarios para entrar en contexto
+ y entender más profundamente el funcionamiento del algoritmo implementado,
+ como el concepto de flujo óptico, los problemas y algoritmos asociados
+ a éste.
+ Finalmente se estudiarán los datos de entrada, las imágenes satelitales
+ producidas por los distintos sensores enfocados hacia la atmósfera terrestre.
 \end_layout
 
 \begin_layout Section
@@ -1328,7 +1332,7 @@ key "arohbarjatya2004"
 \begin_inset Formula $E(B_{1},B_{2})$
 \end_inset
 
- una medida del error entre los píxeles de ambos bloques.
+ una medida del error entre los bloques.
  Para garantizar la ocurrencia de un mínimo, se consideran posibilidades
  únicamente dentro de una ventana de búsqueda, de tamaño parametrizable,
  que representa el entorno del punto.
@@ -1349,7 +1353,7 @@ Definimos entonces:
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\hat{M}(x_{1},y_{1})=(x_{2}\text{­}x_{1},y_{2}\text{­}y_{1})
+\hat{M}(x_{1},y_{1})=(x_{2}-x_{1},y_{2}-y_{1})
 \]
 
 \end_inset
@@ -1597,6 +1601,56 @@ r las características a partir de la información de los bordes y no de la
  Está inspirado en la idea de que la intensidad de una imagen no está relacionad
 a al detalle contenido en la misma, como en los casos en los que un área
  grande es uniforme.
+ Para detectar un borde se calcula el módulo del gradiente 
+\begin_inset Formula $\left|\nabla I\right|$
+\end_inset
+
+ de la imágen, utilizando el siguiente procedimiento:
+\begin_inset Formula 
+\[
+\left|\nabla I\right|=\left|\left(I_{x},\,I_{y}\right)\right|=\sqrt{I_{x}^{2}+I_{y}^{2}}
+\]
+
+\end_inset
+
+donde 
+\begin_inset Formula $I_{x}$
+\end_inset
+
+ e 
+\begin_inset Formula $I_{y}$
+\end_inset
+
+ son las derivadas en 
+\begin_inset Formula $x$
+\end_inset
+
+ y en 
+\begin_inset Formula $y$
+\end_inset
+
+ de la imagen calculadas mediante la convolución:
+\begin_inset Formula 
+\[
+I_{x}=\left[\begin{array}{ccc}
+-1 & 0 & 1\end{array}\right]\ast I
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+I_{y}=\left[\begin{array}{c}
+1\\
+0\\
+-1
+\end{array}\right]\ast I
+\]
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Description
@@ -1644,86 +1698,6 @@ Siendo
 \end_layout
 
 \begin_layout Description
-Pareo
-\begin_inset space ~
-\end_inset
-
-ida
-\begin_inset space ~
-\end_inset
-
-y
-\begin_inset space ~
-\end_inset
-
-vuelta: Se basa en la propiedad de conmutatividad de la función de pareo.
- Dado un movimiento 
-\begin_inset Formula $M_{1,2}(x,y)$
-\end_inset
-
- desde una imagen 1 a una imagen 2, la teoría indica que idealmente debe
- cumplirse 
-\begin_inset Formula $M(x,y)=M_{1,2}(x,y)=-M_{2,1}(x,y)$
-\end_inset
-
-
-\begin_inset CommandInset citation
-LatexCommand cite
-key "arohbarjatya2004"
-
-\end_inset
-
-.
- Esta propiedad es utilizada en algoritmos de compresión de vídeo.
- La justificación es la siguiente:
-\begin_inset Newline newline
-\end_inset
-
-Puesto que a la salida del algoritmo sin la mejora, como se mencionó en
- el capítulo anterior, es 
-\begin_inset Formula $\hat{M}(x,y)=\hat{M}_{1,2}(x,y)=M_{1,2}(x,y)+E_{1,2}(x,y)$
-\end_inset
-
-, si calculamos la vuelta obtenemos 
-\begin_inset Formula $\hat{M}_{2,1}(x,y)=M_{2,1}(x,y)+E_{2,1}(x,y)$
-\end_inset
-
-.
- Suponiendo que 
-\begin_inset Formula $E_{1,2}$
-\end_inset
-
- y 
-\begin_inset Formula $E_{2,1}$
-\end_inset
-
- son variables aleatorias de distribución 
-\begin_inset Formula $N(0,\sigma)$
-\end_inset
-
-, definimos 
-\begin_inset Formula $E(x,y)=\frac{E_{1,2}(x,y)-E_{2,1}(x,y)}{2}$
-\end_inset
-
- de modo que 
-\begin_inset Formula $E\backsim N(0,\frac{\sigma}{2})$
-\end_inset
-
-.
- De este modo, tomando como estimador del movimiento a 
-\begin_inset Formula $\hat{M}^{*}(x,y)=\hat{M}_{1,2}(x,y)-\hat{M}_{2,1}(x,y)=M(x,y)+E(x,y)$
-\end_inset
-
- tenemos que 
-\begin_inset Formula $\hat{M}^{*}\backsim N(M,\frac{\sigma}{2})$
-\end_inset
-
- es mejor estimador del movimiento que cualquiera de los dos sentidos por
- separado.
- 
-\end_layout
-
-\begin_layout Description
 Combinación
 \begin_inset space ~
 \end_inset
@@ -1741,22 +1715,30 @@ resultados: Una vez calculados los movimientos a partir de cada uno de los
 
 
 \begin_inset Formula 
+\begin{equation}
+\hat{M}(x,y)=\hat{M}_{IR2}(x,y)*w_{IR2}+\hat{M}_{IR3}(x,y)*w_{IR3}+\hat{M}_{IR4}(x,y)*w_{IR4}\label{eq:weighted_sensor_estimator}
+\end{equation}
+
+\end_inset
+
+
+\begin_inset Formula 
 \[
-\hat{M}(x,y)=\frac{\hat{M}_{IR2}(x,y)*w_{IR2}+\hat{M}_{IR3}(x,y)*w_{IR3}+\hat{M}_{IR4}(x,y)*w_{IR4}}{w_{IR2}+w_{IR4}+w_{IR3}}
+w_{IR2}+w_{IR3}+w_{IR4}=1
 \]
 
 \end_inset
 
-Donde 
-\begin_inset Formula $w_{IR\cdot}$
+donde 
+\begin_inset Formula $0\leq w_{IR\cdot}\leq1$
 \end_inset
 
-es el peso que se le desea dar al sensor 
+ es el peso que se le desea dar al sensor 
 \begin_inset Formula $IR\cdot$
 \end_inset
 
  y 
-\begin_inset Formula $\hat{M}_{IRN}(x,y)$
+\begin_inset Formula $\hat{M}_{IR\cdot}(x,y)$
 \end_inset
 
  es el vector resultado de correlacionar imágenes consecutivas del sensor
@@ -1765,11 +1747,25 @@ es el peso que se le desea dar al sensor
 \end_inset
 
 .
- El resultado tiene menos ruido puesto que al ocurrir un error de pareo
- en uno de los sensores, es compensado por el otro.
- Al ser un promedio de estimadores, su resultado tiene una dispersión menor
- que cualquiera de ellos por separado, como ya fue justificado en el ítem
- anterior.
+ El valor de los pesos se determinó de forma empírica, utilizando como referenci
+a la información poseída sobre el significado de cada uno de los sensores
+ infrarrojos.
+ En particular para realizar la estimación exhibida se utilizó los pesos
+ 
+\begin_inset Formula $w_{IR2}=0.1$
+\end_inset
+
+, 
+\begin_inset Formula $w_{IR3}=0.5$
+\end_inset
+
+ y 
+\begin_inset Formula $w_{IR4}=0.4$
+\end_inset
+
+; basado en que IR3 e IR4 son los sensores menos afectados por la variacíon
+ dia-noche.
+ 
 \end_layout
 
 \begin_layout Subsection

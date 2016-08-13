@@ -1378,7 +1378,7 @@ status open
 \begin_inset Graphics
 	filename img/motion.png
 	lyxscale 25
-	scale 25
+	scale 20
 
 \end_inset
 
@@ -2280,8 +2280,8 @@ status open
 \align center
 \begin_inset Graphics
 	filename img/db_uml.png
-	lyxscale 75
-	scale 50
+	lyxscale 50
+	scale 40
 
 \end_inset
 
@@ -2568,7 +2568,8 @@ status open
 \align center
 \begin_inset Graphics
 	filename img/web1.png
-	scale 45
+	lyxscale 30
+	scale 30
 
 \end_inset
 
@@ -2633,13 +2634,14 @@ A su vez el panel central muestra una descripción del significado de las
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
 	filename img/Web2.png
-	scale 45
+	lyxscale 30
+	scale 30
 
 \end_inset
 
@@ -2690,13 +2692,14 @@ reference "fig:web-saved-states"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
 	filename img/Web3.png
-	scale 45
+	lyxscale 30
+	scale 30
 
 \end_inset
 
@@ -2786,7 +2789,7 @@ status open
 \begin_inset Graphics
 	filename img/Resultados/rapido1_28-7-16_15-30.png
 	lyxscale 30
-	width 8cm
+	width 7.5cm
 
 \end_inset
 
@@ -2794,7 +2797,7 @@ status open
 \begin_inset Graphics
 	filename img/Resultados/rapido2_28-7-16_15-30.png
 	lyxscale 30
-	width 8cm
+	width 7.5cm
 
 \end_inset
 
@@ -2876,7 +2879,7 @@ status open
 \begin_inset Graphics
 	filename img/Resultados/evap1_6-8-16_14-30.png
 	lyxscale 30
-	width 8cm
+	width 7.5cm
 
 \end_inset
 
@@ -2884,7 +2887,7 @@ status open
 \begin_inset Graphics
 	filename img/Resultados/evap2_6-8-16_14-30.png
 	lyxscale 30
-	width 8cm
+	width 7.5cm
 
 \end_inset
 
@@ -2946,7 +2949,7 @@ status open
 \begin_inset Graphics
 	filename img/Resultados/ciclo dia-noche.png
 	lyxscale 30
-	width 8cm
+	scale 40
 
 \end_inset
 
@@ -3015,7 +3018,7 @@ status open
 \begin_inset Graphics
 	filename img/Resultados/bordes.png
 	lyxscale 30
-	width 8cm
+	scale 40
 
 \end_inset
 

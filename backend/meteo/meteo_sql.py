@@ -224,14 +224,17 @@ class MeteoFlux(object):
     @classmethod
     def from_states(cls, session, states, method):
         state_times = [state.time for state in states]
-        zone_name = states[0].zone.name
-        motions = session.query(MeteoMotionData) \
-                  .filter_by(zone_name=zone_name, method=method) \
-                  .filter_by(is_valid=True) \
-                  .filter(MeteoMotionData.prev_time.in_(state_times)) \
-                  .filter(MeteoMotionData.next_time.in_(state_times)) \
-                  .order_by(MeteoMotionData.prev_time.asc()) \
-                  .all()
+        if len(states) > 0:
+            zone_name = states[0].zone.name
+            motions = session.query(MeteoMotionData) \
+                      .filter_by(zone_name=zone_name, method=method) \
+                      .filter_by(is_valid=True) \
+                      .filter(MeteoMotionData.prev_time.in_(state_times)) \
+                      .filter(MeteoMotionData.next_time.in_(state_times)) \
+                      .order_by(MeteoMotionData.prev_time.asc()) \
+                      .all()
+        else:
+            motions = []
         return cls(motions)
 
 

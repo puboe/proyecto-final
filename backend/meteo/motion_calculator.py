@@ -3,27 +3,29 @@ from .meteo_sql import *
 from . import image
 import pyopencl
 import sys
+import daemon
 
 # Create missing motions
-with session_scope() as session:
-    for zone in session.query(MeteoZone).all():
-        print('Zone', zone.name)
-        
-        query = session.query(MeteoState) \
-                       .filter(MeteoMotionData.suitable_state()) \
-                       .filter_by(zone=zone)
+def create_all_missing_motions():
+    with session_scope() as session:
+        for zone in session.query(MeteoZone).all():
+            print('Zone', zone.name)
+            
+            query = session.query(MeteoState) \
+                           .filter(MeteoMotionData.suitable_state()) \
+                           .filter_by(zone=zone)
 
-        print('State count', query.count())
+            print('State count', query.count())
 
-        for method_name, method_config in zone.config['motion_methods'].items():
-            if method_config['enabled']:
-                motionless = query.filter(~MeteoState.next_motions.any(method=method_name)) \
-                                  .order_by(MeteoState.time).all()
-                print('Motionless count', len(motionless))
-                motions = [MeteoMotionData(prev_state=prev_state, next_state=next_state, method=method_name)
-                            for prev_state, next_state in zip(motionless[:-1], motionless[1:])]
-                for motion in motions:
-                    session.add(motion)
+            for method_name, method_config in zone.config['motion_methods'].items():
+                if method_config['enabled']:
+                    motionless = query.filter(~MeteoState.next_motions.any(method=method_name)) \
+                                      .order_by(MeteoState.time).all()
+                    print('Motionless count', len(motionless))
+                    motions = [MeteoMotionData(prev_state=prev_state, next_state=next_state, method=method_name)
+                                for prev_state, next_state in zip(motionless[:-1], motionless[1:])]
+                    for motion in motions:
+                        session.add(motion)
 
 
 def get_next_motion(session):
@@ -58,11 +60,21 @@ def calculate_all():
                 print(motion.prev_state.zone.config)
                 motion.calculate_motion_ds(processor)
                 motion_calculated = True
-def main():
-    calculate_all()
 
 if __name__ == '__main__':
-    main()
+    create_all_missing_motions()
+    calculate_all()
 
 
+class Daemon(daemon.Daemon):
+    def run(self):
+        import time
+        import config
 
+        while True:
+            try:
+                create_all_missing_motions()
+                calculate_all()
+            except:
+                pass
+            time.sleep(config.EnvironmentConfig.MOTION_CALCULATE_SECONDS)

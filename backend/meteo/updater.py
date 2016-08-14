@@ -15,6 +15,8 @@ import io
 
 from .image import ImageProcessor
 
+import daemon
+
 
 class GOESScrapper(object):
     def __init__(self, satellite, zone_name, channel, url_schema=None, match_regex=None, time_parser=None):
@@ -76,7 +78,7 @@ class MeteoZoneUpdater(object):
                     for time in available]
 
         for state in states:
-            session.merge(state)
+            self.session.merge(state)
 
         return states
 
@@ -85,7 +87,7 @@ class MeteoZoneUpdater(object):
         query = exists()
         for attr in ['time', 'zone_name', 'satellite', 'channel']:
             query = query.where(getattr(MeteoStaticData, attr)==data[attr])
-        return not session.query(query).scalar()
+        return not self.session.query(query).scalar()
 
     def _fetch_and_crop(self, data):
         data = dict(data)
@@ -108,7 +110,7 @@ class MeteoZoneUpdater(object):
 
         for data in datas:
             print(data['time'].isoformat(), data['satellite'], data['channel'])
-            session.add(MeteoStaticData(**data))
+            self.session.add(MeteoStaticData(**data))
 
 
 def update():
@@ -128,12 +130,14 @@ def update():
             updater.update_datas()
             print('Done')
 
+class Daemon(daemon.Daemon):
+    def run(self):
+        import time
+        import config
 
-def main():
-    update()
-
-
-if __name__ == '__main__':
-    main()
-
-
+        while True:
+            try:
+                update()
+            except:
+                pass
+            time.sleep(config.EnvironmentConfig.IMAGE_UPDATE_SECONDS)

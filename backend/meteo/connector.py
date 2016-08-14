@@ -35,6 +35,10 @@ def session_scope():
     finally:
         session.close()
 
+def create_schema(engine = get_engine()):
+    from .meteo_sql import Base
+    Base.metadata.create_all(engine)
+
 if __name__ == '__main__':
     import code
     from .meteo_sql import *

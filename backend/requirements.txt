@@ -18,10 +18,9 @@ py==1.4.31
 pycparser==2.14
 pyopencl==2016.1
 pytest==2.9.2
-python-daemon==2.1.1
 python-dateutil==2.5.3
 pytools==2016.2.1
 six==1.10.0
 SQLAlchemy==1.0.14
 Werkzeug==0.11.10
-
+gunicorn==19.6.0

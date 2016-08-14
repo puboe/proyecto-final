@@ -3,6 +3,8 @@ import os
 
 class Config(object):
     APPLICATION_ROOT = '/api'
+    IMAGE_UPDATE_SECONDS = 5*60
+    MOTION_CALCULATE_SECONDS = 1*60
 
 class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://piedpiper:piedpiper@gserver/piedpiper'
@@ -14,6 +16,10 @@ class DevelopmentExternalConfig(Config):
 
 class DevelopmentLocalConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://piedpiper:piedpiper@exp/piedpiper'
+    DEBUG = True
+
+class DevelopmentAlternativeConfig(Config):
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://clouds:clouds@exp/clouds'
     DEBUG = True
 
 class ProductionConfig(Config):

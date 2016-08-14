@@ -1,6 +1,6 @@
 import numpy as np
 
-
+import os
 import sys
 import logging
 from . import loggingtools
@@ -50,7 +50,9 @@ class CLImageProcessor(ImageProcessor):
 
         self.program = program
         if self.program is None:
-            with open('image.cl', 'r') as cl_file:
+            script_file_name = 'image.cl'
+            script_file_path = os.path.join(os.path.dirname(__file__), script_file_name)
+            with open(script_file_path, 'r') as cl_file:
                 self.program = self.pyopencl.Program(self.context, cl_file.read()).build()
 
     def _check_fortran_cont(self, **kwargs):

@@ -35,8 +35,8 @@ def get_prediction_image(zone_name, time, start_time, end_time):
 def prediction_data_image(zone_name, time):
     pred_image = get_prediction_image(zone_name,
                                       time,
-                                      time - datetime.timedelta(hours=10),
-                                      time - datetime.timedelta(hours=5))
+                                      time - datetime.timedelta(hours=6),
+                                      time - datetime.timedelta(hours=2))
     if pred_image is None:
         abort(404)
 

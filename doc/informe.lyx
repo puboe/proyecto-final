@@ -118,8 +118,7 @@ Introducción
 \end_layout
 
 \begin_layout Standard
-1.
- Introducción Desde la antigüedad, la meteorología ha fascinado al ser humano.
+Desde la antigüedad, la meteorología ha fascinado al ser humano.
  El poder predecir el clima ha sido uno de los retos más grandes de la humanidad
  a través de la historia.
  El primer registro escrito data de alrededor del año 340 a.C.
@@ -1290,6 +1289,12 @@ key "lucas1981iterative"
 \end_layout
 
 \begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Algoritmo-de-pareo"
+
+\end_inset
+
 Algoritmo de pareo de bloques
 \end_layout
 
@@ -1375,7 +1380,7 @@ El estimador del desplazamiento, dato del cual se puede derivar, por ejemplo,
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -2270,7 +2275,7 @@ reference "fig:db_erdiag"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -2558,7 +2563,7 @@ La aplicación consta de tres pantallas a las cuales se puede acceder utilizando
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -2630,7 +2635,7 @@ A su vez el panel central muestra una descripción del significado de las
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -2688,7 +2693,7 @@ reference "fig:web-saved-states"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -2738,6 +2743,12 @@ reference "fig:web-credits"
 \end_layout
 
 \begin_layout Chapter
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Resultados"
+
+\end_inset
+
 Resultados
 \end_layout
 
@@ -2938,7 +2949,7 @@ reference "fig:resultado_dia_noche"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -3007,7 +3018,7 @@ reference "fig:resultado_bordes"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -3057,13 +3068,56 @@ n de este trabajo.
 Conclusiones generales
 \end_layout
 
+\begin_layout Standard
+La meteorología es una ciencia que, debido a su carácter interdisciplinario
+ y global y a la impredicibilidad de sus fenómenos, su estudio resulta de
+ una complejidad elevada.
+ Así mismo, la detección automática de movimiento en imágenes presenta también
+ sus propias dificultades.
+ Combinar estos dos aspectos, por lo tanto, no es una tarea sencilla.
+ 
+\end_layout
+
+\begin_layout Standard
+En este trabajo se propuso utilizar una variante del algoritmo de pareo
+ de bloques, presentado en la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Algoritmo-de-pareo"
+
+\end_inset
+
+, para el seguimiento automático de nubes en una secuencia de imágenes satelital
+es con el fin de estimar la intensidad y dirección del viento.
+ Los resultados obtenidos son alentadores e indican que, si bien esta implementa
+ción posee algunas limitaciones, como las mostradas en el capítulo 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Resultados"
+
+\end_inset
+
+, es una alternativa viable para este propósito.
+ Sin embargo, si dicha secuencia no cuenta con un intervalo temporal entre
+ imágenes relativamente bajo como en este caso (máximo una hora), los resultados
+ podrían no ser muy buenos.
+\end_layout
+
+\begin_layout Standard
+Por otro lado, la flexibilidad de la plataforma provista permite que futuras
+ ampliaciones aprovechen los datos calculados por la misma con relativa
+ facilidad.
+ Este fue uno de los principales objetivos planteados desde el comienzo
+ del proyecto.
+\end_layout
+
 \begin_layout Section
 Posibles ampliaciones
 \end_layout
 
 \begin_layout Standard
-Entre las posibles ampliaciones de este trabajo podemos mencionar dos que
- resultan de interés:
+Entre las posibles ampliaciones de este trabajo podemos mencionar algunas
+ que resultan de interés:
 \end_layout
 
 \begin_layout Itemize
@@ -3073,8 +3127,16 @@ Expandir la región geográfica abarcada por este proyecto a otras regiones
 \end_layout
 
 \begin_layout Itemize
+Identificar y clasificar los diferentes tipos de nubes con el fin de brindar
+ un pronóstico más preciso.
+ Esto involucraría separar aquellas que tienen más probabilidades de precipitar
+ y darles seguimiento para predecir donde y cuando lo harán.
+\end_layout
+
+\begin_layout Itemize
 Modelar el sistema de nubes como una red, para ver si su comportamiento
- es similar al de algún sistema conocido.
+ es similar al de algún sistema conocido y tratarlo con técnicas utilizadas
+ en este área.
 \end_layout
 
 \begin_layout Standard

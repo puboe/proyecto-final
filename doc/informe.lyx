@@ -2753,6 +2753,16 @@ Resultados
 \end_layout
 
 \begin_layout Standard
+En este capítulo se mostrarán ejemplos de situaciones en las que la estimación
+ del movimiento presenta problemas, así como otras en la que los resultados
+ obtenidos son los esperados.
+\end_layout
+
+\begin_layout Section
+Problemas
+\end_layout
+
+\begin_layout Standard
 La estimación del movimiento se ve afectada en las siguientes situaciones:
 \end_layout
 
@@ -2789,7 +2799,7 @@ reference "fig:resultado_rapido"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -2879,7 +2889,7 @@ reference "fig:resultado_evap"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -3055,13 +3065,153 @@ No existe información de movimiento en los bordes de la imagen.
 
 \end_layout
 
+\begin_layout Section
+Casos de éxito
+\end_layout
+
+\begin_layout Standard
+El primer ejemplo de éxito donde la estimación del movimiento resultó ser
+ la esperada se trata de un ciclón que fue captado por el satélite el día
+ 28 de junio de 2016.
+ En la Figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:exito1"
+
+\end_inset
+
+ puede observarse que la dirección de las flechas acompaña el movimiento
+ circular descripto por las nubes entre la primer imagen y la segunda.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/Resultados/exito_28-6-2016_1-38a.png
+	lyxscale 30
+	width 7.5cm
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/Resultados/exito_28-6-2016_1-38b.png
+	lyxscale 30
+	width 7.5cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:exito1"
+
+\end_inset
+
+Ciclón detectado correctamente el día 28 de junio de 2016.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Otro ejemplo se encuentra el día 7 de agosto del 2016.
+ En este caso, se pueden observar en la Figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:exito2"
+
+\end_inset
+
+ dos frentes de viento con distintas direcciones.
+ Por un lado, un frente frío proveniente de la Cordillera de los Andes con
+ dirección hacia el Este y, por el otro, uno cálido proveniente de Brasil
+ con dirección hacia el Sur.
+ Dadas estas condiciones, cuando ambos se encuentran la probabilidad de
+ precipitación es alta y esto se pudo comprobar ya que el día 8 de agosto
+ del 2016 llovió en la Ciudad de Buenos Aires.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/Resultados/2016-08-07T17_08_00.png
+	lyxscale 30
+	width 7.5cm
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/Resultados/2016-08-07T20_08_00.png
+	lyxscale 30
+	width 7.5cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:exito2"
+
+\end_inset
+
+Secuencia en la que se observan dos frentes avanzar en simultáneo con distintas
+ direcciones.
+ Imágenes tomadas el 7 de agosto del 2016.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Chapter
 Conclusiones
 \end_layout
 
 \begin_layout Standard
 En este capítulo se presentarán las conclusiones arribadas durante la realizació
-n de este trabajo.
+n de este trabajo, así como posibles futuras ampliaciones que resultan de
+ interés.
 \end_layout
 
 \begin_layout Section
@@ -3122,8 +3272,12 @@ Entre las posibles ampliaciones de este trabajo podemos mencionar algunas
 
 \begin_layout Itemize
 Expandir la región geográfica abarcada por este proyecto a otras regiones
- del planeta e incluso a todo el mundo, para tener una visión más completa
- de cómo interactúan los sistemas de distintas regiones entre sí.
+ del planeta e incluso a todo el mundo, para tener una
+\end_layout
+
+\begin_layout Itemize
+visión más completa de cómo interactúan los sistemas de distintas regiones
+ entre sí.
 \end_layout
 
 \begin_layout Itemize

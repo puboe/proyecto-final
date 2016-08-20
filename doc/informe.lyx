@@ -892,6 +892,82 @@ DBSCAN requiere dos parámetros:
  que si resulte suficientemente grande y por lo tanto ser parte de un cluster.
 \end_layout
 
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename img/dbscan.png
+	lyxscale 60
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:dbscan"
+
+\end_inset
+
+Secuencia de imágenes procesadas con DBSCAN.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+El resultado que se pretendió lograr utilizando este algorimto fue que cada
+ nube formara un cluster, el cual se podría seguir a través de la secuencia
+ de imágenes para obtener una estimación del movimiento.
+ Sin embargo, esto presentó algunos problemas.
+ En primer lugar, la volatibilidad de los clusters entre imágenes subsecuentes
+ hace que extraer información sobre movimiento resulte difícil.
+ En segundo lugar, hay ocasiones en las que parte de un cluster se convierte
+ en otro, lo que imposibilita que los resultados se correspondan con el
+ movimiento real del sistema.
+ Esto se puede observar en la Figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:dbscan"
+
+\end_inset
+
+, donde parte del cluster 1 (en verde claro) se convierte en el 2 (en verde
+ oscuro), y parte del 2 se convierte en el 3 (en rosa).
+ Por último, hay numerosos clusters que aparecen en la segunda imagen que
+ no pueden parearse con ninguno de la anterior y, por ende, no hay información
+ sobre su movimiento.
+ Estos últimos se observan en la Figura 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:dbscan"
+
+\end_inset
+
+ en color negro.
+ Estos problemas, sumado a que se lograron mejores resultados con otras
+ alternativas, llevaron a que este algoritmo fuera finalmente descartado.
+\end_layout
+
 \begin_layout Section
 Flujo óptico
 \end_layout
@@ -949,7 +1025,7 @@ key "waynebreskyjaimedaniels2006"
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -1133,7 +1209,11 @@ donde
 \begin_inset Formula $I_{t}$
 \end_inset
 
-, son diferencias discretas de la imagen.
+, son diferencias discretas de la imagen y 
+\begin_inset Formula $T$
+\end_inset
+
+ es la traspuesta.
  Si adicionalmente se quiere calcular 
 \begin_inset Formula $\vec{v}$
 \end_inset
@@ -1184,11 +1264,8 @@ Finalmente, puede resolverse el sistema sobredeterminado con algún método
 \end_layout
 
 \begin_layout Standard
-Solamente del enunciado del algoritmo se desprenden dos problemas:
-\end_layout
-
-\begin_layout Standard
-Debido a la localidad del sistema de ecuaciones en diferencias, la frecuencia
+Solamente del enunciado del algoritmo se desprenden dos problemas.
+ Debido a la localidad del sistema de ecuaciones en diferencias, la frecuencia
  temporal de las imágenes debe ser elevada, es decir, el intervalo de tiempo
  entre cada una debe ser reducido.
  Es porque no se dispone de esta frecuencia de imágenes satelitales que
@@ -2050,7 +2127,7 @@ I_{D}(x,y)=\frac{I_{D}^{*}(x,y)-min\{I_{D}^{*}(x,y)/(x,y)\,\epsilon\,Dom_{I_{D}^
 
 \end_inset
 
-Donde 
+donde 
 \begin_inset Formula $I_{D}$
 \end_inset
 

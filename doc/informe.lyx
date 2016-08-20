@@ -897,7 +897,7 @@ DBSCAN requiere dos parámetros:
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1025,7 +1025,7 @@ key "waynebreskyjaimedaniels2006"
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -3349,12 +3349,8 @@ Entre las posibles ampliaciones de este trabajo podemos mencionar algunas
 
 \begin_layout Itemize
 Expandir la región geográfica abarcada por este proyecto a otras regiones
- del planeta e incluso a todo el mundo, para tener una
-\end_layout
-
-\begin_layout Itemize
-visión más completa de cómo interactúan los sistemas de distintas regiones
- entre sí.
+ del planeta e incluso a todo el mundo, para tener una visión más completa
+ de cómo interactúan los sistemas de distintas regiones entre sí.
 \end_layout
 
 \begin_layout Itemize
@@ -3362,6 +3358,12 @@ Identificar y clasificar los diferentes tipos de nubes con el fin de brindar
  un pronóstico más preciso.
  Esto involucraría separar aquellas que tienen más probabilidades de precipitar
  y darles seguimiento para predecir donde y cuando lo harán.
+\end_layout
+
+\begin_layout Itemize
+Detectar situaciones anómalas y ofrecer un sistema de alerta temprana frente
+ a posibles catástrofes naturales o tormentas fuertes en las que podría
+ precipitar, por ejemplo, granizo.
 \end_layout
 
 \begin_layout Itemize

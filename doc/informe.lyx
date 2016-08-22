@@ -3326,19 +3326,46 @@ reference "chap:Resultados"
 
 , es una alternativa viable para este propósito.
  Sin embargo, si dicha secuencia no cuenta con un intervalo temporal entre
- imágenes relativamente bajo como en este caso (máximo una hora), los resultados
+ imágenes relativamente bajo como en este caso (máximo una hora), los mismos
  podrían no ser muy buenos.
+\end_layout
+
+\begin_layout Standard
+Otro de los objetivos propuestos por este proyecto consistió en proveer
+ una predicción simple de la posición y tamaño de las nubes para las próximas
+ horas.
+ En la práctica, no resultó ser tan precisa como se esperaba en la mayoría
+ de los casos.
+ En la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Posibles-ampliaciones"
+
+\end_inset
+
+ se propone una forma de mejorarla mediante la clasificación de los distintos
+ tipos de nubes.
 \end_layout
 
 \begin_layout Standard
 Por otro lado, la flexibilidad de la plataforma provista permite que futuras
  ampliaciones aprovechen los datos calculados por la misma con relativa
  facilidad.
+ Para esto, el desarrollo de una API como método de interacción con el back-end
+ resultó fundamental, ya que proporciona una forma de acceso simple e intuitiva
+ a la información del mismo y permite, entre otras cosas, la utilización
+ de front-ends alternativos.
  Este fue uno de los principales objetivos planteados desde el comienzo
  del proyecto.
 \end_layout
 
 \begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Posibles-ampliaciones"
+
+\end_inset
+
 Posibles ampliaciones
 \end_layout
 

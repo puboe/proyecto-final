@@ -1526,6 +1526,12 @@ E(B_{1},B_{2})=\sum_{i,j}\left(I_{1}(x_{1}+i,y_{1}+j)\text{­}I_{2}(x_{2}+i,y_{2
 \end_layout
 
 \begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Canales-infrarrojos"
+
+\end_inset
+
 Canales infrarrojos
 \end_layout
 
@@ -1683,7 +1689,8 @@ r las características a partir de la información de los bordes y no de la
  Está inspirado en la idea de que la intensidad de una imagen no está relacionad
 a al detalle contenido en la misma, como en los casos en los que un área
  grande es uniforme.
- Para detectar un borde se calcula el módulo del gradiente 
+ Para detectar un borde se calcula una aproximación discreta al módulo del
+ gradiente 
 \begin_inset Formula $\left|\nabla I\right|$
 \end_inset
 
@@ -1830,9 +1837,16 @@ donde
 
 .
  El valor de los pesos se determinó de forma empírica, utilizando como referenci
-a la información poseída sobre el significado de cada uno de los sensores
- infrarrojos.
- En particular para realizar la estimación exhibida se utilizó los pesos
+a la información cada uno de los canales infrarrojos introducida en la sección
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Canales-infrarrojos"
+
+\end_inset
+
+.
+ En particular para realizar la estimación exhibida se utilizaron los pesos
  
 \begin_inset Formula $w_{IR2}=0.1$
 \end_inset
@@ -1846,7 +1860,15 @@ a la información poseída sobre el significado de cada uno de los sensores
 \end_inset
 
 ; basado en que IR3 e IR4 son los sensores menos afectados por la variacíon
- dia-noche.
+ día-noche, la que se discutirá en la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Problemas"
+
+\end_inset
+
+, y puesto que en la práctica los resultados obtenidos con dichos pesos
+ fueron satisfactorios.
  
 \end_layout
 
@@ -2139,11 +2161,15 @@ donde
 \begin_inset Formula $I_{P}$
 \end_inset
 
- es la intensidad de la predicción e 
+ es la intensidad de la predicción, 
 \begin_inset Formula $I_{R}$
 \end_inset
 
- es la intensidad de la imagen real.
+ es la intensidad de la imagen real y 
+\begin_inset Formula $Dom$
+\end_inset
+
+ es el dominio de la función.
  
 \end_layout
 
@@ -2400,6 +2426,7 @@ status collapsed
 \align center
 \begin_inset Graphics
 	filename img/EsquemaBD.png
+	lyxscale 30
 	scale 25
 
 \end_inset
@@ -2428,6 +2455,20 @@ Diagrama de entidad-relación del esquema de la base de datos.
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Este esquema se eligió con el objetivo de que permitiera analizar zonas
+ por separado (funcionando independientemente y con su propia configuración),
+ puesto que son entidades independientes.
+ Por cada estado debe ser posible que haya más de una imágen satelital y
+ una sola predicción.
+ Finalmente se debe poder guardar información generada sobre el movimiento
+ entre dos estados.
+ Se decidió que las interpolaciones no estuvieran almacenadas en la base
+ de datos porque al generarlas a demanda, la aplicación se vuelve más flexible
+ (por ejemplo se puede elegir la cantidad de estados previos que se deseen,
+ de lo contrario estaría delimitado).
 \end_layout
 
 \begin_layout Subsection
@@ -2836,6 +2877,12 @@ En este capítulo se mostrarán ejemplos de situaciones en las que la estimació
 \end_layout
 
 \begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Problemas"
+
+\end_inset
+
 Problemas
 \end_layout
 
@@ -3334,7 +3381,7 @@ reference "chap:Resultados"
 Otro de los objetivos propuestos por este proyecto consistió en proveer
  una predicción simple de la posición y tamaño de las nubes para las próximas
  horas.
- En la práctica, no resultó ser tan precisa como se esperaba en la mayoría
+ En la práctica, resultó no ser tan precisa como se esperaba en la mayoría
  de los casos.
  En la sección 
 \begin_inset CommandInset ref
@@ -3355,8 +3402,7 @@ Por otro lado, la flexibilidad de la plataforma provista permite que futuras
  resultó fundamental, ya que proporciona una forma de acceso simple e intuitiva
  a la información del mismo y permite, entre otras cosas, la utilización
  de front-ends alternativos.
- Este fue uno de los principales objetivos planteados desde el comienzo
- del proyecto.
+ Este fue uno de los principales objetivos planteados al comienzo del proyecto.
 \end_layout
 
 \begin_layout Section

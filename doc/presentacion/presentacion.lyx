@@ -569,10 +569,6 @@ Ofrecer una plataforma flexible
 \end_layout
 
 \begin_layout Section
-Estado del arte
-\end_layout
-
-\begin_layout Subsection
 Plataformas similares
 \end_layout
 
@@ -660,11 +656,23 @@ framebreak
 \end_layout
 
 \begin_layout Itemize
-1
+Imágenes cada una hora.
 \end_layout
 
 \begin_layout Itemize
-2
+Interfaz poco atractiva.
+\end_layout
+
+\begin_layout Itemize
+Limitado a 12 hs.
+\end_layout
+
+\begin_layout Itemize
+Permite ver animación.
+\end_layout
+
+\begin_layout Itemize
+No ofrece información sobre vientos.
 \end_layout
 
 \end_deeper
@@ -759,11 +767,19 @@ framebreak
 \end_layout
 
 \begin_layout Itemize
-1
+Acceso al estado de distintas variables climáticas.
 \end_layout
 
 \begin_layout Itemize
-2
+Interfaz vistosa.
+\end_layout
+
+\begin_layout Itemize
+Distintas proyecciones disponibles.
+\end_layout
+
+\begin_layout Itemize
+Open source (github)
 \end_layout
 
 \end_deeper
@@ -858,20 +874,20 @@ framebreak
 \end_layout
 
 \begin_layout Itemize
-1
+Brinda pronóstico del clima.
 \end_layout
 
 \begin_layout Itemize
-2
+Muestra datos historicos.
 \end_layout
 
 \begin_layout Itemize
-3
+Indica la ubicación de los sensores.
 \end_layout
 
 \end_deeper
-\begin_layout Subsection
-Trabajos académicos
+\begin_layout Section
+Trabajos académicos relacionados
 \end_layout
 
 \begin_layout Frame
@@ -900,7 +916,11 @@ key "remusbradloanalfredletia2002"
 \end_layout
 
 \begin_layout Itemize
-2
+Utilizan un algoritmo de pareo de bloques
+\end_layout
+
+\begin_layout Itemize
+Se obtuvieron buenos resultados
 \end_layout
 
 \end_deeper
@@ -938,11 +958,11 @@ key "waynebreskyjaimedaniels2006"
 \end_layout
 
 \begin_layout Itemize
-2
+Utilizan un algoritmo de flujo óptico tradicional
 \end_layout
 
 \begin_layout Itemize
-3
+Se obtuvieron buenos resultados con alta frecuencia temporal
 \end_layout
 
 \end_deeper
@@ -950,6 +970,29 @@ key "waynebreskyjaimedaniels2006"
 Marco teórico
 \end_layout
 
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+DBSCAN
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Algoritmo de clustering de datos basado en densidad
+\end_layout
+
+\begin_layout Itemize
+Clasifica a los puntos según sus conexiones (núcleo, alcanzables y outliers)
+\end_layout
+
+\end_deeper
 \begin_layout Section
 Implementación
 \end_layout

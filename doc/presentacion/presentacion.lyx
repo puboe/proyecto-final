@@ -612,7 +612,7 @@ status open
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename /home/fede/itba/pied-piper/doc/informe/img/smn.png
+	filename ../informe/img/smn.png
 	lyxscale 25
 	width 8cm
 
@@ -711,7 +711,7 @@ status open
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename /home/fede/itba/pied-piper/doc/informe/img/nullschool.png
+	filename ../informe/img/nullschool.png
 	lyxscale 25
 	width 9cm
 
@@ -810,7 +810,7 @@ status open
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename /home/fede/itba/pied-piper/doc/informe/img/windyty.png
+	filename ../informe/img/windyty.png
 	lyxscale 25
 	width 9cm
 
@@ -1185,22 +1185,6 @@ Título de algún Bloque de ejemplo
 
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
-\begin_inset Formula $e^{i\pi}=-1$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Formula $e^{i\pi/2}=i$
-\end_inset
-
-.
-\end_layout
-
-\end_deeper
 \end_deeper
 \begin_layout Subsection
 Trabajo previo

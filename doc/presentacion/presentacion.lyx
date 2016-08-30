@@ -597,7 +597,7 @@ Servicio Meteorológico Nacional
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -708,7 +708,7 @@ Nullschool Earth
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1244,6 +1244,7 @@ Prueba DBSCAN
 \begin_layout Columns
 \begin_inset Graphics
 	filename img/dbscan_vert.png
+	lyxscale 25
 	width 5cm
 
 \end_inset
@@ -1346,6 +1347,7 @@ Prueba DBSCAN
 \begin_layout Columns
 \begin_inset Graphics
 	filename img/dbscan_vert.png
+	lyxscale 25
 	width 5cm
 
 \end_inset
@@ -1423,9 +1425,148 @@ Movimientos que no se corresponden con la realidad
 \end_layout
 
 \begin_layout Section
-Implementación
+Flujo óptico
 \end_layout
 
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Flujo óptico
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Movimiento aparente de patrones de brillo en una imagen
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename ../informe/img/Opticfloweg.png
+	lyxscale 10
+	width 10cm
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Flujo óptico (Ejemplo)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename img/optical_flow0.png
+	width 10cm
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Flujo óptico (Ejemplo)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename img/optical_flow1.png
+	width 10cm
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Flujo óptico (Ejemplo)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename img/optical_flow.png
+	lyxscale 50
+	width 10cm
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
 \begin_layout Section
 Resultados
 \end_layout

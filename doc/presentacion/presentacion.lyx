@@ -6,7 +6,7 @@
 \origin unavailable
 \textclass beamer
 \begin_preamble
-\usetheme{Boadilla}
+\usetheme{metropolis}
 % or ...
 
 \setbeamercovered{transparent}
@@ -473,10 +473,6 @@ Si se omiten detalles vitales para una demostración/implementación, dígalo
 Introducción
 \end_layout
 
-\begin_layout Subsection
-Objetivos
-\end_layout
-
 \begin_layout Frame
 \begin_inset Argument 4
 status open
@@ -656,23 +652,23 @@ framebreak
 \end_layout
 
 \begin_layout Itemize
-Imágenes cada una hora.
+Imágenes cada una hora
 \end_layout
 
 \begin_layout Itemize
-Interfaz poco atractiva.
+Interfaz poco atractiva
 \end_layout
 
 \begin_layout Itemize
-Limitado a 12 hs.
+Limitado a 12 hs
 \end_layout
 
 \begin_layout Itemize
-Permite ver animación.
+Permite ver animación
 \end_layout
 
 \begin_layout Itemize
-No ofrece información sobre vientos.
+No ofrece información sobre vientos
 \end_layout
 
 \end_deeper
@@ -767,15 +763,15 @@ framebreak
 \end_layout
 
 \begin_layout Itemize
-Acceso al estado de distintas variables climáticas.
+Acceso al estado de distintas variables climáticas
 \end_layout
 
 \begin_layout Itemize
-Interfaz vistosa.
+Interfaz vistosa
 \end_layout
 
 \begin_layout Itemize
-Distintas proyecciones disponibles.
+Distintas proyecciones disponibles
 \end_layout
 
 \begin_layout Itemize
@@ -874,61 +870,24 @@ framebreak
 \end_layout
 
 \begin_layout Itemize
-Brinda pronóstico del clima.
+Brinda pronóstico del clima
 \end_layout
 
 \begin_layout Itemize
-Muestra datos historicos.
+Muestra datos historicos
 \end_layout
 
 \begin_layout Itemize
-Indica la ubicación de los sensores.
+Indica la ubicación de los sensores
+\end_layout
+
+\begin_layout Itemize
+Propietario
 \end_layout
 
 \end_deeper
 \begin_layout Section
 Trabajos académicos relacionados
-\end_layout
-
-\begin_layout Frame
-\begin_inset Argument 4
-status open
-
-\begin_layout Plain Layout
-Extracting Cloud Motion From Satellite Image Sequences
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-Trabajo de Remus Brad y Ioan Alfred Letia 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "remusbradloanalfredletia2002"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-Utilizan un algoritmo de pareo de bloques
-\end_layout
-
-\begin_layout Itemize
-Se obtuvieron buenos resultados
-\end_layout
-
-\end_deeper
-\begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
 \end_layout
 
 \begin_layout Frame
@@ -947,7 +906,7 @@ The Feasibility of an Optical Flow Algorithm for Estimating Atmospheric
 
 \begin_deeper
 \begin_layout Itemize
-Trabajo de Wayne Bresky y Jaime Daniels 
+Trabajo de Wayne Bresky y Jaime Daniels (2006) 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "waynebreskyjaimedaniels2006"
@@ -958,16 +917,243 @@ key "waynebreskyjaimedaniels2006"
 \end_layout
 
 \begin_layout Itemize
-Utilizan un algoritmo de flujo óptico tradicional
+Algoritmo de Lucas y Kanade
 \end_layout
 
 \begin_layout Itemize
-Se obtuvieron buenos resultados con alta frecuencia temporal
+Requiere alta frecuencia temporal
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Extracting Cloud Motion From Satellite Image Sequences
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Trabajo de Remus Brad y Ioan Alfred Letia (2002) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "remusbradloanalfredletia2002"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Umbral automático
+\end_layout
+
+\begin_layout Itemize
+Algoritmo de pareo de bloques
+\end_layout
+
+\begin_layout Itemize
+Filtro de la mediana para el ruido en el resultado
+\end_layout
+
+\begin_layout Itemize
+Más parecido a nuestra implementación
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Fuente de datos
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Imágenes satelitales
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Imágenes satelitales captadas por sensores infrarrojos
+\end_layout
+
+\begin_layout Itemize
+Fuente: NASA/GOES (Geostationary Operational Environmental Satellite)
+\end_layout
+
+\begin_layout Itemize
+Distintos sensores/longitudes de onda
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Infrarrojo
+\end_layout
+
+\begin_layout Itemize
+Visible
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Canales infrarrojos
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+IR2:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Longitud de onda corta (cercana al visible)
+\end_layout
+
+\begin_layout Itemize
+Emisión superficie de la tierra
+\end_layout
+
+\begin_layout Itemize
+Emisión topes nubosos
+\end_layout
+
+\begin_layout Itemize
+Reflexión de la radiación solar
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Variaciones globales en el nivel de intensidad
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Canales infrarrojos
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+IR3:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Longitud de onda media
+\end_layout
+
+\begin_layout Itemize
+También llamada vapor de agua:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Emisión de capas intermedias y altas de la atmósfera
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Se utiliza normalmente para medir el movimiento
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Canales infrarrojos
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+IR4:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Longitud de onda larga
+\end_layout
+
+\begin_layout Itemize
+Similar a IR2
+\end_layout
+
+\begin_layout Itemize
+Menos afectada por la reflexión solar
 \end_layout
 
 \end_deeper
 \begin_layout Section
-Marco teórico
+Primer enfoque
 \end_layout
 
 \begin_layout Frame
@@ -985,18 +1171,44 @@ Clusterización
 
 \begin_deeper
 \begin_layout Itemize
-Primer enfoque
+Definir clusteres de nubes en dos imágenes consecutivas
 \end_layout
 
 \begin_layout Itemize
-Algoritmo DBSCAN (Density based spatial clustering of applications with
- noise)
+Correlacionarlos
 \end_layout
 
 \begin_layout Itemize
-Clasifica a los puntos según sus conexiones (núcleo, alcanzables y outliers)
+Estimar el movimiento
 \end_layout
 
+\begin_layout Itemize
+Algoritmos de clusterización:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+K-Means
+\end_layout
+
+\begin_layout Itemize
+MeanShift
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+DBSCAN
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
 \end_deeper
 \begin_layout Standard
 \begin_inset Separator plain
@@ -1010,7 +1222,7 @@ Clasifica a los puntos según sus conexiones (núcleo, alcanzables y outliers)
 status open
 
 \begin_layout Plain Layout
-DBSCAN - Problemas
+Prueba DBSCAN
 \end_layout
 
 \end_inset
@@ -1019,14 +1231,188 @@ DBSCAN - Problemas
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
-Clusters muy volátiles
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+\begin_inset Graphics
+	filename img/dbscan_vert.png
+	width 5cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
 \end_layout
 
 \begin_layout Itemize
-Muchos clusters no se pueden parear
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+1-
 \end_layout
 
+\end_inset
+
+Pareo basado en tamaño y distancia relativa
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+2-
+\end_layout
+
+\end_inset
+
+Producto cartesiano
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+2-
+\end_layout
+
+\end_inset
+
+Puntaje en función de la distancia y variación de tamaño
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+2-
+\end_layout
+
+\end_inset
+
+Selección de los pares con mejor puntuación
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Prueba DBSCAN
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+\begin_inset Graphics
+	filename img/dbscan_vert.png
+	width 5cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+1-
+\end_layout
+
+\end_inset
+
+Problemas
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+2-
+\end_layout
+
+\end_inset
+
+No hay correspondencia 1 a 1
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+2-
+\end_layout
+
+\end_inset
+
+Dificultad para determinar movimientos
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+2-
+\end_layout
+
+\end_inset
+
+Movimientos que no se corresponden con la realidad
+\end_layout
+
+\end_deeper
+\end_deeper
 \end_deeper
 \begin_layout Frame
 

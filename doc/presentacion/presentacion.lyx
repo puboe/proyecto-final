@@ -975,7 +975,7 @@ Marco teórico
 status open
 
 \begin_layout Plain Layout
-DBSCAN
+Clusterización
 \end_layout
 
 \end_inset
@@ -985,7 +985,12 @@ DBSCAN
 
 \begin_deeper
 \begin_layout Itemize
-Algoritmo de clustering de datos basado en densidad
+Primer enfoque
+\end_layout
+
+\begin_layout Itemize
+Algoritmo DBSCAN (Density based spatial clustering of applications with
+ noise)
 \end_layout
 
 \begin_layout Itemize
@@ -993,6 +998,44 @@ Clasifica a los puntos según sus conexiones (núcleo, alcanzables y outliers)
 \end_layout
 
 \end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+DBSCAN - Problemas
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Clusters muy volátiles
+\end_layout
+
+\begin_layout Itemize
+Muchos clusters no se pueden parear
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
 \begin_layout Section
 Implementación
 \end_layout

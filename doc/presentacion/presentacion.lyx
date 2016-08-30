@@ -1884,13 +1884,22 @@ Resultados
 
 \end_deeper
 \begin_layout Columns
-\begin_inset Graphics
-	filename /home/fede/itba/pied-piper/doc/informe/img/Resultados/2016-08-07T17_08_00.png
-	lyxscale 25
-	width 6cm
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+movie[autostart,loop,width=6cm]{}{img/28-6_exito2.mp4}
+\end_layout
 
 \end_inset
 
+
+\end_layout
+
+\begin_layout Columns
 
 \end_layout
 
@@ -1901,7 +1910,7 @@ Resultados
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename /home/fede/itba/pied-piper/doc/informe/img/Resultados/2016-08-07T20_08_00.png
+	filename ../informe/img/Resultados/2016-08-07T20_08_00.png
 	lyxscale 25
 	width 6cm
 
@@ -1949,7 +1958,7 @@ Resultados
 \end_deeper
 \begin_layout Columns
 \begin_inset Graphics
-	filename /home/fede/itba/pied-piper/doc/informe/img/Resultados/exito_28-6-2016_1-38a.png
+	filename ../informe/img/Resultados/exito_28-6-2016_1-38a.png
 	lyxscale 25
 	width 6cm
 
@@ -1965,7 +1974,7 @@ Resultados
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename /home/fede/itba/pied-piper/doc/informe/img/Resultados/exito_28-6-2016_1-38b.png
+	filename ../informe/img/Resultados/exito_28-6-2016_1-38b.png
 	lyxscale 25
 	width 6cm
 
@@ -2013,7 +2022,7 @@ Problemas - Ciclo dia/noche
 \end_deeper
 \begin_layout Columns
 \begin_inset Graphics
-	filename /home/fede/itba/pied-piper/doc/informe/img/Resultados/exito_28-6-2016_1-38a.png
+	filename ../informe/img/Resultados/exito_28-6-2016_1-38a.png
 	lyxscale 25
 	width 6cm
 
@@ -2029,7 +2038,7 @@ Problemas - Ciclo dia/noche
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename /home/fede/itba/pied-piper/doc/informe/img/Resultados/exito_28-6-2016_1-38b.png
+	filename ../informe/img/Resultados/exito_28-6-2016_1-38b.png
 	lyxscale 25
 	width 6cm
 

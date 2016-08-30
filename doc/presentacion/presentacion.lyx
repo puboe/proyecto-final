@@ -569,16 +569,6 @@ Plataformas similares
 \end_layout
 
 \begin_layout Frame
-\begin_inset Argument 3
-status open
-
-\begin_layout Plain Layout
-allowframebreaks
-\end_layout
-
-\end_inset
-
-
 \begin_inset Argument 4
 status open
 
@@ -597,14 +587,14 @@ Servicio Meteorológico Nacional
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
 	filename ../informe/img/smn.png
 	lyxscale 25
-	width 8cm
+	width 7cm
 
 \end_inset
 
@@ -635,15 +625,28 @@ key "smn2016"
 
 \end_layout
 
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
 \begin_layout Standard
-\begin_inset ERT
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-framebreak
+Servicio Meteorológico Nacional
 \end_layout
 
 \end_inset
@@ -651,6 +654,7 @@ framebreak
 
 \end_layout
 
+\begin_deeper
 \begin_layout Itemize
 Imágenes cada una hora
 \end_layout
@@ -680,16 +684,6 @@ No ofrece información sobre vientos
 \end_layout
 
 \begin_layout Frame
-\begin_inset Argument 3
-status open
-
-\begin_layout Plain Layout
-allowframebreaks
-\end_layout
-
-\end_inset
-
-
 \begin_inset Argument 4
 status open
 
@@ -746,15 +740,20 @@ key "nullschoolearth2016"
 
 \end_layout
 
+\end_deeper
 \begin_layout Standard
-\begin_inset ERT
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-framebreak
+Nullschool Earth
 \end_layout
 
 \end_inset
@@ -762,6 +761,7 @@ framebreak
 
 \end_layout
 
+\begin_deeper
 \begin_layout Itemize
 Acceso al estado de distintas variables climáticas
 \end_layout
@@ -787,16 +787,6 @@ Open source (github)
 \end_layout
 
 \begin_layout Frame
-\begin_inset Argument 3
-status open
-
-\begin_layout Plain Layout
-allowframebreaks
-\end_layout
-
-\end_inset
-
-
 \begin_inset Argument 4
 status open
 
@@ -853,15 +843,20 @@ key "windyty2016"
 
 \end_layout
 
+\end_deeper
 \begin_layout Standard
-\begin_inset ERT
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-framebreak
+Windyty
 \end_layout
 
 \end_inset
@@ -869,6 +864,7 @@ framebreak
 
 \end_layout
 
+\begin_deeper
 \begin_layout Itemize
 Brinda pronóstico del clima
 \end_layout
@@ -917,7 +913,7 @@ key "waynebreskyjaimedaniels2006"
 \end_layout
 
 \begin_layout Itemize
-Algoritmo de Lucas y Kanade
+Algoritmo de Lucas-Kanade
 \end_layout
 
 \begin_layout Itemize
@@ -1196,7 +1192,7 @@ MeanShift
 \end_layout
 
 \begin_layout Itemize
-\begin_inset Flex Alert
+\begin_inset Flex Bold
 status open
 
 \begin_layout Plain Layout
@@ -1568,6 +1564,234 @@ Flujo óptico (Ejemplo)
 
 \end_deeper
 \begin_layout Section
+Algoritmo de Lucas-Kanade
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Ecuación del flujo óptico
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+Ecuación del 
+\begin_inset Flex Emphasize
+status open
+
+\begin_layout Plain Layout
+flujo óptico
+\end_layout
+
+\end_inset
+
+ o de la 
+\begin_inset Flex Emphasize
+status open
+
+\begin_layout Plain Layout
+constancia de brillo:
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Formula 
+\[
+I(x,y,t)\thickapprox I(x+\varDelta x,\,y+\varDelta y,\,t+\varDelta t)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Flex Bold
+status open
+
+\begin_layout Plain Layout
+Hipótesis:
+\end_layout
+
+\end_inset
+
+ la luminosidad es constante en el entorno de (x,y,t)
+\end_layout
+
+\begin_layout Itemize
+Los patrones de luminosidad pueden moverse pero 
+\begin_inset Flex Emphasize
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex Bold
+status open
+
+\begin_layout Plain Layout
+no
+\end_layout
+
+\end_inset
+
+ aparecer o desaparecer
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Esto es violado en algunas condiciones meteorológicas.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Algoritmo de Lucas-Kanade
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+A partir de la ecuación del flujo óptico se obtiene la siguiente expresión:
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Formula 
+\[
+\left(I_{x},\,I_{y}\right)\cdot\left[\begin{array}{c}
+v_{x}\\
+v_{y}
+\end{array}\right]=-I_{t}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula $I_{x}$
+\end_inset
+
+, 
+\begin_inset Formula $I_{y}$
+\end_inset
+
+ e 
+\begin_inset Formula $I_{t}$
+\end_inset
+
+ son discretas.
+ Calculadas numericamente a partir de 
+\begin_inset Formula $I$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Algoritmo de Lucas-Kanade
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+Evaluando 
+\begin_inset Formula $I_{x}$
+\end_inset
+
+, 
+\begin_inset Formula $I_{y}$
+\end_inset
+
+ e 
+\begin_inset Formula $I_{t}$
+\end_inset
+
+ en los puntos 
+\begin_inset Formula $q_{1},\,q_{2},\ldots,\,q_{n}$
+\end_inset
+
+ del entorno al punto donde se quiere estimar el movimiento, tenemos el
+ sistema:
+\begin_inset Formula 
+\[
+\left[\begin{array}{cc}
+I_{x}(q_{1}) & I_{y}(q_{2})\\
+I_{x}(q_{2}) & I_{y}(q_{2})\\
+\vdots & \vdots\\
+I_{x}(q_{n}) & I_{y}(q_{n})
+\end{array}\right]\left[\begin{array}{c}
+v_{x}\\
+v_{y}
+\end{array}\right]=\left[\begin{array}{c}
+-I_{t}(q_{1})\\
+-I_{t}(q_{2})\\
+\vdots\\
+-I_{t}(q_{n})
+\end{array}\right]
+\]
+
+\end_inset
+
+Se resuelve para 
+\begin_inset Formula $v_{x}$
+\end_inset
+
+ y 
+\begin_inset Formula $v_{y}$
+\end_inset
+
+ con cuadrados mínimos.
+\end_layout
+
+\begin_layout Section
 Resultados
 \end_layout
 
@@ -1597,7 +1821,7 @@ Resultados
 \end_deeper
 \begin_layout Columns
 \begin_inset Graphics
-	filename ../informe/img/Resultados/2016-08-07T17_08_00.png
+	filename /home/fede/itba/pied-piper/doc/informe/img/Resultados/2016-08-07T17_08_00.png
 	lyxscale 25
 	width 6cm
 
@@ -1613,7 +1837,7 @@ Resultados
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename ../informe/img/Resultados/2016-08-07T20_08_00.png
+	filename /home/fede/itba/pied-piper/doc/informe/img/Resultados/2016-08-07T20_08_00.png
 	lyxscale 25
 	width 6cm
 
@@ -1661,7 +1885,7 @@ Resultados
 \end_deeper
 \begin_layout Columns
 \begin_inset Graphics
-	filename ../informe/img/Resultados/exito_28-6-2016_1-38a.png
+	filename /home/fede/itba/pied-piper/doc/informe/img/Resultados/exito_28-6-2016_1-38a.png
 	lyxscale 25
 	width 6cm
 
@@ -1677,7 +1901,7 @@ Resultados
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename ../informe/img/Resultados/exito_28-6-2016_1-38b.png
+	filename /home/fede/itba/pied-piper/doc/informe/img/Resultados/exito_28-6-2016_1-38b.png
 	lyxscale 25
 	width 6cm
 
@@ -1725,7 +1949,7 @@ Problemas - Ciclo dia/noche
 \end_deeper
 \begin_layout Columns
 \begin_inset Graphics
-	filename ../informe/img/Resultados/exito_28-6-2016_1-38a.png
+	filename /home/fede/itba/pied-piper/doc/informe/img/Resultados/exito_28-6-2016_1-38a.png
 	lyxscale 25
 	width 6cm
 
@@ -1741,7 +1965,7 @@ Problemas - Ciclo dia/noche
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename ../informe/img/Resultados/exito_28-6-2016_1-38b.png
+	filename /home/fede/itba/pied-piper/doc/informe/img/Resultados/exito_28-6-2016_1-38b.png
 	lyxscale 25
 	width 6cm
 

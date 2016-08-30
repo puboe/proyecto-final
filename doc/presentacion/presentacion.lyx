@@ -1571,6 +1571,187 @@ Flujo óptico (Ejemplo)
 Resultados
 \end_layout
 
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Resultados
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+\begin_inset Graphics
+	filename ../informe/img/Resultados/2016-08-07T17_08_00.png
+	lyxscale 25
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../informe/img/Resultados/2016-08-07T20_08_00.png
+	lyxscale 25
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Resultados
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+\begin_inset Graphics
+	filename ../informe/img/Resultados/exito_28-6-2016_1-38a.png
+	lyxscale 25
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../informe/img/Resultados/exito_28-6-2016_1-38b.png
+	lyxscale 25
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Problemas - Ciclo dia/noche
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+\begin_inset Graphics
+	filename ../informe/img/Resultados/exito_28-6-2016_1-38a.png
+	lyxscale 25
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../informe/img/Resultados/exito_28-6-2016_1-38b.png
+	lyxscale 25
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
 \begin_layout Section
 Conclusiones
 \end_layout

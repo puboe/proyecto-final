@@ -1664,6 +1664,12 @@ El algoritmo desarrollado es una variante del algoritmo de pareo de bloques,
 \end_layout
 
 \begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Técnicas-adicionales"
+
+\end_inset
+
 Técnicas adicionales
 \end_layout
 
@@ -1689,15 +1695,15 @@ r las características a partir de la información de los bordes y no de la
  Está inspirado en la idea de que la intensidad de una imagen no está relacionad
 a al detalle contenido en la misma, como en los casos en los que un área
  grande es uniforme.
- Para detectar un borde se calcula una aproximación discreta al módulo del
+ Para detectar un borde se calcula una aproximación discreta la norma del
  gradiente 
-\begin_inset Formula $\left|\nabla I\right|$
+\begin_inset Formula $\left\Vert \nabla I\right\Vert $
 \end_inset
 
  de la imágen, utilizando el siguiente procedimiento:
 \begin_inset Formula 
 \[
-\left|\nabla I\right|=\left|\left(I_{x},\,I_{y}\right)\right|=\sqrt{I_{x}^{2}+I_{y}^{2}}
+\left\Vert \nabla I\right\Vert =\left\Vert \left(I_{x},\,I_{y}\right)\right\Vert =\sqrt{I_{x}^{2}+I_{y}^{2}}
 \]
 
 \end_inset
@@ -1859,16 +1865,18 @@ reference "sec:Canales-infrarrojos"
 \begin_inset Formula $w_{IR4}=0.4$
 \end_inset
 
-; basado en que IR3 e IR4 son los sensores menos afectados por la variacíon
- día-noche, la que se discutirá en la sección 
+; IR2 tiene un peso considerablemente menor en la combinación porque es
+ afectado en mayor medida por la reflexión de parte de la radiación solar
+ en la superficie de la Tierra durante el día.
+ Este problema, al que llamamos variacíon día-noche, se discutirá en la
+ sección 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Problemas"
 
 \end_inset
 
-, y puesto que en la práctica los resultados obtenidos con dichos pesos
- fueron satisfactorios.
+.
  
 \end_layout
 
@@ -3064,11 +3072,20 @@ Ciclo
 \begin_inset space ~
 \end_inset
 
-día-noche: Si bien se remueve el fondo de las imágenes, en algunos canales,
- como IR2, sigue existiendo una variación de luminosidad homogénea debida
- al ciclo día-noche.
- La misma puede afectar la capacidad de detección puesto que varía el contraste
- en los bordes de las nubes (Figura 
+día-noche: Si bien se remueve el fondo de las imágenes, como se explicó
+ en la subsección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Técnicas-adicionales"
+
+\end_inset
+
+, en algunos canales, como IR2, sigue existiendo una variación de luminosidad
+ homogénea debida a la reflexión de parte de la radiación solar durante
+ el día.
+ Ésta puede afectar la capacidad de detección puesto que el gradiente de
+ la misma se desplaza a lo largo del tiempo y es tomado como un movimiento.
+ (Figura 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:resultado_dia_noche"

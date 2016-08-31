@@ -1816,6 +1816,127 @@ Algoritmo de pareo de bloques
 \end_layout
 
 \begin_deeper
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+1-
+\end_layout
+
+\end_inset
+
+BMA: 
+\begin_inset Flex Emphasize
+status open
+
+\begin_layout Plain Layout
+Block Matching Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+2-
+\end_layout
+
+\end_inset
+
+Usado en algunos algoritmos de compresión de video.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+3-
+\end_layout
+
+\end_inset
+
+Básicamente, relacionar bloques de píxeles:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+De una primera a una segunda imagen
+\end_layout
+
+\begin_layout Itemize
+En una ventana
+\end_layout
+
+\begin_layout Itemize
+Con una medida de error
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+4-
+\end_layout
+
+\end_inset
+
+La diferencia de posición del centro es el vector desplazamiento
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+5-
+\end_layout
+
+\end_inset
+
+
+\begin_inset Flex Bold
+status open
+
+\begin_layout Plain Layout
+En nuestro caso:
+\end_layout
+
+\end_inset
+
+ Cada pixel es el centro de un bloque
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Algoritmo de pareo de bloques
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
 \begin_layout Standard
 \align center
 \begin_inset Graphics
@@ -1852,6 +1973,224 @@ status open
 \end_inset
 
 Tamaños de ventana y bloque configurables
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+4-
+\end_layout
+
+\end_inset
+
+Se repite para cada uno de los píxeles de la imagen
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Implementación: Algoritmos
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Procedimiento
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[0.]
+\backslash
+setcounter{enumi}{0}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+1-
+\end_layout
+
+\end_inset
+
+Obtención de imágenes
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+2-
+\end_layout
+
+\end_inset
+
+Mejoramiento a través de técnicas adicionales
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+3-
+\end_layout
+
+\end_inset
+
+Algoritmo de pareo de bloques
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+4-
+\end_layout
+
+\end_inset
+
+Cálculo de trayectorias
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+5-
+\end_layout
+
+\end_inset
+
+Cálculo de la predicción
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Comparación con la realidad
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Técnicas adicionales
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Detección de bordes
+\end_layout
+
+\begin_layout Itemize
+Remoción de fondo
+\end_layout
+
+\begin_layout Itemize
+Combinación de resultados
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Cálculo de trayectorias
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Detección de bordes
+\end_layout
+
+\begin_layout Itemize
+Remoción de fondo
+\end_layout
+
+\begin_layout Itemize
+Combinación de resultados
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Predicción
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Detección de bordes
+\end_layout
+
+\begin_layout Itemize
+Remoción de fondo
+\end_layout
+
+\begin_layout Itemize
+Combinación de resultados
 \end_layout
 
 \end_deeper

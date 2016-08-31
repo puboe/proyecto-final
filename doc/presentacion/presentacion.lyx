@@ -2112,11 +2112,36 @@ Técnicas adicionales
 
 \end_layout
 
+\begin_layout Frame
+
+\end_layout
+
 \begin_deeper
 \begin_layout Itemize
 Detección de bordes
 \end_layout
 
+\begin_deeper
+\begin_layout Only
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+2-
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Hola
+\end_layout
+
+\end_deeper
+\end_deeper
 \begin_layout Itemize
 Remoción de fondo
 \end_layout
@@ -2148,15 +2173,16 @@ Cálculo de trayectorias
 
 \begin_deeper
 \begin_layout Itemize
-Detección de bordes
+\begin_inset Flex Bold
+status open
+
+\begin_layout Plain Layout
+TODO
 \end_layout
 
-\begin_layout Itemize
-Remoción de fondo
-\end_layout
+\end_inset
 
-\begin_layout Itemize
-Combinación de resultados
+: Fill it
 \end_layout
 
 \end_deeper
@@ -2182,18 +2208,30 @@ Predicción
 
 \begin_deeper
 \begin_layout Itemize
-Detección de bordes
+\begin_inset Flex Bold
+status open
+
+\begin_layout Plain Layout
+TODO
 \end_layout
 
-\begin_layout Itemize
-Remoción de fondo
-\end_layout
+\end_inset
 
-\begin_layout Itemize
-Combinación de resultados
+: Fill it
 \end_layout
 
 \end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Implementación: Arquitectura
+\end_layout
+
 \begin_layout Section
 Resultados
 \end_layout

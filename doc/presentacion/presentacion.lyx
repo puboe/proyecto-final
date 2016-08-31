@@ -2373,13 +2373,27 @@ Problemas - Ciclo dia/noche
 
 \end_deeper
 \begin_layout Columns
-\begin_inset Graphics
-	filename ../informe/img/Resultados/ciclo dia-noche.png
-	lyxscale 25
-	width 6cm
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+includemovie[poster=img/9-08_ciclo-dia-noche.png,repeat,autoplay]{6cm}{3.6cm}{img/
+9-08_ciclo.mp4}
+\end_layout
 
 \end_inset
 
+
+\end_layout
+
+\begin_layout Columns
+Fecha: 9 de agosto de 2016
+\end_layout
+
+\begin_layout Columns
 
 \end_layout
 
@@ -2443,6 +2457,10 @@ Problemas - Bordes de imagen
 \end_inset
 
 
+\end_layout
+
+\begin_layout Columns
+Fecha: 8 de agosto de 2016
 \end_layout
 
 \begin_deeper

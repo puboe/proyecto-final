@@ -14,7 +14,7 @@
 % or whatever (possibly just delete it)\
 
 \usepackage{hyperref}
-\usepackage{multimedia}
+\usepackage{movie15}
 \end_preamble
 \use_default_options false
 \maintain_unincluded_children false
@@ -1891,7 +1891,8 @@ status open
 
 
 \backslash
-movie[autostart,loop,width=6cm]{}{img/28-6_exito2.mp4}
+includemovie[poster=img/exito_2016-08-07T17_08_00.png,repeat,autoplay]{6cm}{3.6cm}
+{img/7-08_exito1.mp4}
 \end_layout
 
 \end_inset
@@ -1908,15 +1909,16 @@ movie[autostart,loop,width=6cm]{}{img/28-6_exito2.mp4}
 6cm 
 \end_layout
 
-\begin_layout Standard
-\begin_inset Graphics
-	filename ../informe/img/Resultados/2016-08-07T20_08_00.png
-	lyxscale 25
-	width 6cm
+\begin_layout Itemize
+Dos frentes de viento con distintas direcciones
+\end_layout
 
-\end_inset
+\begin_layout Itemize
+Frente frio proveniente del oeste
+\end_layout
 
-
+\begin_layout Itemize
+Frente cálido proveniente del norte
 \end_layout
 
 \end_deeper
@@ -1957,13 +1959,23 @@ Resultados
 
 \end_deeper
 \begin_layout Columns
-\begin_inset Graphics
-	filename ../informe/img/Resultados/exito_28-6-2016_1-38a.png
-	lyxscale 25
-	width 6cm
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+includemovie[poster=img/exito_28-6-2016_1-38a.png,repeat,autoplay]{6cm}{3.6cm}{img
+/28-6_exito2.mp4}
+\end_layout
 
 \end_inset
 
+
+\end_layout
+
+\begin_layout Columns
 
 \end_layout
 
@@ -1972,15 +1984,8 @@ Resultados
 6cm 
 \end_layout
 
-\begin_layout Standard
-\begin_inset Graphics
-	filename ../informe/img/Resultados/exito_28-6-2016_1-38b.png
-	lyxscale 25
-	width 6cm
-
-\end_inset
-
-
+\begin_layout Itemize
+Dirección de las flechas acompaña el movimiento circular de las nubes
 \end_layout
 
 \end_deeper
@@ -2022,7 +2027,7 @@ Problemas - Ciclo dia/noche
 \end_deeper
 \begin_layout Columns
 \begin_inset Graphics
-	filename ../informe/img/Resultados/exito_28-6-2016_1-38a.png
+	filename ../informe/img/Resultados/ciclo dia-noche.png
 	lyxscale 25
 	width 6cm
 
@@ -2036,9 +2041,55 @@ Problemas - Ciclo dia/noche
 6cm 
 \end_layout
 
+\begin_layout Itemize
+Variacion de luminosidad debida a la reflexión de la radiación solar en
+ la superficie de la tierra
+\end_layout
+
+\begin_layout Itemize
+Algoritmo detecta movimiento donde no lo hay
+\end_layout
+
+\end_deeper
+\end_deeper
 \begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Problemas - Bordes de imagen
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
+\end_layout
+
+\end_deeper
+\begin_layout Columns
 \begin_inset Graphics
-	filename ../informe/img/Resultados/exito_28-6-2016_1-38b.png
+	filename ../informe/img/Resultados/bordes.png
 	lyxscale 25
 	width 6cm
 
@@ -2047,8 +2098,166 @@ Problemas - Ciclo dia/noche
 
 \end_layout
 
+\begin_deeper
+\begin_layout Column
+6cm 
+\end_layout
+
+\begin_layout Itemize
+Falta de información en los bordes de la imagen
+\end_layout
+
 \end_deeper
 \end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Problemas - Eventos meteorológicos rápidos
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+includemovie[poster=img/rapido1_28-7-16_15-30.png,repeat,autoplay]{6cm}{3.6cm}{img
+/28-07_evrapidos.mp4}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm 
+\end_layout
+
+\begin_layout Itemize
+Vientos rápidos donde ocurre agrupación o fragmentación repentina de nubes
+\end_layout
+
+\begin_layout Itemize
+Pérdida de fidelidad debido a la frecuencia temporal baja
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Problemas - Evaporación y precipitación
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+includemovie[poster=img/evap2_6-8-16_14-30.png,repeat,autoplay]{6cm}{3.6cm}{img/6-
+08_evap.mp4}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm 
+\end_layout
+
+\begin_layout Itemize
+Nubes que disminuyen de tamaño
+\end_layout
+
+\begin_layout Itemize
+Se percibe movimiento donde no lo hay
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Conclusiones
 \end_layout

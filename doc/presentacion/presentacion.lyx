@@ -2258,7 +2258,7 @@ Arquitectura
 \begin_inset Graphics
 	filename ../informe/img/arquitectura.png
 	lyxscale 25
-	scale 25
+	width 8cm
 
 \end_inset
 
@@ -2287,19 +2287,39 @@ Base de datos
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
-\begin_inset Flex Bold
-status open
+\begin_layout Columns
 
-\begin_layout Plain Layout
-TODO
 \end_layout
+
+\begin_deeper
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename img/arq-db.png
+	lyxscale 25
+	width 5cm
 
 \end_inset
 
-: Fill it
+
 \end_layout
 
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Itemize
+We are family
+\end_layout
+
+\begin_layout Itemize
+I got all my sisters with me
+\end_layout
+
+\end_deeper
 \end_deeper
 \begin_layout Standard
 \begin_inset Separator plain
@@ -2322,19 +2342,39 @@ Obtención de imágenes
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
-\begin_inset Flex Bold
-status open
+\begin_layout Columns
 
-\begin_layout Plain Layout
-TODO
 \end_layout
+
+\begin_deeper
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename img/arq-scrapper.png
+	lyxscale 25
+	width 5cm
 
 \end_inset
 
-: Fill it
+
 \end_layout
 
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Itemize
+We are family
+\end_layout
+
+\begin_layout Itemize
+I got all my sisters with me
+\end_layout
+
+\end_deeper
 \end_deeper
 \begin_layout Standard
 \begin_inset Separator plain
@@ -2357,19 +2397,39 @@ Servicios de cálculo
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
-\begin_inset Flex Bold
-status open
+\begin_layout Columns
 
-\begin_layout Plain Layout
-TODO
 \end_layout
+
+\begin_deeper
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename img/arq-motion-prediction.png
+	lyxscale 25
+	width 5cm
 
 \end_inset
 
-: Fill it
+
 \end_layout
 
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Itemize
+We are family
+\end_layout
+
+\begin_layout Itemize
+I got all my sisters with me
+\end_layout
+
+\end_deeper
 \end_deeper
 \begin_layout Standard
 \begin_inset Separator plain
@@ -2392,19 +2452,39 @@ API
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
-\begin_inset Flex Bold
-status open
+\begin_layout Columns
 
-\begin_layout Plain Layout
-TODO
 \end_layout
+
+\begin_deeper
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename img/arq-api.png
+	lyxscale 25
+	width 5cm
 
 \end_inset
 
-: Fill it
+
 \end_layout
 
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Itemize
+We are family
+\end_layout
+
+\begin_layout Itemize
+I got all my sisters with me
+\end_layout
+
+\end_deeper
 \end_deeper
 \begin_layout Standard
 \begin_inset Separator plain
@@ -2427,19 +2507,39 @@ Aplicación Web
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
-\begin_inset Flex Bold
-status open
+\begin_layout Columns
 
-\begin_layout Plain Layout
-TODO
 \end_layout
+
+\begin_deeper
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename img/arq-webapp.png
+	lyxscale 25
+	width 5cm
 
 \end_inset
 
-: Fill it
+
 \end_layout
 
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Itemize
+We are family
+\end_layout
+
+\begin_layout Itemize
+I got all my sisters with me
+\end_layout
+
+\end_deeper
 \end_deeper
 \begin_layout Section
 Resultados

@@ -2673,6 +2673,100 @@ Se percibe movimiento donde no lo hay
 Conclusiones
 \end_layout
 
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Conclusiones
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Problema complejo
+\end_layout
+
+\begin_layout Itemize
+Algoritmo de pareo de bloques:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Resultados alentadores con frecuencia temporal baja entre imágenes
+\end_layout
+
+\begin_layout Itemize
+Alternativa viable para este propósito
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Predicción imprecisa en la práctica
+\end_layout
+
+\begin_layout Itemize
+Plataforma flexible para futuros desarrollos
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Trabajo futuro
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Expandir región geográfica
+\end_layout
+
+\begin_layout Itemize
+Identificar y clasificar tipos de nubes
+\end_layout
+
+\begin_layout Itemize
+Sistema de alerta temprana que detecte situaciones anómalas
+\end_layout
+
+\begin_layout Itemize
+Modelar sistema de nubes como una red
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 El problema básico que estudiamos
 \begin_inset Argument 2

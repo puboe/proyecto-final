@@ -2312,11 +2312,19 @@ Base de datos
 \end_layout
 
 \begin_layout Itemize
-We are family
+BD relacional
 \end_layout
 
 \begin_layout Itemize
-I got all my sisters with me
+Motor PostgreSQL con SQLAlchemy como ORM
+\end_layout
+
+\begin_layout Itemize
+Permite analizar zonas por separado
+\end_layout
+
+\begin_layout Itemize
+Almacena información generada sobre el movimiento entre dos estados
 \end_layout
 
 \end_deeper
@@ -2367,11 +2375,19 @@ Obtención de imágenes
 \end_layout
 
 \begin_layout Itemize
-We are family
+Scrapper HTTP / FTP
 \end_layout
 
 \begin_layout Itemize
-I got all my sisters with me
+Imágenes servidor NASA/GOES 
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+ BD
+\end_layout
+
+\begin_layout Itemize
+Ejecuta periódicamente
 \end_layout
 
 \end_deeper
@@ -2422,13 +2438,37 @@ Servicios de cálculo
 \end_layout
 
 \begin_layout Itemize
-We are family
+Python + OpenCL
 \end_layout
 
 \begin_layout Itemize
-I got all my sisters with me
+Paralelizable y distribuible
 \end_layout
 
+\begin_layout Itemize
+Movimiento:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Calcula movimientos entre par de imágenes
+\end_layout
+
+\begin_layout Itemize
+Implementa algoritmo explicado
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Predicción:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Calcula predicciones 
+\end_layout
+
+\end_deeper
 \end_deeper
 \end_deeper
 \begin_layout Standard
@@ -2477,11 +2517,19 @@ API
 \end_layout
 
 \begin_layout Itemize
-We are family
+REST/JSON con Flask
 \end_layout
 
 \begin_layout Itemize
-I got all my sisters with me
+Cálculo de trayectorias
+\end_layout
+
+\begin_layout Itemize
+Renderiza imágenes y animaciones
+\end_layout
+
+\begin_layout Itemize
+Punto de entrada a la información
 \end_layout
 
 \end_deeper
@@ -2532,11 +2580,15 @@ Aplicación Web
 \end_layout
 
 \begin_layout Itemize
-We are family
+Java con framework Wicket y Spring
 \end_layout
 
 \begin_layout Itemize
-I got all my sisters with me
+Visualización de información
+\end_layout
+
+\begin_layout Itemize
+Permite buscar y guardar estados
 \end_layout
 
 \end_deeper

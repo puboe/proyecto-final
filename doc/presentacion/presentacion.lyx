@@ -582,79 +582,36 @@ Servicio Meteorológico Nacional
 \end_layout
 
 \begin_deeper
-\begin_layout Standard
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename ../informe/img/smn.png
-	lyxscale 25
-	width 7cm
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Captura del Servicio Meteorológico Nacional 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "smn2016"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_deeper
-\begin_layout Frame
-
-\end_layout
-
-\begin_layout Frame
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
-\end_layout
-
-\begin_layout Frame
-\begin_inset Argument 4
-status open
-
-\begin_layout Plain Layout
-Servicio Meteorológico Nacional
-\end_layout
-
-\end_inset
-
+\begin_layout Columns
 
 \end_layout
 
 \begin_deeper
+\begin_layout Column
+5cm
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+\begin_inset Graphics
+	filename ../informe/img/smn.png
+	lyxscale 25
+	width 5cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
+\end_layout
+
 \begin_layout Itemize
 Imágenes cada una hora
 \end_layout
@@ -676,70 +633,6 @@ No ofrece información sobre vientos
 \end_layout
 
 \end_deeper
-\begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
-\end_layout
-
-\begin_layout Frame
-\begin_inset Argument 4
-status open
-
-\begin_layout Plain Layout
-Nullschool Earth
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_deeper
-\begin_layout Standard
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename ../informe/img/nullschool.png
-	lyxscale 25
-	width 9cm
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Captura del Nullschool Earth 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "nullschoolearth2016"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
 \end_deeper
 \begin_layout Standard
 \begin_inset Separator plain
@@ -762,6 +655,37 @@ Nullschool Earth
 \end_layout
 
 \begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename ../informe/img/nullschool.png
+	lyxscale 20
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
+\end_layout
+
 \begin_layout Itemize
 Acceso al estado de distintas variables climáticas
 \end_layout
@@ -779,70 +703,6 @@ Open source (github)
 \end_layout
 
 \end_deeper
-\begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
-\end_layout
-
-\begin_layout Frame
-\begin_inset Argument 4
-status open
-
-\begin_layout Plain Layout
-Windyty
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_deeper
-\begin_layout Standard
-\align center
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Graphics
-	filename ../informe/img/windyty.png
-	lyxscale 25
-	width 9cm
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Captura de Windyty 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "windyty2016"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
 \end_deeper
 \begin_layout Standard
 \begin_inset Separator plain
@@ -865,6 +725,41 @@ Windyty
 \end_layout
 
 \begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename ../informe/img/windyty.png
+	lyxscale 20
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+6cm
+\end_layout
+
 \begin_layout Itemize
 Brinda pronóstico del clima
 \end_layout
@@ -882,6 +777,14 @@ Propietario
 \end_layout
 
 \end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Trabajos académicos relacionados
 \end_layout
@@ -3246,10 +3149,6 @@ Identificar y clasificar tipos de nubes
 
 \begin_layout Itemize
 Sistema de alerta temprana que detecte situaciones anómalas
-\end_layout
-
-\begin_layout Itemize
-Modelar sistema de nubes como una red
 \end_layout
 
 \end_deeper

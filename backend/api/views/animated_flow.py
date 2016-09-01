@@ -21,6 +21,7 @@ def show_animated_flow(zone_name, end_time, steps, satellite, channel):
     datas = db.session.query(MeteoStaticData) \
                       .filter_by(zone_name=zone_name) \
                       .filter_by(satellite=satellite, channel=channel) \
+                      .filter_by(is_valid=True) \
                       .filter(MeteoStaticData.time <= end_time) \
                       .filter(MeteoMotionData.suitable_state()) \
                       .order_by(MeteoStaticData.time.desc()) \
@@ -36,6 +37,7 @@ def show_animated_trails(zone_name, end_time, steps, satellite, channel):
     datas = db.session.query(MeteoStaticData) \
                       .filter_by(zone_name=zone_name) \
                       .filter_by(satellite=satellite, channel=channel) \
+                      .filter_by(is_valid=True) \
                       .filter(MeteoStaticData.time <= end_time) \
                       .filter(MeteoMotionData.suitable_state()) \
                       .order_by(MeteoStaticData.time.desc()) \

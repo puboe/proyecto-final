@@ -805,14 +805,7 @@ The Feasibility of an Optical Flow Algorithm for Estimating Atmospheric
 
 \begin_deeper
 \begin_layout Itemize
-Trabajo de Wayne Bresky y Jaime Daniels (2006) 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "waynebreskyjaimedaniels2006"
-
-\end_inset
-
-
+Trabajo de Wayne Bresky y Jaime Daniels (2006)
 \end_layout
 
 \begin_layout Itemize
@@ -847,13 +840,6 @@ Extracting Cloud Motion From Satellite Image Sequences
 \begin_deeper
 \begin_layout Itemize
 Trabajo de Remus Brad y Ioan Alfred Letia (2002) 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "remusbradloanalfredletia2002"
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Itemize
@@ -1988,12 +1974,6 @@ status open
 Cálculo de la predicción
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
-Comparación con la realidad
-\end_layout
-
-\end_deeper
 \end_deeper
 \begin_layout Standard
 \begin_inset Separator plain
@@ -2015,18 +1995,22 @@ Técnicas adicionales
 
 \end_layout
 
-\begin_layout Frame
-
-\end_layout
-
 \begin_deeper
-\begin_layout Itemize
+\begin_layout Standard
+\begin_inset Flex Bold
+status open
+
+\begin_layout Plain Layout
 Detección de bordes
 \end_layout
 
-\begin_deeper
-\begin_layout Only
-\begin_inset Argument 1
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
 status open
 
 \begin_layout Plain Layout
@@ -2035,22 +2019,226 @@ status open
 
 \end_inset
 
+Detectar movimiento sobre los bordes en lugar de la intensidad
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+3-
+\end_layout
+
+\end_inset
+
+Idea: seguir detalles en lugar de intensidad
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+4-
+\end_layout
+
+\end_inset
+
+Inspiración: niveles de intensidad similares no significa mejor pareo
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+5-
+\end_layout
+
+\end_inset
+
+La detección de bordes se realiza a través de la norma del gradiente
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Técnicas adicionales
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
-Hola
-\end_layout
+\begin_layout Standard
+\begin_inset Flex Bold
+status open
 
-\end_deeper
-\end_deeper
-\begin_layout Itemize
+\begin_layout Plain Layout
 Remoción de fondo
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+2-
+\end_layout
+
+\end_inset
+
+Se remueve la intensidad constante a lo largo del tiempo
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+3-
+\end_layout
+
+\end_inset
+
+Idea: remover características del fondo que interfieren con las de las nubes
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+4-
+\end_layout
+
+\end_inset
+
+Los fondos se calculan como el valor mínimo de cada pixel a lo largo de
+ una gran cantidad de imágenes (en este caso, aprox.
+ 2900)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+5-
+\end_layout
+
+\end_inset
+
+Adicionalmente, calculamos imágenes de contraste mejorado, disponibles en
+ la aplicación
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Técnicas adicionales
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Flex Bold
+status open
+
+\begin_layout Plain Layout
 Combinación de resultados
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+2-
+\end_layout
+
+\end_inset
+
+Se realiza el pareo sobre múltiples sensores y se promedian ponderadamente
+ los resultados
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+3-
+\end_layout
+
+\end_inset
+
+Idea: se puede aumentar la precisión aprovechando la información de varios
+ sensores
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+4-
+\end_layout
+
+\end_inset
+
+Se le da menos peso a los sensores más afectados por la reflexión, como
+ IR2.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+5-
+\end_layout
+
+\end_inset
+
+Se le da más peso a IR3.
 \end_layout
 
 \end_deeper
@@ -2075,17 +2263,86 @@ Cálculo de trayectorias
 \end_layout
 
 \begin_deeper
-\begin_layout Itemize
+\begin_layout Standard
+Se desea modelar el comportamiento de una partícula que sigue los mismos
+ patrones de movimiento que las nubes, a lo largo de un 
 \begin_inset Flex Bold
 status open
 
 \begin_layout Plain Layout
-TODO
+invervalo de tiempo
 \end_layout
 
 \end_inset
 
-: Fill it
+, en que se dispone una 
+\begin_inset Flex Bold
+status open
+
+\begin_layout Plain Layout
+secuencia de imágenes
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Para esto:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+2-
+\end_layout
+
+\end_inset
+
+Se ubica la partícula en una posición inicial deseada, en la primera imagen
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+3-
+\end_layout
+
+\end_inset
+
+Se calcula su desplazamiento hacia la siguiente
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+4-
+\end_layout
+
+\end_inset
+
+Se repite el procedimiento hasta llegar a la última imagen
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+5-
+\end_layout
+
+\end_inset
+
+Se dispone ahora de una secuencia de puntos que forman la trayectoria de
+ la partícula.
 \end_layout
 
 \end_deeper
@@ -2101,7 +2358,7 @@ TODO
 status open
 
 \begin_layout Plain Layout
-Cálculo de trayectorias (ejemplo)
+Cálculo de trayectorias
 \end_layout
 
 \end_inset
@@ -2145,7 +2402,7 @@ m_trails_mini.mp4}
 status open
 
 \begin_layout Plain Layout
-Cálculo de trayectorias (ejemplo)
+Cálculo de trayectorias
 \end_layout
 
 \end_inset
@@ -2189,7 +2446,121 @@ anim_lines_nointerp.mp4}
 status open
 
 \begin_layout Plain Layout
-Cálculo de trayectorias (ejemplo)
+Cálculo de trayectorias
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Las trayectorias previamente calculadas son 
+\begin_inset Flex Emphasize
+status open
+
+\begin_layout Plain Layout
+discretas
+\end_layout
+
+\end_inset
+
+ y 
+\begin_inset Flex Emphasize
+status open
+
+\begin_layout Plain Layout
+no del todo realistas
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+2-
+\end_layout
+
+\end_inset
+
+Para solventar este problema ajustamos una curva polinómica a la secuencia
+ de puntos
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+3-
+\end_layout
+
+\end_inset
+
+El resultado es un recorrido que:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+3-
+\end_layout
+
+\end_inset
+
+Es suave
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+4-
+\end_layout
+
+\end_inset
+
+Brinda información sobre los tiempos en que no hay imágenes
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+5-
+\end_layout
+
+\end_inset
+
+Extrapolando, se puede predecir la posición en el futuro
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Cálculo de trayectorias
 \end_layout
 
 \end_inset
@@ -2243,18 +2614,107 @@ Predicción
 
 \begin_deeper
 \begin_layout Itemize
-\begin_inset Flex Bold
+Se extrapolan las curvas de desplazamiento
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
 status open
 
 \begin_layout Plain Layout
-TODO
+2-
 \end_layout
 
 \end_inset
 
-: Fill it
+Sobre la última imágen:
 \end_layout
 
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+3-
+\end_layout
+
+\end_inset
+
+Se toman bloques de un tamaño elegido.
+ En nuestro caso 20x20 pixeles
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+4-
+\end_layout
+
+\end_inset
+
+Se desplazan tomando como referencia la curva que pasa por el centro
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+5-
+\end_layout
+
+\end_inset
+
+El tiempo de la curva ajustada es contínuo.
+ Puede elegirse cualquier instante futuro
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+6-
+\end_layout
+
+\end_inset
+
+Para poder hacer una comparación, en la aplicación se hace hacia el tiempo
+ de la próxima muestra disponible
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+7-
+\end_layout
+
+\end_inset
+
+Se mide la precisión tomando la diferencia entre la imagen real y la predicha
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Argument item:2
+status open
+
+\begin_layout Plain Layout
+8-
+\end_layout
+
+\end_inset
+
+Esta diferencia se muestra como un mapa de calor en la aplicación
+\end_layout
+
+\end_deeper
 \end_deeper
 \begin_layout Standard
 \begin_inset Separator plain

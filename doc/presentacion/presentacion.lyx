@@ -408,7 +408,7 @@ Objetivos
 \begin_deeper
 \begin_layout Itemize
 \begin_inset Argument item:2
-status collapsed
+status open
 
 \begin_layout Plain Layout
 1-
@@ -416,24 +416,29 @@ status collapsed
 
 \end_inset
 
-Detectar el movimiento
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-\begin_inset Argument item:2
+Detectar el movimiento 
+\begin_inset Flex Emphasize
 status open
 
 \begin_layout Plain Layout
-4-
+automática
 \end_layout
 
 \end_inset
 
-Automática y eficazmente
+ y 
+\begin_inset Flex Emphasize
+status open
+
+\begin_layout Plain Layout
+eficazmente
 \end_layout
 
-\end_deeper
+\end_inset
+
+
+\end_layout
+
 \begin_layout Itemize
 \begin_inset Argument item:2
 status open
@@ -444,27 +449,18 @@ status open
 
 \end_inset
 
-Predecir la posición y el tamaño
+Predecir la posición y el tamaño de nubes
 \end_layout
 
 \begin_deeper
 \begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-5-
-\end_layout
-
-\end_inset
-
- Medir su precisión
+Compararlo con la realidad
 \end_layout
 
 \end_deeper
 \begin_layout Itemize
 \begin_inset Argument item:2
-status collapsed
+status open
 
 \begin_layout Plain Layout
 3-
@@ -472,7 +468,7 @@ status collapsed
 
 \end_inset
 
-Ofrecer una plataforma flexible
+Ofrecer una plataforma flexible y escalable
 \end_layout
 
 \end_deeper
@@ -705,87 +701,6 @@ Propietario
 \end_layout
 
 \begin_layout Section
-Trabajos académicos relacionados
-\end_layout
-
-\begin_layout Frame
-\begin_inset Argument 4
-status open
-
-\begin_layout Plain Layout
-The Feasibility of an Optical Flow Algorithm for Estimating Atmospheric
- Motion
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-Trabajo de Wayne Bresky y Jaime Daniels (2006)
-\end_layout
-
-\begin_layout Itemize
-Algoritmo de Lucas-Kanade
-\end_layout
-
-\begin_layout Itemize
-Requiere alta frecuencia temporal
-\end_layout
-
-\end_deeper
-\begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
-\end_layout
-
-\begin_layout Frame
-\begin_inset Argument 4
-status open
-
-\begin_layout Plain Layout
-Extracting Cloud Motion From Satellite Image Sequences
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-Trabajo de Remus Brad y Ioan Alfred Letia (2002) 
-\end_layout
-
-\begin_layout Itemize
-Umbral automático
-\end_layout
-
-\begin_layout Itemize
-Algoritmo de pareo de bloques
-\end_layout
-
-\begin_layout Itemize
-Filtro de la mediana para el ruido en el resultado
-\end_layout
-
-\begin_layout Itemize
-Más parecido a nuestra implementación
-\end_layout
-
-\end_deeper
-\begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
 Fuente de datos
 \end_layout
 
@@ -833,6 +748,13 @@ Visible
 
 \end_layout
 
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
 \begin_layout Frame
 \begin_inset Argument 4
 status open
@@ -846,21 +768,43 @@ Canales infrarrojos
 
 \end_layout
 
-\begin_layout Frame
-IR2:
+\begin_deeper
+\begin_layout Columns
+
 \end_layout
 
 \begin_deeper
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+includemovie[poster=img/ir2_static.png,repeat,autoplay]{5cm}{3cm}{img/ir2.mp4}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Standard
+IR2:
+\end_layout
+
 \begin_layout Itemize
 Longitud de onda corta (cercana al visible)
-\end_layout
-
-\begin_layout Itemize
-Emisión superficie de la tierra
-\end_layout
-
-\begin_layout Itemize
-Emisión topes nubosos
 \end_layout
 
 \begin_layout Itemize
@@ -874,6 +818,11 @@ Variaciones globales en el nivel de intensidad
 
 \end_deeper
 \end_deeper
+\end_deeper
+\begin_layout Standard
+
+\end_layout
+
 \begin_layout Standard
 \begin_inset Separator plain
 \end_inset
@@ -894,30 +843,62 @@ Canales infrarrojos
 
 \end_layout
 
-\begin_layout Frame
-IR3:
+\begin_deeper
+\begin_layout Columns
+
 \end_layout
 
 \begin_deeper
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+includemovie[poster=img/ir3_static.png,repeat,autoplay]{5cm}{3cm}{img/ir3.mp4}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Standard
+IR3:
+\end_layout
+
 \begin_layout Itemize
 Longitud de onda media
 \end_layout
 
 \begin_layout Itemize
-También llamada vapor de agua:
+También llamada vapor de agua: capas intermedias y altas
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
-Emisión de capas intermedias y altas de la atmósfera
-\end_layout
-
-\end_deeper
 \begin_layout Itemize
 Se utiliza normalmente para medir el movimiento
 \end_layout
 
 \end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 \begin_inset Separator plain
 \end_inset
@@ -938,11 +919,41 @@ Canales infrarrojos
 
 \end_layout
 
-\begin_layout Frame
-IR4:
+\begin_deeper
+\begin_layout Columns
+
 \end_layout
 
 \begin_deeper
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+includemovie[poster=img/ir4_static.png,repeat,autoplay]{5cm}{3cm}{img/ir4.mp4}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Standard
+IR4:
+\end_layout
+
 \begin_layout Itemize
 Longitud de onda larga
 \end_layout
@@ -951,10 +962,7 @@ Longitud de onda larga
 Similar a IR2
 \end_layout
 
-\begin_layout Itemize
-Menos afectada por la reflexión solar
-\end_layout
-
+\end_deeper
 \end_deeper
 \begin_layout Section
 Primer enfoque
@@ -1076,42 +1084,7 @@ Pareo basado en tamaño y distancia relativa
 
 \begin_deeper
 \begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-2-
-\end_layout
-
-\end_inset
-
-Producto cartesiano
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-2-
-\end_layout
-
-\end_inset
-
-Puntaje en función de la distancia y variación de tamaño
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-2-
-\end_layout
-
-\end_inset
-
-Selección de los pares con mejor puntuación
+Algoritmo simple con puntajes
 \end_layout
 
 \end_deeper
@@ -1253,7 +1226,7 @@ Movimiento aparente de patrones de brillo en una imagen
 \begin_layout Standard
 \align center
 \begin_inset Graphics
-	filename ../informe/img/Opticfloweg.png
+	filename img/flow_wheel.png
 	lyxscale 10
 	width 10cm
 
@@ -1372,7 +1345,7 @@ Flujo óptico (Ejemplo)
 
 \end_deeper
 \begin_layout Section
-Algoritmo de Lucas-Kanade
+Algoritmos de flujo óptico
 \end_layout
 
 \begin_layout Frame
@@ -1477,30 +1450,8 @@ Esto es violado en algunas condiciones meteorológicas.
 status open
 
 \begin_layout Plain Layout
-Algoritmo de Lucas-Kanade
+Algoritmos de flujo óptico
 \end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Frame
-A partir de la ecuación del flujo óptico se obtiene la siguiente expresión:
-\end_layout
-
-\begin_layout Frame
-
-\end_layout
-
-\begin_layout Frame
-\begin_inset Formula 
-\[
-\left(I_{x},\,I_{y}\right)\cdot\left[\begin{array}{c}
-v_{x}\\
-v_{y}
-\end{array}\right]=-I_{t}
-\]
 
 \end_inset
 
@@ -1508,97 +1459,44 @@ v_{y}
 \end_layout
 
 \begin_deeper
-\begin_layout Standard
-\begin_inset Formula $I_{x}$
-\end_inset
-
-, 
-\begin_inset Formula $I_{y}$
-\end_inset
-
- e 
-\begin_inset Formula $I_{t}$
-\end_inset
-
- son discretas.
- Calculadas numericamente a partir de 
-\begin_inset Formula $I$
-\end_inset
-
-.
-\end_layout
-
-\end_deeper
-\begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
-\end_layout
-
-\begin_layout Frame
-\begin_inset Argument 4
-status open
-
-\begin_layout Plain Layout
+\begin_layout Itemize
 Algoritmo de Lucas-Kanade
 \end_layout
 
+\begin_deeper
+\begin_layout Itemize
+Solución a la ecuación del flujo óptico
+\end_layout
+
+\begin_layout Itemize
+Método númerico
+\end_layout
+
+\begin_layout Itemize
+No sirve según Brad y Letia: se requieren frecuencias altas de imágenes
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset Flex Bold
+status open
+
+\begin_layout Plain Layout
+Algoritmo de pareo de bloques (BMA)
+\end_layout
+
 \end_inset
 
 
 \end_layout
 
-\begin_layout Frame
-Evaluando 
-\begin_inset Formula $I_{x}$
-\end_inset
-
-, 
-\begin_inset Formula $I_{y}$
-\end_inset
-
- e 
-\begin_inset Formula $I_{t}$
-\end_inset
-
- en los puntos 
-\begin_inset Formula $q_{1},\,q_{2},\ldots,\,q_{n}$
-\end_inset
-
- del entorno al punto donde se quiere estimar el movimiento, tenemos el
- sistema:
-\begin_inset Formula 
-\[
-\left[\begin{array}{cc}
-I_{x}(q_{1}) & I_{y}(q_{2})\\
-I_{x}(q_{2}) & I_{y}(q_{2})\\
-\vdots & \vdots\\
-I_{x}(q_{n}) & I_{y}(q_{n})
-\end{array}\right]\left[\begin{array}{c}
-v_{x}\\
-v_{y}
-\end{array}\right]=\left[\begin{array}{c}
--I_{t}(q_{1})\\
--I_{t}(q_{2})\\
-\vdots\\
--I_{t}(q_{n})
-\end{array}\right]
-\]
-
-\end_inset
-
-Se resuelve para 
-\begin_inset Formula $v_{x}$
-\end_inset
-
- y 
-\begin_inset Formula $v_{y}$
-\end_inset
-
- con cuadrados mínimos.
+\begin_deeper
+\begin_layout Itemize
+Inspirado en un trabajo de Bresky y Daniels
 \end_layout
 
+\end_deeper
+\end_deeper
 \begin_layout Standard
 \begin_inset Separator plain
 \end_inset
@@ -1964,19 +1862,6 @@ status open
 
 \end_inset
 
-Inspiración: niveles de intensidad similares no significa mejor pareo
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-5-
-\end_layout
-
-\end_inset
-
 La detección de bordes se realiza a través de la norma del gradiente
 \end_layout
 
@@ -2054,20 +1939,6 @@ status open
 Los fondos se calculan como el valor mínimo de cada pixel a lo largo de
  una gran cantidad de imágenes (en este caso, aprox.
  2900)
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-5-
-\end_layout
-
-\end_inset
-
-Adicionalmente, calculamos imágenes de contraste mejorado, disponibles en
- la aplicación
 \end_layout
 
 \end_deeper
@@ -2189,7 +2060,7 @@ Se desea modelar el comportamiento de una partícula que sigue los mismos
 status open
 
 \begin_layout Plain Layout
-invervalo de tiempo
+intervalo de tiempo
 \end_layout
 
 \end_inset
@@ -2489,6 +2360,50 @@ Cálculo de trayectorias
 
 \begin_deeper
 \begin_layout Standard
+Posiciones de los puntos unidas por líneas, sin ajustar curvas:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+includemovie[poster=img/anim_lines_nointerp.png,repeat,autoplay]{6cm}{3.67cm}{img/
+anim_lines_nointerp.mp4}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Cálculo de trayectorias
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
 Gráfica de las curvas polinómicas ajustadas:
 \end_layout
 
@@ -2734,11 +2649,7 @@ Motor PostgreSQL con SQLAlchemy como ORM
 \end_layout
 
 \begin_layout Itemize
-Permite analizar zonas por separado
-\end_layout
-
-\begin_layout Itemize
-Almacena información generada sobre el movimiento entre dos estados
+Almacena información de los estados y movimientos entre ellos
 \end_layout
 
 \end_deeper
@@ -2859,30 +2770,6 @@ Python + OpenCL
 Paralelizable y distribuible
 \end_layout
 
-\begin_layout Itemize
-Movimiento:
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-Calcula movimientos entre par de imágenes
-\end_layout
-
-\begin_layout Itemize
-Implementa algoritmo explicado
-\end_layout
-
-\end_deeper
-\begin_layout Itemize
-Predicción:
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-Calcula predicciones 
-\end_layout
-
-\end_deeper
 \end_deeper
 \end_deeper
 \begin_layout Standard
@@ -3063,6 +2950,14 @@ Fecha: 7 de agosto de 2016
 \begin_deeper
 \begin_layout Column
 6cm 
+\end_layout
+
+\begin_layout Itemize
+Flechas azules: trayectorias con curvas ajustadas
+\end_layout
+
+\begin_layout Itemize
+Flechas rojas: trayectorias de mayor longitud (más rápidas)
 \end_layout
 
 \begin_layout Itemize
@@ -3476,7 +3371,8 @@ Algoritmo de pareo de bloques:
 
 \begin_deeper
 \begin_layout Itemize
-Resultados alentadores con frecuencia temporal baja entre imágenes
+Resultados alentadores con frecuencia temporal alta - 30 minutos - entre
+ imágenes
 \end_layout
 
 \begin_layout Itemize

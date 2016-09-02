@@ -1568,57 +1568,7 @@ status open
 
 \end_inset
 
-Básicamente, relacionar bloques de píxeles:
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-De una primera a una segunda imagen
-\end_layout
-
-\begin_layout Itemize
-En una ventana
-\end_layout
-
-\begin_layout Itemize
-Con una medida de error
-\end_layout
-
-\end_deeper
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-4-
-\end_layout
-
-\end_inset
-
-La diferencia de posición del centro es el vector desplazamiento
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-5-
-\end_layout
-
-\end_inset
-
-
-\begin_inset Flex Bold
-status open
-
-\begin_layout Plain Layout
-En nuestro caso:
-\end_layout
-
-\end_inset
-
- Cada pixel es el centro de un bloque
+Básicamente: relacionar bloques de píxeles entre imágenes consecutivas
 \end_layout
 
 \end_deeper
@@ -1643,6 +1593,10 @@ Algoritmo de pareo de bloques
 \end_layout
 
 \begin_deeper
+\begin_layout Standard
+Para cada píxel de la imagen:
+\end_layout
+
 \begin_layout Standard
 \align center
 \begin_inset Graphics
@@ -1678,20 +1632,7 @@ status open
 
 \end_inset
 
-Tamaños de ventana y bloque configurables
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-4-
-\end_layout
-
-\end_inset
-
-Se repite para cada uno de los píxeles de la imagen
+Tamaños de bloque y ventana optimizados empíricamente
 \end_layout
 
 \end_deeper
@@ -1775,7 +1716,7 @@ status open
 
 \end_inset
 
-Cálculo de trayectorias
+Trayectorias
 \end_layout
 
 \begin_layout Enumerate
@@ -1788,7 +1729,7 @@ status open
 
 \end_inset
 
-Cálculo de la predicción
+Predicción
 \end_layout
 
 \end_deeper
@@ -1813,32 +1754,19 @@ Técnicas adicionales
 \end_layout
 
 \begin_deeper
-\begin_layout Standard
-\begin_inset Flex Bold
+\begin_layout Itemize
+\begin_inset Argument item:2
 status open
 
 \begin_layout Plain Layout
+2-
+\end_layout
+
+\end_inset
+
 Detección de bordes
 \end_layout
 
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-2-
-\end_layout
-
-\end_inset
-
-Detectar movimiento sobre los bordes en lugar de la intensidad
-\end_layout
-
 \begin_layout Itemize
 \begin_inset Argument item:2
 status open
@@ -1849,83 +1777,9 @@ status open
 
 \end_inset
 
-Idea: seguir detalles en lugar de intensidad
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-4-
-\end_layout
-
-\end_inset
-
-La detección de bordes se realiza a través de la norma del gradiente
-\end_layout
-
-\end_deeper
-\begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
-\end_layout
-
-\begin_layout Frame
-\begin_inset Argument 4
-status open
-
-\begin_layout Plain Layout
-Técnicas adicionales
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_deeper
-\begin_layout Standard
-\begin_inset Flex Bold
-status open
-
-\begin_layout Plain Layout
 Remoción de fondo
 \end_layout
 
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-2-
-\end_layout
-
-\end_inset
-
-Se remueve la intensidad constante a lo largo del tiempo
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-3-
-\end_layout
-
-\end_inset
-
-Idea: remover características del fondo que interfieren con las de las nubes
-\end_layout
-
 \begin_layout Itemize
 \begin_inset Argument item:2
 status open
@@ -1936,99 +1790,7 @@ status open
 
 \end_inset
 
-Los fondos se calculan como el valor mínimo de cada pixel a lo largo de
- una gran cantidad de imágenes (en este caso, aprox.
- 2900)
-\end_layout
-
-\end_deeper
-\begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
-\end_layout
-
-\begin_layout Frame
-\begin_inset Argument 4
-status open
-
-\begin_layout Plain Layout
-Técnicas adicionales
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_deeper
-\begin_layout Standard
-\begin_inset Flex Bold
-status open
-
-\begin_layout Plain Layout
 Combinación de resultados
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-2-
-\end_layout
-
-\end_inset
-
-Se realiza el pareo sobre múltiples sensores y se promedian ponderadamente
- los resultados
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-3-
-\end_layout
-
-\end_inset
-
-Idea: se puede aumentar la precisión aprovechando la información de varios
- sensores
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-4-
-\end_layout
-
-\end_inset
-
-Se le da menos peso a los sensores más afectados por la reflexión, como
- IR2.
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-5-
-\end_layout
-
-\end_inset
-
-Se le da más peso a IR3.
 \end_layout
 
 \end_deeper
@@ -2223,28 +1985,6 @@ anim_lines_nointerp.mp4}
 
 \end_layout
 
-\end_deeper
-\begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
-\end_layout
-
-\begin_layout Frame
-\begin_inset Argument 4
-status open
-
-\begin_layout Plain Layout
-Cálculo de trayectorias
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_deeper
 \begin_layout Itemize
 Las trayectorias previamente calculadas son 
 \begin_inset Flex Emphasize
@@ -2261,7 +2001,7 @@ discretas
 status open
 
 \begin_layout Plain Layout
-no del todo realistas
+no suaves
 \end_layout
 
 \end_inset
@@ -2279,106 +2019,7 @@ status open
 
 \end_inset
 
-Para solventar este problema ajustamos una curva polinómica a la secuencia
- de puntos
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-3-
-\end_layout
-
-\end_inset
-
-El resultado es un recorrido que:
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-3-
-\end_layout
-
-\end_inset
-
-Es suave
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-4-
-\end_layout
-
-\end_inset
-
-Brinda información sobre los tiempos en que no hay imágenes
-\end_layout
-
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-5-
-\end_layout
-
-\end_inset
-
-Extrapolando, se puede predecir la posición en el futuro
-\end_layout
-
-\end_deeper
-\end_deeper
-\begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
-\end_layout
-
-\begin_layout Frame
-\begin_inset Argument 4
-status open
-
-\begin_layout Plain Layout
-Cálculo de trayectorias
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_deeper
-\begin_layout Standard
-Posiciones de los puntos unidas por líneas, sin ajustar curvas:
-\end_layout
-
-\begin_layout Standard
-\align center
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-includemovie[poster=img/anim_lines_nointerp.png,repeat,autoplay]{6cm}{3.67cm}{img/
-anim_lines_nointerp.mp4}
-\end_layout
-
-\end_inset
-
-
+Ajustamos una curva polinómica a la secuencia de puntos
 \end_layout
 
 \end_deeper
@@ -2423,6 +2064,18 @@ s.mp4}
 \end_inset
 
 
+\end_layout
+
+\begin_layout Itemize
+Es suave
+\end_layout
+
+\begin_layout Itemize
+Brinda información sobre los tiempos en que no hay imágenes
+\end_layout
+
+\begin_layout Itemize
+Extrapolando, se puede predecir la posición en el futuro
 \end_layout
 
 \end_deeper
@@ -2492,7 +2145,6 @@ status open
 Se desplazan tomando como referencia la curva que pasa por el centro
 \end_layout
 
-\end_deeper
 \begin_layout Itemize
 \begin_inset Argument item:2
 status open
@@ -2503,24 +2155,10 @@ status open
 
 \end_inset
 
-El tiempo de la curva ajustada es contínuo.
- Puede elegirse cualquier instante futuro
+Bloques que se superpongan, se promedian
 \end_layout
 
-\begin_layout Itemize
-\begin_inset Argument item:2
-status open
-
-\begin_layout Plain Layout
-6-
-\end_layout
-
-\end_inset
-
-Para poder hacer una comparación, en la aplicación se hace hacia el tiempo
- de la próxima muestra disponible
-\end_layout
-
+\end_deeper
 \begin_layout Itemize
 \begin_inset Argument item:2
 status open
@@ -2531,7 +2169,7 @@ status open
 
 \end_inset
 
-Se mide la precisión tomando la diferencia entre la imagen real y la predicha
+Se compara tomando la diferencia entre la imagen real y la predicha
 \end_layout
 
 \begin_deeper
